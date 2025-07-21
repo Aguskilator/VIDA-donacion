@@ -920,7 +920,13 @@
                     // Intentar parsear el JSON
                     let newQuestions;
                     try {
-                        newQuestions = JSON.parse(content);
+                        let cleaned = content.trim();
+                        if (cleaned.startsWith('```json')) {
+                            cleaned = cleaned.replace(/^```json[\r\n]+/, '').replace(/```$/, '').trim();
+                        } else if (cleaned.startsWith('```')) {
+                            cleaned = cleaned.replace(/^```[\r\n]+/, '').replace(/```$/, '').trim();
+                        }
+                        newQuestions = JSON.parse(cleaned);
                     } catch (parseError) {
                         console.error('Error parsing generated questions:', parseError);
                         throw new Error('Error en el formato de las preguntas generadas');
@@ -1095,7 +1101,13 @@
                     
                     let newQuestions;
                     try {
-                        newQuestions = JSON.parse(content);
+                        let cleaned = content.trim();
+                        if (cleaned.startsWith('```json')) {
+                            cleaned = cleaned.replace(/^```json[\r\n]+/, '').replace(/```$/, '').trim();
+                        } else if (cleaned.startsWith('```')) {
+                            cleaned = cleaned.replace(/^```[\r\n]+/, '').replace(/```$/, '').trim();
+                        }
+                        newQuestions = JSON.parse(cleaned);
                     } catch (parseError) {
                         console.error('Error parsing generated questions:', parseError);
                         throw new Error('Error en el formato de las preguntas generadas');

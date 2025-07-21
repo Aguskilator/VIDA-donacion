@@ -99,8 +99,10 @@
         }
 
         .chat-bubble-text {
-            text-align: justify;
+            text-align: justify !important;
             line-height: 1.6;
+            word-break: break-word;
+            hyphens: auto;
         }
         
         .chat-messages::-webkit-scrollbar { width: 8px; }
@@ -566,14 +568,14 @@
                 textBubbleDiv.className = 'px-4 py-3 shadow-lg chat-bubble-text relative bot-bubble bg-[var(--bot-bubble-bg)] text-[var(--text-dark)] rounded-2xl rounded-bl-lg w-full text-left';
                 textBubbleDiv.innerHTML = textContent;
                 botTextAndBtn.appendChild(textBubbleDiv);
-                // Botón de audio pequeño centrado debajo de la burbuja
+                // Botón de audio alineado a la derecha debajo de la burbuja
                 const ttsBtnWrapper = document.createElement('div');
-                ttsBtnWrapper.className = 'w-full flex justify-center';
+                ttsBtnWrapper.className = 'w-full flex justify-end';
                 const ttsBtn = document.createElement('button');
                 ttsBtn.type = 'button';
                 ttsBtn.title = 'Escuchar respuesta';
-                ttsBtn.className = 'mt-1 bg-slate-100 rounded-full p-1.5 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-300 shadow flex items-center';
-                ttsBtn.innerHTML = `<img src="volume.png" alt="Escuchar" class="h-5 w-5 object-contain" onerror=\"this.onerror=null;this.src='https://placehold.co/20x20/cccccc/ffffff?text=%F0%9F%94%8A';\" />`;
+                ttsBtn.className = 'mt-1 bg-slate-100 rounded-full p-2 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-300 shadow flex items-center';
+                ttsBtn.innerHTML = `<img src="bocina.png" alt="Escuchar" class="h-6 w-6 object-contain" onerror=\"this.onerror=null;this.src='https://placehold.co/24x24/cccccc/ffffff?text=%F0%9F%94%8A';\" />`;
                 ttsBtn.addEventListener('click', async (e) => {
                     e.preventDefault();
                     ttsBtn.disabled = true;

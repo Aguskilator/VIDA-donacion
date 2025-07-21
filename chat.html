@@ -355,11 +355,6 @@
 
         // --- State ---
         let chatHistory = [];
-        let currentDonorPathStep = null;
-        let viewedExplanations = {
-            muerte_encefalica: false,
-            paro_cardiaco: false
-        };
 
         // --- System Prompt for OpenAI ---
         const systemPrompt = `
@@ -371,9 +366,10 @@
         - NO repitas constantemente palabras como "maravilloso", "increíble" o "generoso".
         - Usa distintas estructuras: "Me alegra saber que...", "Qué bien que lo estés considerando...", "Te agradezco que lo menciones...", "Es muy valioso que te intereses..."
         - Sé breve, claro y empático. Usa un lenguaje sencillo, sin tecnicismos.
-        - No uses asteriscos. Puedes usar listas numeradas o guiones si es necesario.
+        - Nunca por ningun motivo uses asteriscos. Puedes usar listas numeradas o guiones si es necesario.
         - Si percibes dolor, miedo o pérdida, prioriza el acompañamiento emocional.
         - Solo respondes sobre donación de órganos y tejidos en el marco español.
+        - En España, todas las personas son consideradas donantes salvo que hayan manifestado lo contrario. Pero siempre se consulta a la familia.
         - Si te preguntan sobre otros temas, responde amablemente: "Lo siento, solo puedo ayudarte con preguntas sobre donación de órganos y tejidos."
 
         **PROHIBIDO ABSOLUTAMENTE:**
@@ -390,143 +386,13 @@
         - Si dice "cómo puedo ser donante": "Claro, te explico cómo funciona la donación en España."
 
         Recuerda: en España, todas las personas son consideradas donantes salvo que hayan manifestado lo contrario. Pero siempre se consulta a la familia.
-        
-        Responde según el contexto pero SIEMPRE incluye al final: { "activarModulo": "donorPath" }
-        
+                
         NO uses frases idénticas. Varía el estilo y adáptalo al mensaje concreto de la persona.
         
         Tu respuesta debe sonar cercana, humana y sin automatismos.
         `;
 
-        // =====================
-        // MODULO: Camino como Donante
-        // =====================
-        const donorPathModule = {
-            introduction: {
-                text: null, // No texto predeterminado, solo la respuesta de la IA
-                buttons: [
-                    { text: "Empezar el camino 🌱", action: "donor_path_step1" }
-                ]
-            },
-            step1: {
-                text: "Para poder decidir, es importante que sepas qué significa donar. En México, se puede donar órganos y tejidos después de fallecer, ya sea por Muerte encefálica (cuando el cerebro deja de funcionar por completo) o por Paro cardíaco (cuando el corazón deja de latir y ya no se puede revivir). En ambos casos, la donación puede salvar vidas o mejorar la salud de muchas personas.",
-                buttons: [
-                    { text: "¿Qué es la muerte encefálica? 🧠", action: "donor_path_explain_muerte_encefalica" },
-                    { text: "¿Qué es el paro cardíaco? ❤️", action: "donor_path_explain_paro_cardiaco" },
-                    { text: "Entendido, continuar 👉", action: "donor_path_step2" }
-                ]
-            },
-            explain_muerte_encefalica: {
-                text: "La muerte encefálica es cuando el cerebro, que controla todo el cuerpo, deja de funcionar de forma total e irreversible. Esto se confirma con pruebas médicas rigurosas que demuestran que ya no hay actividad cerebral ni capacidad de respirar por sí mismo. Es el momento en que una persona es legal y médicamente declarada fallecida.",
-                buttons: function() {
-                    const buttons = [];
-                    if (!viewedExplanations.paro_cardiaco) {
-                        buttons.push({ text: "¿Qué es el paro cardíaco? ❤️", action: "donor_path_explain_paro_cardiaco" });
-                    }
-                    buttons.push({ text: "Entendido, siguiente paso 👉", action: "donor_path_step2" });
-                    return buttons;
-                }
-            },
-            explain_paro_cardiaco: {
-                text: "El paro cardíaco es cuando el corazón deja de latir de forma definitiva y no puede ser revivido a pesar de las maniobras médicas. A diferencia de la muerte encefálica, aquí el corazón se detiene primero y luego el cerebro. En este caso, la donación debe realizarse muy rápidamente para que los órganos sigan siendo viables para trasplante.",
-                buttons: function() {
-                    const buttons = [];
-                    if (!viewedExplanations.muerte_encefalica) {
-                        buttons.push({ text: "¿Qué es la muerte encefálica? 🧠", action: "donor_path_explain_muerte_encefalica" });
-                    }
-                    buttons.push({ text: "Entendido, siguiente paso 👉", action: "donor_path_step2" });
-                    return buttons;
-                }
-            },
-            step2: {
-                text: "Donar es una decisión personal, libre y voluntaria. Te invito a pensar: ¿Me gustaría ayudar a alguien más si ya no estoy aquí? ¿Cómo me sentiría si alguien que amo necesitara un órgano? No hay respuestas correctas. Lo importante es que lo pienses con el corazón. 💙",
-                buttons: [
-                    { text: "Sí, quiero ayudar 💚", action: "donor_path_step3" },
-                    { text: "Tengo dudas aún 🤔", action: "indecision_start" }
-                ]
-            },
-            step3: {
-                text: "Aunque tú quieras donar, en México tu familia debe autorizarlo en el hospital. Por eso, lo más importante es que hables con ellos y les digas tu deseo de donar. Puedes decir algo como: 'Si algún día fallezco, quiero que donen mis órganos. Es mi decisión.'",
-                buttons: [
-                    { text: "¿Cómo hablo con mi familia? 👨‍👩‍👧‍👦", action: "donor_path_examples_family_talk" },
-                    { text: "Ya hablé con ellos 👍", action: "donor_path_step4" }
-                ]
-            },
-            examples_family_talk: {
-                text: "Aquí tienes algunas ideas para iniciar la conversación con tu familia: 'Estuve pensando en la donación de órganos y quiero compartirles mi decisión. Si algo me pasara, me gustaría que mis órganos ayudaran a alguien más.' 'Es un tema difícil, pero es importante para mí que sepan que quiero ser donante. Es un acto de generosidad que siento que es correcto.' 'Investigué sobre la donación de órganos y me gustaría dejar claro que es mi deseo. Me siento tranquilo con esta decisión.'",
-                buttons: [
-                    { text: "Gracias, continuar 👉", action: "donor_path_step4" }
-                ]
-            },
-            step4: {
-                text: "Además de hablar con tu familia, puedes dejar por escrito tu decisión de estas maneras: 1. Marcándolo en tu INE (si renovaste y pediste que aparezca). 2. En el portal del Centro Nacional de Trasplantes (CENATRA). 3. En una carta simple firmada. 4. O en tu testamento o voluntad anticipada (si aplica en tu estado).",
-                buttons: [
-                    { text: "Registrarme en CENATRA 📝", action: "cenatra_link" },
-                    { text: "Enséñame un ejemplo de carta", action: "donor_path_example_carta" },
-                    { text: "No, continuar 👉", action: "donor_path_step5" }
-                ]
-            },
-            example_carta: {
-                text: "Aquí tienes un ejemplo de una carta simple de voluntad anticipada para donación:\n\n'[Tu Nombre Completo]\n[Tu Dirección]\n[Tu Ciudad, Estado, Fecha]\n\nA quien corresponda:\n\nPor medio de la presente, yo, [Tu Nombre Completo], con [Tipo de identificación y número, ej. INE 1234567890], declaro que, en caso de fallecimiento, es mi libre y voluntaria voluntad que mis órganos y tejidos aptos sean donados para trasplante, con el fin de salvar o mejorar la calidad de vida de otras personas. Esta decisión es informada y definitiva. Solicito a mis familiares y al personal médico respetar y facilitar este deseo.\n\nAtentamente,\n[Tu Firma]\n[Tu Nombre Completo]\n\nNota: Es recomendable tener testigos y/o notario, aunque una carta simple con tu firma es un inicio importante.'",
-                buttons: [
-                    { text: "Entendido, continuar 👉", action: "donor_path_step5" }
-                ]
-            },
-            step5: {
-                text: "Donar es un acto que vale repetir. Recuérdales a tus seres queridos tu decisión cada tanto. Puedes también compartir tu voluntad en redes o por WhatsApp: 'He decidido que quiero donar mis órganos si algún día muero. Es una forma de seguir ayudando. VIDA me ayudó a informarme.'",
-                buttons: [
-                    { text: "Compartir por WhatsApp", action: "share_whatsapp", shareText: "He decidido que quiero donar mis órganos si algún día muero. Es una forma de seguir ayudando. VIDA me ayudó a informarme." },
-                    { text: "Finalizar camino 💚", action: "donor_path_cierre" }
-                ]
-            },
-            cierre: {
-                text: "¡Gracias por recorrer este camino conmigo! 🌱 Cada paso que das acerca a alguien más a vivir con esperanza. Tu decisión es un acto de amor y generosidad.",
-                buttons: [
-                    { text: "Ver más dudas frecuentes", action: "suggest_questions" }, 
-                    { text: "Hablar con VIDA nuevamente", action: "reset_chat" }
-                ]
-            }
-        };
 
-        // =====================
-        // MODULO: Registro CENATRA (independiente)
-        // =====================
-        const cenatraModule = {
-            showButton: function() {
-                addBotMessageWithTyping('¿Te gustaría registrarte como donante en el portal oficial de CENATRA? Si lo deseas, puedes hacerlo ahora mismo.');
-                displayModuleButtons([
-                    { text: "Ir al portal de CENATRA 📝", action: "cenatra_open_portal" },
-                    { text: "No, gracias", action: "cenatra_later" }
-                ], handleCenatraAction);
-            },
-            openPortal: function() {
-                window.open('https://dv.cenatra.salud.gob.mx/registrar.php', '_blank');
-                setTimeout(async () => {
-                    await addBotMessageWithTyping('Cuando termines tu registro en CENATRA, puedes indicarme si ya lo hiciste o si prefieres hacerlo en otro momento.');
-                    displayModuleButtons([
-                        { text: "Ya me registré 👍", action: "cenatra_done" },
-                        { text: "Lo haré en otro momento 📅", action: "cenatra_later" }
-                    ], handleCenatraAction);
-                }, 2500);
-            }
-        };
-
-        function handleCenatraAction(action) {
-            // Ocultar botones de CENATRA inmediatamente al responder
-            suggestedQuestionsContainer.classList.add('hidden');
-            moduleButtonClicks = 0;
-            cenatraConversationCount = 0;
-            activeModule = null;
-            if (action === "cenatra_open_portal") {
-                cenatraModule.openPortal();
-                return;
-            }
-            if (action === "cenatra_done") {
-                addBotMessageWithTyping('¡Felicidades por registrarte como donante en CENATRA! Si tienes más dudas, puedes preguntarme.');
-            } else if (action === "cenatra_later") {
-                addBotMessageWithTyping('No hay problema, puedes registrarte cuando lo desees. Si tienes más dudas, aquí estoy para ayudarte.');
-            }
-        }
 
         // =====================
         // MODULO: Preguntas Sugeridas
@@ -715,67 +581,16 @@
             addMessageToChat('assistant', text);
         }
         
-        // =====================
-        // CONTADOR DE INTERACCIONES DE BOTONES Y CONVERSACIONES DE MODULOS
-        // =====================
-        let moduleButtonClicks = 0;
-        let donorPathConversationCount = 0;
-        let cenatraConversationCount = 0;
-        let activeModule = null; // 'donorPath' | 'cenatra' | null
 
-        function closeActiveModule() {
-            const container = suggestedQuestionsContainer;
-            container.classList.add('hidden');
-            moduleButtonClicks = 0;
-            donorPathConversationCount = 0;
-            cenatraConversationCount = 0;
-            activeModule = null;
-        }
-
-        function displayModuleButtons(buttons, handler) {
-            const container = suggestedQuestionsContainer;
-            container.innerHTML = '';
-            container.classList.remove('hidden');
-            moduleButtonClicks = 0;
-            buttons.forEach((btn, idx) => {
-                const button = document.createElement('button');
-                button.className = 'bg-blue-50 text-blue-700 px-3 py-2 rounded-full text-sm hover:bg-blue-100 transition-colors opacity-0 transform translate-y-2';
-                button.textContent = btn.text;
-                button.addEventListener('click', () => {
-                    moduleButtonClicks++;
-                    handler(btn.action);
-                    if (moduleButtonClicks >= 2) {
-                        closeActiveModule();
-                    }
-                });
-                container.appendChild(button);
-                setTimeout(() => {
-                    button.classList.remove('opacity-0', 'translate-y-2');
-                }, idx * 150);
-            });
-        }
 
         // =====================
-        // ACTIVACION DE MODULOS SEGUN INTENCION
+        // FUNCION PRINCIPAL DEL CHAT (solo IA y preguntas sugeridas)
         // =====================
         async function getBotResponse(userMessage, isFromSuggestedQuestion = false) {
             showTypingIndicator(true); 
             chatInput.disabled = true; 
             chatForm.querySelector('button[type="submit"]').disabled = true; 
             suggestQuestionsBtn.disabled = true; 
-
-            // Detectar si hay un módulo activo y contar conversación
-            if (activeModule === 'donorPath') {
-                donorPathConversationCount++;
-                if (donorPathConversationCount >= 2) {
-                    closeActiveModule();
-                }
-            } else if (activeModule === 'cenatra') {
-                cenatraConversationCount++;
-                if (cenatraConversationCount >= 2) {
-                    closeActiveModule();
-                }
-            }
 
             const messages = [
                 { role: "system", content: systemPrompt },
@@ -784,65 +599,7 @@
             try {
                 const result = await callOpenAI(messages);
                 let botResponseText = result.choices?.[0]?.message?.content || "Lo siento, hubo un problema. Por favor, intenta de nuevo.";
-                // Detectar activación de módulos
-                const moduleMatch = botResponseText.match(/\{\s*"activarModulo"\s*:\s*"([^\"]+)"\s*\}/);
-                if (moduleMatch) {
-                    const moduleName = moduleMatch[1];
-                    botResponseText = botResponseText.replace(moduleMatch[0], '').trim();
-                    addMessageToChat('assistant', botResponseText);
-                    if (moduleName === 'donorPath') {
-                        activeModule = 'donorPath';
-                        donorPathConversationCount = 0;
-                        setTimeout(() => {
-                            displayDonorPathStep('introduction');
-                        }, 500);
-                    } else if (moduleName === 'cenatra') {
-                        activeModule = 'cenatra';
-                        cenatraConversationCount = 0;
-                        setTimeout(() => {
-                            cenatraModule.showButton();
-                        }, 500);
-                    } else if (moduleName === 'indecision') {
-                        setTimeout(() => {
-                            addMessageToChat('assistant', 'Es completamente normal tener dudas sobre la donación. Es una decisión importante. ¿Qué te preocupa más: el proceso médico, hablar con tu familia, o algo más específico?');
-                        }, 1500);
-                    }
-                } else {
-                    // Detectar intención manual para donante y cenatra
-                    const donorIntentions = [
-                        'quiero ser donante', 'me interesa donar', 'quiero ayudar', 'ser donante', 
-                        'donar organos', 'quiero donar', 'deseo ser donante', 'me gustaría donar',
-                        'pienso ser donante', 'creo que quiero ser donante', 'quisiera ser donante',
-                        'me interesa ser donante', 'quiero ser donador', 'deseo donar', 'me gustaría ser donante',
-                        'estoy interesado en donar', 'estoy pensando en ser donante', 'como ser donante',
-                        'como puedo ser donante', 'como me hago donante', 'quiero registrarme como donante'
-                    ];
-                    const cenatraIntentions = [
-                        'registrarme en cenatra', 'registro cenatra', 'quiero registrarme cenatra', 'portal cenatra', 'registro nacional de donantes', 'cenatra', 'quiero ser donante cenatra', 'quiero registrarme en el cenatra', 'quiero registrarme en el registro nacional de donantes', 'quiero el registro cenatra', 'quiero el portal cenatra',
-                        // Frases comunes de registro
-                        'donde me registro', 'cómo me registro', 'quiero registrarme', 'como registrarme', 'registrarme como donante', 'me quiero registrar', 'quiero hacer mi registro', 'quiero el registro', 'quiero registrarme como donante', 'como puedo registrarme', 'como hago mi registro', 'como puedo hacer mi registro', 'como puedo registrarme como donante', 'quiero saber como registrarme', 'quiero saber donde registrarme', 'quiero saber como hacer mi registro', 'quiero saber como registrarme como donante'
-                    ];
-                    const userMessageLower = userMessage.toLowerCase();
-                    const hasDonorIntention = donorIntentions.some(intention => userMessageLower.includes(intention));
-                    const hasCenatraIntention = cenatraIntentions.some(intention => userMessageLower.includes(intention));
-                    if (hasDonorIntention && !currentDonorPathStep) {
-                        activeModule = 'donorPath';
-                        donorPathConversationCount = 0;
-                        addMessageToChat('assistant', botResponseText);
-                        setTimeout(() => {
-                            displayDonorPathStep('introduction');
-                        }, 500);
-                    } else if (hasCenatraIntention) {
-                        activeModule = 'cenatra';
-                        cenatraConversationCount = 0;
-                        addMessageToChat('assistant', botResponseText);
-                        setTimeout(() => {
-                            cenatraModule.showButton();
-                        }, 500);
-                    } else {
-                        addMessageToChat('assistant', botResponseText);
-                    }
-                }
+                addMessageToChat('assistant', botResponseText);
             } catch (error) {
                 console.error("Error in getBotResponse:", error);
                 addMessageToChat('assistant', 'Lo siento, hubo un problema de conexión. Por favor, verifica tu conexión a internet e inténtalo de nuevo.');
@@ -860,59 +617,6 @@
         // =====================
         function toggleSuggestedQuestions() {
             suggestedQuestionsModule.show();
-        }
-        // =====================
-        // FUNCION GLOBAL: Mostrar Camino como Donador
-        // =====================
-        function displayDonorPathStep(step) {
-            currentDonorPathStep = step;
-            let stepData = donorPathModule[step];
-            let text = typeof stepData.text === 'function' ? stepData.text() : stepData.text;
-            let buttons = typeof stepData.buttons === 'function' ? stepData.buttons() : stepData.buttons;
-            if (text) addBotMessageWithTyping(text);
-            if (buttons && buttons.length > 0) {
-                displayModuleButtons(buttons, handleDonorPathAction);
-            }
-        }
-
-        function handleDonorPathAction(action) {
-            // Separar registro CENATRA del camino donador
-            if (action === "cenatra_link") {
-                activeModule = 'cenatra';
-                cenatraConversationCount = 0;
-                cenatraModule.openPortal();
-                return;
-            }
-            if (action === "donor_path_step1") return displayDonorPathStep('step1');
-            if (action === "donor_path_explain_muerte_encefalica") {
-                viewedExplanations.muerte_encefalica = true;
-                return displayDonorPathStep('explain_muerte_encefalica');
-            }
-            if (action === "donor_path_explain_paro_cardiaco") {
-                viewedExplanations.paro_cardiaco = true;
-                return displayDonorPathStep('explain_paro_cardiaco');
-            }
-            if (action === "donor_path_step2") return displayDonorPathStep('step2');
-            if (action === "indecision_start") return addBotMessageWithTyping('Es normal tener dudas. ¿Qué te gustaría saber?');
-            if (action === "donor_path_step3") return displayDonorPathStep('step3');
-            if (action === "donor_path_examples_family_talk") return displayDonorPathStep('examples_family_talk');
-            if (action === "donor_path_step4") return displayDonorPathStep('step4');
-            if (action === "donor_path_example_carta") return displayDonorPathStep('example_carta');
-            if (action === "donor_path_step5") return displayDonorPathStep('step5');
-            if (action === "share_whatsapp") {
-                window.open('https://wa.me/?text=' + encodeURIComponent('He decidido que quiero donar mis órganos si algún día muero. Es una forma de seguir ayudando. VIDA me ayudó a informarme.'), '_blank');
-                return;
-            }
-            if (action === "donor_path_cierre") {
-                closeActiveModule();
-                return displayDonorPathStep('cierre');
-            }
-            if (action === "suggest_questions") return suggestedQuestionsModule.show();
-            if (action === "reset_chat") {
-                chatHistory = [];
-                currentDonorPathStep = null;
-                addBotMessageWithTyping('¡Hola! Soy VIDA, tu asistente virtual sobre donación de órganos y tejidos. Estoy aquí para informarte de forma cercana, clara y respetuosa. ¿En qué puedo ayudarte hoy?');
-            }
         }
 
         // =====================
@@ -1044,7 +748,7 @@
         // Initialize Chat and Background
         document.addEventListener('DOMContentLoaded', () => {
             // Usar el efecto de escritura para el mensaje inicial
-            addBotMessageWithTyping('¡Hola! Soy VIDA, tu asistente para información sobre donación de órganos, tejidos y sangre. Estoy aquí para ayudarte de manera clara y empática. ¿En qué puedo apoyarte hoy?');
+            addBotMessageWithTyping('Hola, soy VIDA. Estoy aquí para acompañarte y resolver tus dudas sobre la donación de órganos y tejidos en España. Pregúntame lo que necesites, con total confianza.');
             chatInput.focus();
             initBackground();
             animateBackground();

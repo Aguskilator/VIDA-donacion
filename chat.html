@@ -543,31 +543,37 @@
             // Verificar si el usuario está cerca del final antes de agregar el mensaje
             const isNearBottom = chatContainerWrapper.scrollHeight - chatContainerWrapper.clientHeight <= chatContainerWrapper.scrollTop + 150;
             const messageWrapper = document.createElement('div');
-            messageWrapper.className = `flex items-start gap-3 max-w-xl lg:max-w-2xl chat-bubble ${role === 'user' ? 'self-end flex-row-reverse' : 'self-start'}`;
+            if (role === 'user') {
+                messageWrapper.className = 'flex items-start gap-3 max-w-xl lg:max-w-2xl chat-bubble self-end flex-row-reverse';
+            } else {
+                messageWrapper.className = 'flex items-start gap-3 max-w-xl lg:max-w-2xl chat-bubble self-start';
+            }
             const textContent = text.replace(/\n/g, '<br>');
             const textBubbleDiv = document.createElement('div');
-            textBubbleDiv.className = `px-4 py-3 shadow-lg chat-bubble-text relative`;
             if (role === 'user') {
-                textBubbleDiv.className += ` user-bubble order-1 bg-[var(--user-bubble-bg)] text-white rounded-2xl rounded-br-lg`;
+                textBubbleDiv.className = 'px-4 py-3 shadow-lg chat-bubble-text relative user-bubble order-1 bg-[var(--user-bubble-bg)] text-white rounded-2xl rounded-br-lg';
+                textBubbleDiv.innerHTML = textContent;
+                messageWrapper.appendChild(textBubbleDiv);
             } else {
+                // Bot avatar
                 const botAvatarDiv = document.createElement('div');
                 botAvatarDiv.className = "w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 bg-white shadow-md bot-avatar-breathing";
                 botAvatarDiv.innerHTML = '<img src="robotcara.png" alt="Robot VIDA" class="w-10 h-10 object-contain p-1" onerror="this.onerror=null;this.src=\'https://placehold.co/40x40/0D47A1/FFFFFF?text=V\';" />';
                 messageWrapper.appendChild(botAvatarDiv);
-                textBubbleDiv.className += ` bot-bubble bg-[var(--bot-bubble-bg)] text-[var(--text-dark)] rounded-2xl rounded-bl-lg`;
-            }
-            textBubbleDiv.innerHTML += textContent;
-            messageWrapper.appendChild(textBubbleDiv);
-            // Botón de audio (text-to-speech) fuera de la burbuja
-            if (role !== 'user') {
-                // Botón de audio centrado debajo de la burbuja
+                // Contenedor para burbuja y botón
+                const botTextAndBtn = document.createElement('div');
+                botTextAndBtn.className = 'flex flex-col items-start flex-1 min-w-0';
+                textBubbleDiv.className = 'px-4 py-3 shadow-lg chat-bubble-text relative bot-bubble bg-[var(--bot-bubble-bg)] text-[var(--text-dark)] rounded-2xl rounded-bl-lg w-full text-left';
+                textBubbleDiv.innerHTML = textContent;
+                botTextAndBtn.appendChild(textBubbleDiv);
+                // Botón de audio pequeño centrado debajo de la burbuja
                 const ttsBtnWrapper = document.createElement('div');
                 ttsBtnWrapper.className = 'w-full flex justify-center';
                 const ttsBtn = document.createElement('button');
                 ttsBtn.type = 'button';
                 ttsBtn.title = 'Escuchar respuesta';
-                ttsBtn.className = 'mt-2 bg-slate-100 rounded-full p-2 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-300 shadow flex items-center';
-                ttsBtn.innerHTML = `<img src="volume.png" alt="Escuchar" class="h-6 w-6 object-contain" onerror=\"this.onerror=null;this.src='https://placehold.co/24x24/cccccc/ffffff?text=%F0%9F%94%8A';\" />`;
+                ttsBtn.className = 'mt-1 bg-slate-100 rounded-full p-1.5 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-300 shadow flex items-center';
+                ttsBtn.innerHTML = `<img src="volume.png" alt="Escuchar" class="h-5 w-5 object-contain" onerror=\"this.onerror=null;this.src='https://placehold.co/20x20/cccccc/ffffff?text=%F0%9F%94%8A';\" />`;
                 ttsBtn.addEventListener('click', async (e) => {
                     e.preventDefault();
                     ttsBtn.disabled = true;
@@ -581,7 +587,8 @@
                     ttsBtn.classList.remove('opacity-60');
                 });
                 ttsBtnWrapper.appendChild(ttsBtn);
-                messageWrapper.appendChild(ttsBtnWrapper);
+                botTextAndBtn.appendChild(ttsBtnWrapper);
+                messageWrapper.appendChild(botTextAndBtn);
             }
             chatContainer.appendChild(messageWrapper);
             // Solo hacer scroll automático si es un mensaje del usuario O si el usuario estaba al final

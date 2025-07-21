@@ -363,7 +363,6 @@
 
         // --- System Prompt for OpenAI ---
         const systemPrompt = `
-<<<<<<< HEAD
         Eres VIDA, un asistente virtual sobre donación de órganos, tejidos y sangre en México.
 
         **Reglas básicas:**
@@ -398,46 +397,9 @@
         Responde siempre de manera natural, empática y sin sonar robótico.
         `;
 
-        // --- Module Content Definition ---
-=======
-        Eres VIDA, un asistente virtual sobre donación de órganos y tejidos en España. Tu función es brindar información clara, empática y accesible basada en la normativa vigente, sin sustituir asesoramiento médico ni legal.
-
-        **Reglas básicas:**
-        - Responde siempre de forma cálida, humana y conversacional. NUNCA suenes como robot.
-        - EVITA repeticiones. Varía tu forma de hablar en cada mensaje.
-        - NO repitas constantemente palabras como "maravilloso", "increíble" o "generoso".
-        - Usa distintas estructuras: "Me alegra saber que...", "Qué bien que lo estés considerando...", "Te agradezco que lo menciones...", "Es muy valioso que te intereses..."
-        - Sé breve, claro y empático. Usa un lenguaje sencillo, sin tecnicismos.
-        - No uses asteriscos. Puedes usar listas numeradas o guiones si es necesario.
-        - Si percibes dolor, miedo o pérdida, prioriza el acompañamiento emocional.
-        - Solo respondes sobre donación de órganos y tejidos en el marco español.
-        - Si te preguntan sobre otros temas, responde amablemente: "Lo siento, solo puedo ayudarte con preguntas sobre donación de órganos y tejidos."  
-
-        **PROHIBIDO ABSOLUTAMENTE:**
-        - NUNCA pidas ni almacenes datos personales (nombre, DNI, dirección, etc.).
-        - NO registres usuarios ni completes formularios de ningún tipo.
-        - NO recopiles ni solicites información personal.
-        - Tu función es únicamente educativa, informativa y de apoyo emocional.
-
-
-        **IMPORTANTE - Detección de intención de donante:**
-        Si el usuario expresa que quiere ser donante (frases como "quiero ser donante", "me interesa donar", "quiero ayudar", "deseo ser donante", "me gustaría donar"), responde con empatía y según el contexto exacto. Puedes usar frases como:
-        - Si dice "quiero ser donante": "Qué bien que quieras ayudar a otras personas. Es una decisión muy valiosa."
-        - Si dice "me interesa donar": "Gracias por compartirlo. Es bonito saber que te interesa marcar la diferencia."
-        - Si dice "tengo dudas": "Es totalmente normal tener dudas. Estoy aquí para ayudarte a resolverlas."
-        - Si dice "cómo puedo ser donante": "Claro, te explico cómo funciona la donación en España."
-        
-        Responde según el contexto pero SIEMPRE incluye al final: { "activarModulo": "donorPath" }
-        
-        NO uses frases idénticas. Varía el estilo y adáptalo al mensaje concreto de la persona.
-        
-        Tu respuesta debe sonar cercana, humana y sin automatismos.
-        `;
-
         // =====================
         // MODULO: Camino como Donante
         // =====================
->>>>>>> 1c36224 (Subir proyecto VIDA completo)
         const donorPathModule = {
             introduction: {
                 text: null, // No texto predeterminado, solo la respuesta de la IA
@@ -525,32 +487,6 @@
             }
         };
 
-<<<<<<< HEAD
-        // --- Función para generar sugerencias con IA ---
-        async function generateSuggestedQuestions() {
-            try {
-                const suggestionPrompt = [
-                    { role: "system", content: "Eres VIDA. Genera exactamente 4 preguntas cortas (máximo 6 palabras cada una) sobre donación de órganos que una persona común haría. Deben ser preguntas concisas, en donde se entienda perfectamente lo que se esta preguntado.Responde SOLO con las 4 preguntas, una por línea, sin numeración ni puntos. Ejemplos: '¿Duele donar órganos?', '¿Qué órganos se donan?', '¿Cómo me registro?', '¿Es seguro donar?'" },
-                    { role: "user", content: "Genera 4 preguntas cortas sobre donación de órganos" }
-                ];
-                
-                const result = await callOpenAI(suggestionPrompt);
-                const response = result.choices?.[0]?.message?.content || "";
-                
-                // Dividir las preguntas por líneas y limpiar
-                const questions = response.split('\n')
-                    .map(q => q.trim())
-                    .filter(q => q.length > 0 && q.includes('?'))
-                    .slice(0, 4);
-                
-                return questions.length >= 3 ? questions : null;
-            } catch (error) {
-                console.error("Error generating suggestions:", error);
-                return null;
-            }
-        }
-
-=======
         // =====================
         // MODULO: Registro CENATRA (independiente)
         // =====================
@@ -598,7 +534,7 @@
             generate: async function() {
                 try {
                     const suggestionPrompt = [
-                        { role: "system", content: "Eres VIDA. Genera exactamente 4 preguntas cortas (máximo 6 palabras cada una) sobre donación de órganos en España que una persona común haría. Deben ser preguntas concisas, en donde se entienda perfectamente lo que se esta preguntado.Responde SOLO con las 4 preguntas, una por línea, sin numeración ni puntos. Ejemplos: '¿Duele donar órganos?', '¿Qué órganos se donan?', '¿Cómo me registro?', '¿Es seguro donar?'" },
+                        { role: "system", content: "Eres VIDA. Genera exactamente 4 preguntas cortas (máximo 6 palabras cada una) sobre donación de órganos que una persona común haría. Deben ser preguntas concisas, en donde se entienda perfectamente lo que se esta preguntado.Responde SOLO con las 4 preguntas, una por línea, sin numeración ni puntos. Ejemplos: '¿Duele donar órganos?', '¿Qué órganos se donan?', '¿Cómo me registro?', '¿Es seguro donar?'" },
                         { role: "user", content: "Genera 4 preguntas cortas sobre donación de órganos" }
                     ];
                     const result = await callOpenAI(suggestionPrompt);
@@ -661,7 +597,6 @@
         // =====================
         // FUNCIONES PRINCIPALES DEL CHAT
         // =====================
->>>>>>> 1c36224 (Subir proyecto VIDA completo)
         // --- API Call Function ---
         async function callOpenAI(messages) {
             try {
@@ -686,10 +621,6 @@
             }
         }
 
-<<<<<<< HEAD
-        // --- Chat Functions ---
-=======
->>>>>>> 1c36224 (Subir proyecto VIDA completo)
         function addMessageToChat(role, text) {
             chatHistory.push({ role: role, content: text });
             
@@ -783,8 +714,6 @@
             addMessageToChat('assistant', text);
         }
         
-<<<<<<< HEAD
-=======
         // =====================
         // CONTADOR DE INTERACCIONES DE BOTONES Y CONVERSACIONES DE MODULOS
         // =====================
@@ -828,15 +757,12 @@
         // =====================
         // ACTIVACION DE MODULOS SEGUN INTENCION
         // =====================
->>>>>>> 1c36224 (Subir proyecto VIDA completo)
         async function getBotResponse(userMessage, isFromSuggestedQuestion = false) {
             showTypingIndicator(true); 
             chatInput.disabled = true; 
             chatForm.querySelector('button[type="submit"]').disabled = true; 
             suggestQuestionsBtn.disabled = true; 
 
-<<<<<<< HEAD
-=======
             // Detectar si hay un módulo activo y contar conversación
             if (activeModule === 'donorPath') {
                 donorPathConversationCount++;
@@ -850,68 +776,10 @@
                 }
             }
 
->>>>>>> 1c36224 (Subir proyecto VIDA completo)
             const messages = [
                 { role: "system", content: systemPrompt },
                 ...chatHistory
             ];
-<<<<<<< HEAD
-            
-            try {
-                const result = await callOpenAI(messages);
-                let botResponseText = result.choices?.[0]?.message?.content || "Lo siento, hubo un problema. Por favor, intenta de nuevo.";
-                
-                // Solo activar el camino del donador si NO es una pregunta sugerida
-                if (!isFromSuggestedQuestion) {
-                    // Detectar si hay un comando de módulo en la respuesta
-                    const moduleMatch = botResponseText.match(/\{\s*"activarModulo"\s*:\s*"([^"]+)"\s*\}/);
-                    if (moduleMatch) {
-                        const moduleName = moduleMatch[1];
-                        botResponseText = botResponseText.replace(moduleMatch[0], '').trim();
-                        
-                        // Agregar respuesta del bot (sin el JSON)
-                        addMessageToChat('assistant', botResponseText);
-                        
-                        // Activar el módulo apropiado
-                        if (moduleName === 'donorPath') {
-                            setTimeout(() => {
-                                displayDonorPathStep('introduction');
-                            }, 500); // Reducir a 500ms para que aparezca rápido
-                        } else if (moduleName === 'indecision') {
-                            setTimeout(() => {
-                                addMessageToChat('assistant', 'Es completamente normal tener dudas sobre la donación. Es una decisión importante. ¿Qué te preocupa más: el proceso médico, hablar con tu familia, o algo más específico?');
-                            }, 1500);
-                        }
-                    } else {
-                        // Si no hay módulo detectado, verificar manualmente si el usuario quiere ser donante
-                        const donorIntentions = [
-                            'quiero ser donante', 'me interesa donar', 'quiero ayudar', 'ser donante', 
-                            'donar organos', 'quiero donar', 'deseo ser donante', 'me gustaría donar',
-                            'pienso ser donante', 'creo que quiero ser donante', 'quisiera ser donante',
-                            'me interesa ser donante', 'quiero ser donador', 'deseo donar', 'me gustaría ser donante',
-                            'estoy interesado en donar', 'estoy pensando en ser donante', 'como ser donante',
-                            'como puedo ser donante', 'como me hago donante', 'quiero registrarme como donante'
-                        ];
-                        const userMessageLower = userMessage.toLowerCase();
-                        const hasDonorIntention = donorIntentions.some(intention => userMessageLower.includes(intention));
-                        
-                        if (hasDonorIntention && !currentDonorPathStep) {
-                            addMessageToChat('assistant', botResponseText);
-                            setTimeout(() => {
-                                displayDonorPathStep('introduction');
-                            }, 500); // Reducir a 500ms para que aparezca rápido
-                        } else {
-                            addMessageToChat('assistant', botResponseText);
-                        }
-                    }
-                } else {
-                    // Si es una pregunta sugerida, limpiar el JSON pero no activar módulos
-                    const moduleMatch = botResponseText.match(/\{\s*"activarModulo"\s*:\s*"([^"]+)"\s*\}/);
-                    if (moduleMatch) {
-                        botResponseText = botResponseText.replace(moduleMatch[0], '').trim();
-                    }
-                    addMessageToChat('assistant', botResponseText);
-=======
             try {
                 const result = await callOpenAI(messages);
                 let botResponseText = result.choices?.[0]?.message?.content || "Lo siento, hubo un problema. Por favor, intenta de nuevo.";
@@ -973,7 +841,6 @@
                     } else {
                         addMessageToChat('assistant', botResponseText);
                     }
->>>>>>> 1c36224 (Subir proyecto VIDA completo)
                 }
             } catch (error) {
                 console.error("Error in getBotResponse:", error);
@@ -987,242 +854,6 @@
             }
         }
 
-<<<<<<< HEAD
-        // --- Module Functions ---
-        function displayModuleButtons(buttons, handler) {
-            suggestedQuestionsContainer.innerHTML = '';
-            if (!buttons || !Array.isArray(buttons) || buttons.length === 0) {
-                suggestedQuestionsContainer.classList.add('hidden');
-                return;
-            }
-            
-            buttons.forEach((btn, index) => {
-                const button = document.createElement('button');
-                button.textContent = btn.text;
-                button.className = `px-4 py-2 rounded-lg bg-blue-50 text-blue-700 text-sm font-medium hover:bg-blue-100 transition-all duration-200 shadow-sm m-1 opacity-0 transform translate-y-2`;
-                button.onclick = () => handler(btn.action, btn);
-                suggestedQuestionsContainer.appendChild(button);
-                
-                // Animación escalonada para que aparezcan uno por uno
-                setTimeout(() => {
-                    button.classList.remove('opacity-0', 'translate-y-2');
-                }, index * 100);
-            });
-            
-            suggestedQuestionsContainer.classList.remove('hidden');
-        }
-
-        function reset_chat_and_offer_suggestions() {
-            chatHistory = [];
-            suggestedQuestionsContainer.classList.add('hidden');
-            suggestedQuestionsContainer.innerHTML = '';
-            chatContainer.innerHTML = '';
-            currentDonorPathStep = null;
-            // Resetear las explicaciones vistas
-            viewedExplanations = {
-                muerte_encefalica: false,
-                paro_cardiaco: false
-            };
-            // Usar el efecto de escritura para el mensaje inicial
-            addBotMessageWithTyping('¡Hola! Soy VIDA, tu asistente para información sobre donación de órganos, tejidos y sangre. Estoy aquí para ayudarte de manera clara y empática. ¿En qué puedo apoyarte hoy?');
-        }
-
-        // --- Donor Path Module Functions ---
-        async function displayDonorPathStep(stepKey) {
-            const stepContent = donorPathModule[stepKey];
-            if (!stepContent) {
-                console.error("Invalid donor path step:", stepKey);
-                await addBotMessageWithTyping("Lo siento, hubo un problema. Por favor, intenta de nuevo.");
-                return;
-            }
-            
-            currentDonorPathStep = stepKey;
-            
-            // Marcar explicaciones como vistas
-            if (stepKey === 'explain_muerte_encefalica') {
-                viewedExplanations.muerte_encefalica = true;
-            } else if (stepKey === 'explain_paro_cardiaco') {
-                viewedExplanations.paro_cardiaco = true;
-            }
-            
-            // Para el paso de introducción, solo mostrar el botón después de 2 segundos (sin texto adicional)
-            if (stepKey === 'introduction') {
-                // Solo mostrar botón después de exactamente 2 segundos
-                if (stepContent.buttons && stepContent.buttons.length > 0) {
-                    setTimeout(() => {
-                        displayModuleButtons(stepContent.buttons, handleDonorPathAction);
-                    }, 2000);
-                }
-            } else {
-                // Para otros pasos, comportamiento normal con efecto de escritura
-                if (stepContent.text) {
-                    // Usar efecto de escritura para el mensaje
-                    await addBotMessageWithTyping(stepContent.text);
-                    
-                    // Mostrar botones después de que aparezca el mensaje
-                    const buttonsToShow = typeof stepContent.buttons === 'function' ? stepContent.buttons() : stepContent.buttons;
-                    if (buttonsToShow && buttonsToShow.length > 0) {
-                        setTimeout(() => {
-                            displayModuleButtons(buttonsToShow, handleDonorPathAction);
-                        }, 800);
-                    }
-                } else {
-                    // Si no hay texto, mostrar botones directamente
-                    const buttonsToShow = typeof stepContent.buttons === 'function' ? stepContent.buttons() : stepContent.buttons;
-                    if (buttonsToShow && buttonsToShow.length > 0) {
-                        displayModuleButtons(buttonsToShow, handleDonorPathAction);
-                    }
-                }
-            }
-        }
-
-        async function handleDonorPathAction(action, buttonData = {}) {
-            // Ocultar botones previos con animación suave
-            const buttons = suggestedQuestionsContainer.querySelectorAll('button');
-            buttons.forEach((btn, index) => {
-                setTimeout(() => {
-                    btn.classList.add('opacity-0', 'transform', 'scale-95');
-                }, index * 50);
-            });
-            
-            // Ocultar completamente después de las animaciones
-            setTimeout(() => {
-                suggestedQuestionsContainer.classList.add('hidden');
-            }, buttons.length * 50 + 200);
-            
-            // Ejecutar acción después de un pequeño delay para naturalidad
-            setTimeout(async () => {
-                switch(action) {
-                    case 'donor_path_step1':
-                    case 'donor_path_step2':
-                    case 'donor_path_step3':
-                    case 'donor_path_step4':
-                    case 'donor_path_step5':
-                        await displayDonorPathStep(action.replace('donor_path_', ''));
-                        break;
-                    case 'donor_path_explain_muerte_encefalica':
-                        await displayDonorPathStep('explain_muerte_encefalica');
-                        break;
-                    case 'donor_path_explain_paro_cardiaco':
-                        await displayDonorPathStep('explain_paro_cardiaco');
-                        break;
-                    case 'donor_path_examples_family_talk':
-                        await displayDonorPathStep('examples_family_talk');
-                        break;
-                    case 'donor_path_example_carta':
-                        await displayDonorPathStep('example_carta');
-                        break;
-                    case 'donor_path_cierre':
-                        await displayDonorPathStep('cierre');
-                        break;
-                    case 'cenatra_link':
-                        await addBotMessageWithTyping('¡Perfecto! Te voy a llevar al portal oficial de CENATRA donde puedes registrarte como donante. Se abrirá una nueva ventana.');
-                        setTimeout(() => {
-                            window.open('https://dv.cenatra.salud.gob.mx/registrar.php', '_blank');
-                            // Después de abrir el enlace, mostrar opciones para continuar
-                            setTimeout(async () => {
-                                await addBotMessageWithTyping('Ya abrí el portal de CENATRA para ti. Cuando termines de registrarte (o si prefieres hacerlo después), podemos continuar con el siguiente paso.');
-                                const continueButtons = [
-                                    { text: "Ya me registré, continuar 👍", action: "donor_path_step5" },
-                                    { text: "Lo haré después, continuar 📅", action: "donor_path_step5" },
-                                    { text: "Enséñame un ejemplo de carta", action: "donor_path_example_carta" }
-                                ];
-                                setTimeout(() => {
-                                    displayModuleButtons(continueButtons, handleDonorPathAction);
-                                }, 800);
-                            }, 3000);
-                        }, 1000);
-                        break;
-                    case 'share_whatsapp':
-                        if (buttonData.shareText) {
-                            await addBotMessageWithTyping('¡Perfecto! Te voy a ayudar a compartir tu decisión por WhatsApp. Se abrirá una nueva ventana.');
-                            setTimeout(() => {
-                                const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(buttonData.shareText)}`;
-                                window.open(whatsappUrl, '_blank');
-                            }, 1000);
-                        }
-                        break;
-                    case 'suggest_questions':
-                        // Mostrar mensaje explicativo antes de las sugerencias
-                        await addBotMessageWithTyping('Te voy a generar algunas preguntas que podrían interesarte:');
-                        setTimeout(async () => {
-                            await toggleSuggestedQuestions();
-                        }, 800);
-                        break;
-                    case 'reset_chat':
-                        await addBotMessageWithTyping('Por supuesto, vamos a empezar de nuevo. ¡Estoy aquí para ayudarte!');
-                        setTimeout(() => {
-                            reset_chat_and_offer_suggestions();
-                        }, 1500);
-                        break;
-                    case 'indecision_start':
-                        await addBotMessageWithTyping('Es completamente normal tener dudas sobre la donación. Es una decisión importante. ¿Qué te preocupa más: el proceso médico, hablar con tu familia, o algo más específico?');
-                        break;
-                    default:
-                        console.warn("Unknown donor path action:", action);
-                        await addBotMessageWithTyping("Lo siento, no reconozco esa acción. ¿Puedes intentar de nuevo?");
-                }
-            }, 400);
-        }
-
-        async function toggleSuggestedQuestions() {
-            const container = suggestedQuestionsContainer;
-            if (container.classList.contains('hidden')) {
-                container.classList.remove('hidden');
-                container.innerHTML = '';
-                
-                // Mostrar indicador de carga
-                const loadingDiv = document.createElement('div');
-                loadingDiv.className = 'flex items-center justify-center py-4';
-                loadingDiv.innerHTML = `
-                    <div class="flex items-center space-x-2 text-blue-600">
-                        <div class="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                        <span class="text-sm">Generando preguntas...</span>
-                    </div>
-                `;
-                container.appendChild(loadingDiv);
-                
-                // Generar preguntas con IA
-                const questions = await generateSuggestedQuestions();
-                
-                // Limpiar el contenedor
-                container.innerHTML = '';
-                
-                if (questions && questions.length > 0) {
-                    questions.forEach((question, index) => {
-                        const button = document.createElement('button');
-                        button.className = 'bg-blue-50 text-blue-700 px-3 py-2 rounded-full text-sm hover:bg-blue-100 transition-colors opacity-0 transform translate-y-2';
-                        button.textContent = question;
-                        button.addEventListener('click', () => {
-                            // Simular que el usuario escribió la pregunta
-                            addMessageToChat('user', question);
-                            container.classList.add('hidden');
-                            // Enviar la pregunta a la IA marcando que es de pregunta sugerida
-                            getBotResponse(question, true);
-                        });
-                        container.appendChild(button);
-                        
-                        // Animación escalonada
-                        setTimeout(() => {
-                            button.classList.remove('opacity-0', 'translate-y-2');
-                        }, index * 150);
-                    });
-                } else {
-                    // Si falla la generación, mostrar mensaje de error
-                    const errorDiv = document.createElement('div');
-                    errorDiv.className = 'text-red-600 text-sm py-2';
-                    errorDiv.textContent = 'No se pudieron generar preguntas. Por favor, intenta de nuevo.';
-                    container.appendChild(errorDiv);
-                }
-                
-                suggestButtonText.textContent = 'Ocultar';
-            } else {
-                container.classList.add('hidden');
-                suggestButtonText.textContent = 'Sugerir';
-            }
-        }
-
-=======
         // =====================
         // FUNCION GLOBAL: Toggle Preguntas Sugeridas
         // =====================
@@ -1286,7 +917,6 @@
         // =====================
         // EVENTOS Y MICROINTERACCIONES
         // =====================
->>>>>>> 1c36224 (Subir proyecto VIDA completo)
         // --- Event Listeners ---
         chatForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -1332,12 +962,9 @@
             });
         });
 
-<<<<<<< HEAD
-=======
         // =====================
         // MODULO: Fondo Interactivo
         // =====================
->>>>>>> 1c36224 (Subir proyecto VIDA completo)
         // --- Interactive Background with three.js ---
         let scene, camera, renderer, particles, mouseX = 0, mouseY = 0;
 
@@ -1410,12 +1037,9 @@
             renderer.render(scene, camera);
         }
 
-<<<<<<< HEAD
-=======
         // =====================
         // INICIALIZACION
         // =====================
->>>>>>> 1c36224 (Subir proyecto VIDA completo)
         // Initialize Chat and Background
         document.addEventListener('DOMContentLoaded', () => {
             // Usar el efecto de escritura para el mensaje inicial

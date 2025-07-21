@@ -55,7 +55,7 @@ Recuerda: El JSON debe ir al final, en una sola línea, solo si corresponde acti
   }
 
   const openaiPayload = {
-    model: model || 'gpt-4o',
+    model: model || 'gpt-3.5-turbo',
     messages,
     temperature: temperature || 0.7,
     max_tokens: max_tokens || 700

@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIDA - Asistente de Donación</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Roboto as requested -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- three.js for interactive background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- Custom Styles and Animations -->
+    <style>
+        /* New Color Palette and Font from the design specification */
+        :root {
+            --vida-bg: #E3F2FD; /* Azul cielo claro */
+            --vida-text-dark: #0D47A1; /* Azul oscuro médico */
+            --vida-btn-green: #66BB6A; /* Verde esperanza suave */
+            --vida-btn-green-hover: #43A047;
+            --vida-text-secondary: #757575; /* Gris medio */
+            --vida-bg-footer: #F5F5F5; /* Gris claro */
+            --vida-chat-bot-bg: #F9F9F9; /* Gris claro para burbuja del bot */
+            --vida-chat-user-bg: #E8F5E9; /* Verde muy claro para burbuja de usuario */
+            --vida-btn-feedback: #4FC3F7; /* Azul cielo para feedback */
+            --vida-suggest-btn-bg: #E0F2F7; /* Azul muy claro para botón de sugerencia */
+            --vida-suggest-btn-hover: #B3E5FC; /* Azul más claro para hover */
+            --vida-module-btn-bg: #E0F2F7; /* Color para botones de módulo */
+            --vida-module-btn-hover: #B3E5FC; /* Color hover para botones de módulo */
+            --vida-module-btn-text: #0D47A1; /* Color de texto para botones de módulo */
+            --vida-quiz-btn-correct: #4CAF50; /* Verde para respuesta correcta */
+            --vida-quiz-btn-incorrect: #F44336; /* Rojo para respuesta incorrecta */
+            --vida-quiz-btn-disabled: #BDBDBD; /* Gris para botones deshabilitados */
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            /* Fondo con degradado suave y tenue como el quiz */
+            background-color: #f0f9ff;
+            background-image: 
+                radial-gradient(at 47% 33%, hsl(200.00, 80%, 85%) 0px, transparent 50%),
+                radial-gradient(at 9% 62%, hsl(215.00, 80%, 80%) 0px, transparent 50%),
+                radial-gradient(at 82% 65%, hsl(140.00, 80%, 80%) 0px, transparent 50%),
+                radial-gradient(at 24% 88%, hsl(20.00, 80%, 85%) 0px, transparent 50%),
+                radial-gradient(at 75% 8%, hsl(340.00, 80%, 85%) 0px, transparent 50%),
+                radial-gradient(at 56% 33%, hsl(260.00, 80%, 85%) 0px, transparent 50%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+
+
+        /* Canvas para partículas interactivas */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        /* Estilo especial para el título principal */
+        .vida-main-title {
+            color: #0F1B3C;
+            font-weight: 900;
+            letter-spacing: 0.02em;
+            /* Sombra y destello elegante */
+            text-shadow: 
+                0 0 20px rgba(255, 255, 255, 0.8),
+                0 0 40px rgba(255, 255, 255, 0.6),
+                0 2px 8px rgba(15, 27, 60, 0.4),
+                0 4px 16px rgba(15, 27, 60, 0.2);
+            filter: 
+                drop-shadow(0 0 15px rgba(255, 255, 255, 0.7))
+                drop-shadow(0 2px 8px rgba(15, 27, 60, 0.3));
+            /* Animación sutil de resplandor */
+            animation: titleGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            0% {
+                text-shadow: 
+                    0 0 20px rgba(255, 255, 255, 0.8),
+                    0 0 40px rgba(255, 255, 255, 0.6),
+                    0 2px 8px rgba(15, 27, 60, 0.4),
+                    0 4px 16px rgba(15, 27, 60, 0.2);
+            }
+            100% {
+                text-shadow: 
+                    0 0 25px rgba(255, 255, 255, 0.9),
+                    0 0 50px rgba(255, 255, 255, 0.7),
+                    0 2px 8px rgba(15, 27, 60, 0.5),
+                    0 4px 16px rgba(15, 27, 60, 0.3);
+            }
+        }
+        /* Subtítulo con color y formato mejorado */
+        .vida-main-subtitle {
+            color: #0D1B2A;
+            font-size: 1.35rem;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+            /* Sombra de texto para mejor contraste */
+            text-shadow: 0 1px 4px rgba(255, 255, 255, 0.9), 0 2px 8px rgba(13, 27, 42, 0.25);
+            /* Añadir un resplandor sutil */
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
+        }
+
+        /* Estilos específicos para cada línea del subtítulo */
+        .subtitle-line-1 {
+            font-size: 1.4rem;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .subtitle-line-2 {
+            font-size: 1.25rem;
+            font-weight: 400;
+            line-height: 1.6;
+            opacity: 0.95;
+        }
+
+        .subtitle-line-1 .font-semibold,
+        .subtitle-line-2 .font-semibold {
+            font-weight: 700;
+            color: #1A237E;
+        }
+
+        /* Banner hero principal */
+        .vida-hero-banner {
+            position: relative;
+            padding: 0.75rem 0.75rem;
+            border-radius: 0.75rem;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.95) 0%, 
+                rgba(255, 255, 255, 0.88) 50%, 
+                rgba(255, 255, 255, 0.95) 100%);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 
+                0 6px 20px rgba(13, 27, 42, 0.08),
+                0 3px 10px rgba(255, 255, 255, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            max-width: 100%;
+            margin: 0 auto;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        @media (min-width: 640px) {
+            .vida-hero-banner {
+                padding: 2rem 2rem;
+                border-radius: 1.5rem;
+                box-shadow: 
+                    0 10px 35px rgba(13, 27, 42, 0.12),
+                    0 5px 15px rgba(255, 255, 255, 0.3),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .vida-hero-banner {
+                max-width: 42rem;
+                margin: 0;
+                padding: 2.5rem 2.5rem;
+            }
+        }
+
+        .vida-hero-banner:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 12px 40px rgba(26, 35, 126, 0.15),
+                0 6px 20px rgba(255, 255, 255, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.7);
+        }
+
+        /* Efecto decorativo en el banner */
+        .vida-hero-banner::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            right: -1px;
+            bottom: -1px;
+            background: linear-gradient(135deg, 
+                rgba(26, 35, 126, 0.1) 0%, 
+                rgba(13, 71, 161, 0.08) 25%, 
+                rgba(25, 118, 210, 0.06) 50%, 
+                rgba(13, 71, 161, 0.08) 75%, 
+                rgba(26, 35, 126, 0.1) 100%);
+            border-radius: 2rem;
+            z-index: -1;
+        }
+
+        /* Social Media Buttons Styles */
+        .social-btn {
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .social-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .social-btn:active {
+            transform: translateY(0) scale(0.95);
+            transition: all 0.1s ease;
+        }
+
+        /* Instagram button specific styles */
+        .social-btn[title*="Instagram"] {
+            background: linear-gradient(45deg, #833AB4, #E1306C, #F77737);
+            background-size: 150% 150%;
+            animation: instagramGradient 3s ease infinite;
+        }
+
+        .social-btn[title*="Instagram"]:hover {
+            animation-play-state: paused;
+            background-position: 100% 0;
+        }
+
+        @keyframes instagramGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Facebook button specific styles */
+        .social-btn[title*="Facebook"] {
+            background: linear-gradient(135deg, #1877F2, #0D57A0);
+            position: relative;
+        }
+
+        .social-btn[title*="Facebook"]:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.6s;
+        }
+
+        .social-btn[title*="Facebook"]:hover:before {
+            left: 100%;
+        }
+
+        /* Responsive adjustments for social buttons */
+        @media (max-width: 640px) {
+            .social-btn {
+                box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            }
+            
+            .social-btn:hover {
+                transform: translateY(-1px) scale(1.03);
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            }
+        }
+
+        /* Feedback button optimizations for mobile */
+        #feedback-btn {
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+            /* Forzar que se mantenga fijo */
+            transform: translateZ(0);
+            will-change: transform;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        /* Animación suave para el botón de feedback */
+        #feedback-btn.fade-in-element {
+            opacity: 0;
+            transform: translateY(20px) translateZ(0);
+            animation: feedbackFadeIn 0.8s ease-out forwards;
+            animation-delay: inherit; /* Respeta el delay del HTML */
+        }
+
+        /* En móviles, después de la animación inicial, forzar estabilidad */
+        @media (max-width: 640px) {
+            #feedback-btn.fade-in-element {
+                animation: feedbackFadeInMobile 0.8s ease-out forwards;
+                animation-delay: inherit; /* Respeta el delay del HTML */
+            }
+        }
+
+        @keyframes feedbackFadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px) translateZ(0); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) translateZ(0); 
+            }
+        }
+
+        @keyframes feedbackFadeInMobile {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px) translateZ(0); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateZ(0); 
+            }
+        }
+
+        /* Reglas específicas para botones de feedback */
+        @media (max-width: 640px) {
+            /* En móviles: mostrar solo el botón móvil */
+            #feedback-btn-mobile {
+                display: flex !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+            }
+            
+            .feedback-mobile-container {
+                display: block !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+            }
+            
+            #feedback-btn {
+                display: none !important;
+            }
+        }
+
+        @media (min-width: 641px) {
+            /* En desktop: mostrar solo el botón flotante */
+            #feedback-btn-mobile {
+                display: none !important;
+            }
+            
+            .feedback-mobile-container {
+                display: none !important;
+            }
+            
+            #feedback-btn {
+                display: flex !important;
+                position: fixed !important;
+                bottom: 1.25rem !important;
+                left: 1.25rem !important;
+                z-index: 999 !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+            }
+        }
+
+        /* Footer normal - sin necesidad de z-index especial */
+        footer {
+            position: relative;
+        }
+
+        /* Header Buttons Styles */
+        .header-btn {
+            position: relative;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .header-btn:active {
+            transform: translateZ(0) scale(0.95);
+            transition: all 0.1s ease;
+        }
+
+        /* Privacy Button Specific Styles */
+        .privacy-btn {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.95));
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .privacy-btn:hover {
+            background: linear-gradient(135deg, rgba(239, 246, 255, 0.95), rgba(219, 234, 254, 0.95));
+            border-color: rgba(59, 130, 246, 0.3);
+            transform: translateZ(0) translateY(-1px) scale(1.02);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+        }
+
+        .privacy-btn:focus {
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+        }
+
+        /* About Button Specific Styles */
+        .about-btn {
+            background: linear-gradient(135deg, var(--vida-btn-green), var(--vida-btn-green-hover));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-btn:hover {
+            background: linear-gradient(135deg, var(--vida-btn-green-hover), #388E3C);
+            transform: translateZ(0) translateY(-1px) scale(1.02);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
+        }
+
+        .about-btn:focus {
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.5);
+        }
+
+        /* Enhanced animations for header buttons */
+        @keyframes headerButtonPulse {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+
+        @keyframes headerButtonPulseGreen {
+            0% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(76, 175, 80, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+        }
+
+        .privacy-btn:active {
+            animation: headerButtonPulse 0.6s ease-out;
+        }
+
+        .about-btn:active {
+            animation: headerButtonPulseGreen 0.6s ease-out;
+        }
+
+        /* Mobile optimizations for header buttons */
+        @media (max-width: 640px) {
+            .header-btn {
+                min-height: 32px;
+                font-size: 11px;
+                padding: 6px 12px;
+            }
+            
+            .header-btn:hover {
+                transform: translateZ(0) scale(1.01);
+            }
+            
+            .privacy-btn:hover {
+                transform: translateZ(0) scale(1.01);
+                box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+            }
+            
+            .about-btn:hover {
+                transform: translateZ(0) scale(1.01);
+                box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+            }
+        }
+
+        /* Extra small screens adjustments */
+        @media (max-width: 480px) {
+            .header-btn {
+                font-size: 10px;
+                padding: 5px 10px;
+                min-height: 28px;
+            }
+            
+            .header-btn svg {
+                width: 12px;
+                height: 12px;
+            }
+        }
+
+        /* Show full text on larger screens */
+        @media (min-width: 480px) {
+            .xs\:inline {
+                display: inline;
+            }
+        }
+
+        /* Fade-in animation for a smooth load */
+        .fade-in-element {
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Asegurar que el contenido principal sea visible */
+        body {
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+        /* Asegurar que el welcome-screen siempre sea visible */
+        #welcome-screen {
+            display: flex !important;
+            flex-direction: column !important;
+            min-height: 100vh !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+        
+        /* Asegurar que todos los elementos principales sean visibles */
+        #welcome-screen > * {
+            visibility: visible !important;
+        }
+        
+        /* Asegurar que el header, main y footer sean visibles */
+        #welcome-screen header,
+        #welcome-screen main,
+        #welcome-screen footer {
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+        
+        /* Asegurar que los botones del header sean visibles */
+        #welcome-screen header button,
+        #welcome-screen main button {
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+        
+        /* Asegurar que el contenido del main sea visible */
+        #welcome-screen main > div,
+        #welcome-screen main .vida-hero-banner,
+        #welcome-screen main h2,
+        #welcome-screen main p,
+        #welcome-screen main button {
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+        
+        /* Justify chat text */
+        .chat-bubble-text {
+            text-align: justify;
+        }
+        
+        /* Custom scrollbar for chat */
+        .chat-messages::-webkit-scrollbar { width: 6px; }
+        .chat-messages::-webkit-scrollbar-track { background: #FFFFFF; }
+        .chat-messages::-webkit-scrollbar-thumb { background: #BDBDBD; border-radius: 10px; }
+        .chat-messages::-webkit-scrollbar-thumb:hover { background: var(--vida-text-secondary); }
+
+        /* Initially hide these screens/modals */
+        #chat-screen, #about-modal, #feedback-modal, #privacy-modal { display: none; }
+        
+        /* Styles for radio buttons in feedback form */
+        .feedback-radio-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+        }
+
+        /* Styles for quiz question card */
+        .quiz-card {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .quiz-buttons button {
+            transition: all 0.2s;
+        }
+
+        /* Styling for the custom SVG robot */
+        /* Base styles for the SVG robot to ensure consistent appearance */
+        .robot-svg-icon { /* Class for the SVG element itself */
+            width: 100%;
+            height: 100%;
+        }
+        .robot-svg-icon .heart-icon {
+            fill: #EF5350; /* Red heart */
+        }
+        .robot-svg-icon .head-shape, .robot-svg-icon .torso {
+            fill: #FFFFFF; /* White parts */
+            stroke: #D1D5DB; /* Light gray border */
+            stroke-width: 2;
+        }
+        .robot-svg-icon .neck {
+            fill: #90A4AE; /* Gray neck */
+        }
+        .robot-svg-icon .arm-left, .robot-svg-icon .arm-right {
+            stroke: #42A5F5; /* Blue arms */
+            stroke-width: 15;
+            fill: none;
+            stroke-linecap: round;
+        }
+        .robot-svg-icon .screen {
+            fill: #1F2937; /* Dark screen */
+            rx: 10;
+        }
+        .robot-svg-icon .eye {
+            fill: #40C4FF; /* Light blue eyes */
+        }
+        .robot-svg-icon .smile {
+            stroke: #40C4FF; /* Light blue smile */
+            stroke-width: 1.5;
+            fill: none;
+            stroke-linecap: round;
+        }
+
+        /* Animations for the robot SVG */
+        @keyframes float-animation {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes heart-beat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes typing-animation {
+            0% { transform: translateY(0px); }
+            25% { transform: translateY(-2px); }
+            50% { transform: translateY(0px); }
+            75% { transform: translateY(-2px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        /* Apply animations to specific elements by ID or Class for different contexts */
+        #main-robot-container svg { /* Target the SVG inside the main container */
+            animation: float-animation 3s ease-in-out infinite;
+        }
+        /* Specific targeting for heart and head within message/typing indicator SVGs */
+        .message-robot-avatar .heart-icon {
+            animation: heart-beat 1.5s infinite;
+        }
+        .typing-indicator-robot .head {
+            animation: typing-animation 0.7s infinite;
+        }
+
+        /* Fondo exclusivo para la pantalla de conversación del chatbot */
+        #chat-screen {
+            background: linear-gradient(135deg, #e0e7ff 0%, #f0fdfa 50%, #e3f2fd 100%);
+        }
+
+        /* Robot Circle Styles mejorados con glassmorphism */
+        .robot-circle-bg {
+            width: 420px;
+            height: 420px;
+            min-width: 320px;
+            min-height: 320px;
+            max-width: 450px;
+            max-height: 450px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.9) 0%, 
+                rgba(255, 255, 255, 0.75) 50%, 
+                rgba(255, 255, 255, 0.9) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 
+                0 15px 45px rgba(13, 27, 42, 0.12), 
+                0 8px 25px rgba(255, 255, 255, 0.3),
+                inset 0 2px 0 rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: breathe 4s ease-in-out infinite;
+        }
+
+        .robot-circle-bg:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 
+                0 20px 55px rgba(13, 27, 42, 0.15), 
+                0 10px 30px rgba(255, 255, 255, 0.4),
+                inset 0 2px 0 rgba(255, 255, 255, 0.9);
+        }
+
+        @media (max-width: 640px) {
+            .robot-circle-bg {
+                width: 240px;
+                height: 240px;
+                min-width: 200px;
+                min-height: 200px;
+                max-width: 260px;
+                max-height: 260px;
+            }
+        }
+
+        .robot-img-main {
+            width: 115%;
+            height: 115%;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+            filter: drop-shadow(0 4px 16px rgba(76,175,80,0.10));
+            transition: all 0.4s ease;
+        }
+
+        /* Animación mejorada de respiración del robot */
+        @keyframes enhancedBreathing {
+            0% { 
+                transform: scale(1) rotate(0deg); 
+                filter: drop-shadow(0 4px 16px rgba(76,175,80,0.10));
+            }
+            50% { 
+                transform: scale(1.02) rotate(0.5deg); 
+                filter: drop-shadow(0 6px 24px rgba(76,175,80,0.15));
+            }
+            100% { 
+                transform: scale(1) rotate(0deg); 
+                filter: drop-shadow(0 4px 16px rgba(76,175,80,0.10));
+            }
+        }
+
+        #main-robot-container svg,
+        #main-robot-container img {
+            animation: enhancedBreathing 4s ease-in-out infinite;
+        }
+
+        /* Efectos de hover mejorados para botones */
+        .enhanced-button {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .enhanced-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s;
+        }
+
+        .enhanced-button:hover::before {
+            left: 100%;
+        }
+
+        .enhanced-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.2);
+        }
+
+        /* Botones premium mejorados */
+        .btn-primary-enhanced {
+            background: linear-gradient(135deg, #4CAF50 0%, #45A049 100%);
+            border: none;
+            min-width: 220px;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        .btn-secondary-enhanced {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            border: none;
+            min-width: 220px;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        /* Glassmorphism para cards/modales */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+        }
+        
+        /* Clase específica para modales con mejor legibilidad */
+        .modal-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 40px 0 rgba(31, 38, 135, 0.25);
+        }
+
+        /* Específico para móviles - manejo del teclado virtual */
+        :root {
+            --vh: 1vh;
+        }
+        
+        @supports (-webkit-touch-callout: none) {
+            #chat-screen {
+                /* Usar viewport fijo para iOS */
+                height: 100vh;
+                height: calc(var(--vh, 1vh) * 100);
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+            }
+        }
+        
+        /* Mejoras para el chat en móviles */
+        @media (max-width: 640px) {
+            /* Solo prevenir el scroll cuando el chat está abierto */
+            body.chat-open {
+                overflow: hidden !important;
+                position: fixed !important;
+                width: 100% !important;
+                height: 100% !important;
+            }
+            
+            html.chat-open {
+                overflow: hidden !important;
+                position: fixed !important;
+                width: 100% !important;
+                height: 100% !important;
+            }
+            
+            #chat-screen {
+                /* Prevenir zoom en inputs en iOS */
+                -webkit-text-size-adjust: 100%;
+                position: fixed !important;
+                top: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                bottom: 0 !important;
+                height: 100vh !important;
+                height: calc(var(--vh, 1vh) * 100) !important;
+                width: 100vw !important;
+                overflow: hidden;
+            }
+            
+            #chat-screen > div {
+                height: 100vh !important;
+                height: calc(var(--vh, 1vh) * 100) !important;
+                max-height: 100vh !important;
+                max-height: calc(var(--vh, 1vh) * 100) !important;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            #chat-input {
+                /* Prevenir zoom en inputs */
+                font-size: 16px !important;
+                -webkit-appearance: none;
+                appearance: none;
+                border-radius: 25px;
+                /* Prevenir el scroll automático al enfocar */
+                transform: translateZ(0);
+                -webkit-transform: translateZ(0);
+            }
+            
+            /* Asegurar que el footer se mantenga visible */
+            #chat-screen footer {
+                position: relative;
+                z-index: 10;
+                flex-shrink: 0;
+                bottom: 0;
+            }
+            
+            /* Mejorar el scroll del contenedor de mensajes */
+            #chat-container-wrapper {
+                flex: 1;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+                /* Prevenir el rebote del scroll */
+                overscroll-behavior: contain;
+            }
+            
+            /* Prevenir el zoom en toda la pantalla de chat */
+            #chat-screen * {
+                -webkit-text-size-adjust: 100%;
+                text-size-adjust: 100%;
+            }
+        }
+        
+        /* Viewport dinámico para móviles modernos */
+        @media (max-width: 640px) and (max-height: 800px) {
+            #chat-screen .w-full.h-full {
+                height: 100vh;
+                height: 100dvh;
+                min-height: 100vh;
+                min-height: 100dvh;
+            }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased">
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Welcome Screen -->
+    <div id="welcome-screen" class="min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="w-full p-4 sm:p-6 bg-transparent fade-in-element" style="animation-delay: 0.2s;">
+            <div class="container mx-auto flex justify-between items-center">
+                <div class="flex items-center space-x-0.5 sm:space-x-2 lg:space-x-2">
+                    <div class="w-8 h-8 sm:w-10 sm:h-10 lg:w-14 lg:h-14 bg-[var(--vida-text-dark)] rounded-full flex items-center justify-center shadow-lg">
+                        <!-- Heart Icon for VIDA logo -->
+                        <svg class="h-4 w-4 sm:h-6 sm:w-6 lg:h-8 lg:w-8 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    </div>
+                    <img src="Vidalogo.png" alt="VIDA Logo" class="h-16 w-auto sm:h-10 sm:w-auto lg:h-28 lg:w-auto object-contain max-w-[220px] sm:max-w-[140px] lg:max-w-[350px]" onerror="this.onerror=null;this.src='https://placehold.co/300x90/E3F2FD/0D47A1?text=VIDA';" />
+                </div>
+                <div class="flex items-center space-x-2 sm:space-x-3">
+                    <!-- Social Media Buttons -->
+                    <div class="flex items-center space-x-1 sm:space-x-2 mr-2 sm:mr-3 fade-in-element" style="animation-delay: 0.2s;">
+                        <!-- Instagram Button -->
+                        <a href="https://www.instagram.com/vida_donacion/" target="_blank" rel="noopener noreferrer" 
+                           class="social-btn w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-pink-300 focus:ring-offset-2"
+                           style="background: linear-gradient(45deg, #833AB4, #E1306C, #F77737);"
+                           title="Síguenos en Instagram">
+                            <svg class="w-3 h-3 sm:w-4 sm:h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12,2.163c3.204,0,3.584,0.012,4.85,0.07c3.252,0.148,4.771,1.691,4.919,4.919c0.058,1.265,0.069,1.645,0.069,4.849c0,3.205-0.012,3.584-0.069,4.849c-0.149,3.225-1.664,4.771-4.919,4.919c-1.266,0.058-1.644,0.07-4.85,0.07c-3.204,0-3.584-0.012-4.849-0.07c-3.26-0.149-4.771-1.699-4.919-4.92c-0.058-1.265-0.07-1.644-0.07-4.849c0-3.204,0.013-3.583,0.07-4.849c0.149-3.227,1.664-4.771,4.919-4.919c1.266-0.057,1.645-0.069,4.849-0.069zm0-2.163c-3.259,0-3.667,0.014-4.947,0.072c-4.358,0.2-6.78,2.618-6.98,6.98c-0.059,1.281-0.073,1.689-0.073,4.948c0,3.259,0.014,3.668,0.072,4.948c0.2,4.358,2.618,6.78,6.98,6.98c1.281,0.058,1.689,0.072,4.948,0.072c3.259,0,3.668-0.014,4.948-0.072c4.354-0.2,6.782-2.618,6.979-6.98c0.059-1.28,0.073-1.689,0.073-4.948c0-3.259-0.014-3.667-0.072-4.947c-0.196-4.354-2.617-6.78-6.979-6.98c-1.281-0.059-1.689-0.073-4.949-0.073zm0,5.838c-3.403,0-6.162,2.759-6.162,6.162c0,3.403,2.759,6.163,6.162,6.163s6.162-2.759,6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0,10.162c-2.209,0-4-1.79-4-4c0-2.209,1.791-4,4-4s4,1.791,4,4c0,2.21-1.791,4-4,4zm6.406-11.845c-0.796,0-1.441,0.645-1.441,1.44s0.645,1.44,1.441,1.44c0.795,0,1.439-0.645,1.439-1.44s-0.644-1.44-1.439-1.44z"/>
+                            </svg>
+                        </a>
+                        <!-- Facebook Button -->
+                        <a href="https://www.facebook.com/share/19NdNXLpmr/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" 
+                           class="social-btn w-6 h-6 sm:w-8 sm:h-8 bg-blue-600 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-2"
+                           title="Síguenos en Facebook">
+                            <svg class="w-3 h-3 sm:w-4 sm:h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <!-- Header Action Buttons -->
+                    <div class="flex items-center space-x-1.5 sm:space-x-3">
+                        <!-- Privacy button -->
+                        <button id="privacy-btn" class="header-btn privacy-btn group relative overflow-hidden bg-white/90 backdrop-blur-sm text-[var(--vida-text-dark)] font-semibold py-1.5 px-3 sm:py-2 sm:px-4 text-xs sm:text-sm rounded-xl border border-blue-200/50 shadow-sm hover:shadow-md transition-all duration-300 hover:scale-[1.02] hover:bg-blue-50/90 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-2">
+                            <span class="relative z-10 flex items-center gap-1.5">
+                                <svg class="w-3 h-3 sm:w-4 sm:h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                                </svg>
+                                <span class="hidden xs:inline">Aviso de </span>Privacidad
+                            </span>
+                            <div class="absolute inset-0 bg-gradient-to-r from-blue-500/0 via-blue-500/10 to-blue-500/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+                        </button>
+                        <!-- About button -->
+                        <button id="about-btn" class="header-btn about-btn group relative overflow-hidden bg-gradient-to-r from-[var(--vida-btn-green)] to-[var(--vida-btn-green-hover)] text-white font-bold py-1.5 px-3 sm:py-2 sm:px-4 text-xs sm:text-sm rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-[var(--vida-btn-green)] focus:ring-offset-2 enhanced-button">
+                            <span class="relative z-10 flex items-center gap-1.5">
+                                <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                                </svg>
+                                <span class="hidden xs:inline">¿Qué hace </span>VIDA<span class="hidden xs:inline">?</span>
+                            </span>
+                            <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+                        </button>
+                    </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col lg:flex-row items-center justify-center container mx-auto px-4 py-6 sm:py-8 lg:py-8 text-center lg:text-left gap-6 sm:gap-8 lg:gap-12">
+            <div class="lg:w-3/5 flex flex-col items-center lg:items-start space-y-4 sm:space-y-6">
+                <!-- Banner principal con diseño elegante -->
+                <div class="vida-hero-banner fade-in-element w-full" style="animation-delay: 0.3s;">
+                    <h2 class="vida-main-title text-base sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-[var(--vida-text-dark)] fade-in-element leading-tight" style="animation-delay: 0.4s;">
+                        Voz de Información y Donación Asistida
+                    </h2>
+                    <div class="vida-main-subtitle text-xs sm:text-base md:text-lg lg:text-xl mt-2 sm:mt-5 fade-in-element" style="animation-delay: 0.6s;">
+                        <p class="subtitle-line-1 mb-1 sm:mb-3 text-center lg:text-left text-xs sm:text-base">
+<<<<<<< HEAD
+                            <span class="font-semibold">Tu aliado informativo</span> en momentos críticos
+                        </p>
+                        <p class="subtitle-line-2 text-center lg:text-left leading-relaxed text-xs sm:text-base">
+                            Estoy aquí para ayudarte a tomar decisiones 
+                            <span class="font-semibold">claras, humanas y fundamentadas</span>
+=======
+                            <span class="font-semibold">Tu guía de confianza</span> en momentos delicados
+                        </p>
+                        <p class="subtitle-line-2 text-center lg:text-left leading-relaxed text-xs sm:text-base">
+                            Estoy aquí para ayudarte a tomar decisiones 
+                            <span class="font-semibold">claras, humanas y bien informadas</span>
+>>>>>>> 1c36224 (Subir proyecto VIDA completo)
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Botones de acción debajo del banner, centrados con respecto al banner -->
+                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center self-center w-full max-w-2xl fade-in-element lg:justify-start lg:self-start" style="animation-delay: 0.8s;">
+                    <button id="start-chat-btn" class="btn-primary-enhanced bg-[var(--vida-btn-green)] text-white font-bold py-2 px-4 sm:py-4 sm:px-8 text-xs sm:text-base rounded-full shadow-lg hover:bg-[var(--vida-btn-green-hover)] transition-all transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-300 enhanced-button flex items-center justify-center gap-2 w-full sm:w-auto">
+                        <svg class="h-3 w-3 sm:h-5 sm:w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M4.913 2.658c2.075-.27 4.19-.408 6.337-.408 2.147 0 4.262.139 6.337.408 1.922.25 3.291 1.861 3.405 3.727a4.403 4.403 0 00-1.032-.211 50.89 50.89 0 00-8.42 0c-2.358.196-4.04 2.19-4.04 4.434v4.286a4.47 4.47 0 002.433 3.984L7.28 21.53A.75.75 0 016 21v-4.03a48.527 48.527 0 01-1.087-.128C2.905 16.58 1.5 14.833 1.5 12.862V6.638c0-1.97 1.405-3.718 3.413-3.979z"/>
+                            <path d="M15.75 7.5c-1.376 0-2.739.057-4.086.169C10.124 7.797 9 9.103 9 10.609v4.285c0 1.507 1.128 2.814 2.67 2.94 1.243.102 2.5.157 3.768.165l2.782 2.781a.75.75 0 001.28-.53v-2.39l.33-.026c1.542-.125 2.67-1.433 2.67-2.940v-4.286c0-1.505-1.125-2.811-2.664-2.94A49.392 49.392 0 0015.75 7.5z"/>
+                        </svg>
+                        Iniciar conversación
+                    </button>
+                    <!-- New Quiz Module Button -->
+                    <button id="start-quiz-btn" class="btn-secondary-enhanced bg-[var(--vida-btn-feedback)] text-white font-bold py-2 px-4 sm:py-4 sm:px-8 text-xs sm:text-base rounded-full shadow-lg hover:bg-blue-400 transition-all transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 flex items-center justify-center gap-2 enhanced-button w-full sm:w-auto">
+                        <svg class="h-3 w-3 sm:h-5 sm:w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2c-3.87 0-7 3.13-7 7 0 3.73 2.7 6.84 6.3 7.64V22h1.4c.26 0 .5-.11.6-.33.15-.36-.04-.77-.4-.92L11.5 20h1v-1.12c3.6-1.12 6.3-4.23 6.3-7.64 0-3.87-3.13-7-7-7zm0 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+                        </svg>
+                        ¿Qué tanto sabes sobre donar?
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Robot Image mejorado -->
+            <div id="main-robot-container" class="lg:w-2/5 flex items-center justify-center lg:items-start lg:justify-start mt-6 sm:mt-8 lg:mt-[-2rem] lg:ml-[-3rem] fade-in-element" style="animation-delay: 1s;">
+                <div class="robot-circle-bg">
+                    <img src="robot.png" alt="Robot VIDA" class="robot-img-main" onerror="this.onerror=null;this.src='https://placehold.co/437x437/FFFFFF/FFFFFF?text=Robot';" />
+                </div>
+            </div>
+        </main>
+
+        <!-- Botón de feedback ARRIBA del footer - SOLO para móviles -->
+        <div class="feedback-mobile-container block sm:hidden px-4 py-2 fade-in-element" style="animation-delay: 1.4s;">
+            <button id="feedback-btn-mobile" class="bg-[var(--vida-btn-feedback)] text-white font-semibold py-2 px-4 rounded-full shadow-lg hover:scale-105 transition-transform flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.08-3.239A8.939 8.939 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM4.416 11.603a.75.75 0 00-.029.048l.029-.048zM5.022 13.013a.75.75 0 00.213.024l.028-.024z" clip-rule="evenodd" /></svg>
+                Danos tu opinión
+            </button>
+        </div>
+
+        <footer class="w-full py-1 px-0 sm:p-1 bg-[var(--vida-bg-footer)] fade-in-element" style="animation-delay: 1.2s;">
+            <div class="container mx-auto max-w-xl lg:max-w-2xl px-4 sm:px-12 lg:px-16">
+                <div class="flex flex-col items-center justify-center py-1 sm:py-2">
+                    <p class="text-[10px] sm:text-base md:text-xs text-slate-700 font-medium mb-0 leading-tight max-w-xs sm:max-w-md lg:max-w-lg text-center">
+<<<<<<< HEAD
+                        VIDA es una herramienta informativa. No sustituye la atención médica.<br class="hidden sm:block">
+                        <span class="block sm:inline">© 2025 José Agustín Gutiérrez Iglesias | Iniciativa VIDA. Todos los derechos reservados.</span>
+                    </p>
+                    <a href="https://www.gob.mx/cenatra" target="_blank" class="text-[10px] sm:text-xs text-[var(--vida-btn-feedback)] underline font-semibold hover:text-[var(--vida-text-dark)] transition-colors block mt-0 text-center">
+                        Ir a CENATRA
+=======
+                        VIDA es una herramienta informativa. No sustituye la atención médica ni legal.<br class="hidden sm:block">
+                        <span class="block sm:inline">© 2025 José Agustín Gutiérrez Iglesias | Proyecto VIDA. Todos los derechos reservados.</span>
+                    </p>
+                    <a href="https://www.ont.es/" target="_blank" class="text-[10px] sm:text-xs text-[var(--vida-btn-feedback)] underline font-semibold hover:text-[var(--vida-text-dark)] transition-colors block mt-0 text-center">
+                        Ir a Organización Nacional de Trasplantes
+>>>>>>> 1c36224 (Subir proyecto VIDA completo)
+                    </a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Botón de feedback flotante solo para desktop -->
+    <button id="feedback-btn" class="bg-[var(--vida-btn-feedback)] text-white font-semibold py-2 px-4 rounded-full shadow-lg hover:scale-105 transition-transform items-center gap-2 enhanced-button fade-in-element" style="animation-delay: 1.4s;">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.08-3.239A8.939 8.939 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM4.416 11.603a.75.75 0 00-.029.048l.029-.048zM5.022 13.013a.75.75 0 00.213.024l.028-.024z" clip-rule="evenodd" /></svg>
+        Danos tu opinión
+    </button>
+    
+    <div id="about-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-3 sm:p-4 z-50">
+        <div class="modal-card rounded-lg sm:rounded-2xl shadow-xl max-w-xs sm:max-w-lg w-full p-3 sm:p-8 relative max-h-[85vh] sm:max-h-[90vh] overflow-y-auto">
+            <button id="close-about-modal-btn" class="absolute top-2 right-2 sm:top-4 sm:right-4 text-gray-500 hover:text-gray-800 z-10 bg-white rounded-full p-1 shadow-md">
+                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+            <h3 class="text-base sm:text-2xl font-bold text-[var(--vida-text-dark)] mb-2 sm:mb-4 pr-8">¿Qué hace VIDA?</h3>
+            <div class="text-slate-700 text-justify space-y-2 sm:space-y-3 text-xs sm:text-base" style="text-align: justify;">
+<<<<<<< HEAD
+                <p>VIDA es un asistente conversacional creado para brindar orientación empática, clara y confiable sobre la donación de órganos, tejidos y sangre en México.</p>
+                <p>Fue desarrollado como una herramienta informativa para acompañar a personas que tienen dudas, miedo o simplemente desean entender mejor cómo funciona la donación, ya sea como donadores voluntarios o como familiares que enfrentan una decisión en un momento difícil.</p>
+                <p>VIDA no sustituye atención médica ni asesoría profesional directa, pero está diseñada para ayudarte a:</p>
+                <ul class="list-disc pl-3 sm:pl-6 space-y-1 text-xs sm:text-base">
+                    <li>Entender qué órganos, tejidos y componentes sanguíneos se pueden donar.</li>
+                    <li>Saber quién puede ser donador y en qué momentos.</li>
+                    <li>Desmitificar ideas falsas sobre la donación.</li>
+                    <li>Reflexionar con libertad sobre el acto de donar.</li>
+                    <li>Obtener enlaces seguros y oficiales para registrarte como donador voluntario o encontrar centros de donación.</li>
+=======
+                <p>VIDA es un asistente conversacional creado para ofrecer orientación empática, clara y confiable sobre la donación de órganos, tejidos y sangre en España.</p>
+                <p>Está diseñado como una herramienta informativa para acompañar a personas que tienen dudas, inquietudes o simplemente desean comprender mejor cómo funciona la donación en nuestro país, ya sea desde la reflexión personal o ante la pérdida de un ser querido.</p>
+                <p>VIDA no reemplaza la atención médica ni la labor de los equipos de coordinación de trasplantes, pero sí puede ayudarte a:</p>
+                <ul class="list-disc pl-3 sm:pl-6 space-y-1 text-xs sm:text-base">
+                    <li>Comprender qué órganos, tejidos y componentes sanguíneos se pueden donar.</li>
+                    <li>Saber cuándo y cómo se lleva a cabo una donación en vida o tras el fallecimiento.</li>
+                    <li>Conocer en qué consiste el consentimiento presunto y cómo se respeta la voluntad individual.</li>
+                    <li>Desmentir ideas equivocadas que aún circulan sobre la donación.</li>
+                    <li>Reflexionar libremente sobre el valor de donar y cómo compartir tu decisión con la familia.</li>
+                    <li>Acceder a recursos oficiales como la ONT o los registros autonómicos de voluntades anticipadas.</li>
+>>>>>>> 1c36224 (Subir proyecto VIDA completo)
+                </ul>
+                <p>VIDA es una voz que informa sin juzgar, acompaña con respeto y cree que donar es uno de los mayores actos de generosidad y humanidad.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="privacy-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-3 sm:p-4 z-50">
+        <div class="modal-card rounded-lg sm:rounded-2xl shadow-xl max-w-xs sm:max-w-lg w-full p-3 sm:p-8 relative max-h-[85vh] sm:max-h-[90vh] overflow-y-auto">
+            <button id="close-privacy-modal-btn" class="absolute top-2 right-2 sm:top-4 sm:right-4 text-gray-500 hover:text-gray-800 z-10 bg-white rounded-full p-1 shadow-md">
+                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+            <h3 class="text-base sm:text-2xl font-bold text-[var(--vida-text-dark)] mb-2 sm:mb-4 pr-8">Aviso de Privacidad – VIDA</h3>
+            <div class="text-slate-700 text-justify text-xs sm:text-base" style="text-align: justify;">
+<<<<<<< HEAD
+                <p class="mb-2 sm:mb-3">VIDA (Voz de Información y Donación Asistida) es una herramienta informativa que opera sin recopilar datos personales sensibles. No se almacenan nombres, ubicaciones, correos electrónicos ni respuestas específicas de los usuarios. Las conversaciones no son monitoreadas ni utilizadas para fines comerciales o de perfilamiento.</p>
+                <p class="mb-2 sm:mb-3">El uso de esta plataforma es completamente anónimo y su único propósito es ofrecer orientación general sobre procesos de donación post mortem, con base en información pública y normativa mexicana vigente.</p>
+                <p class="mb-2 sm:mb-3">VIDA no sustituye asesoría médica, psicológica ni legal. Si requiere atención médica o desea formalizar su voluntad de donar, debe acudir a las instancias oficiales correspondientes (CENATRA, IMSS, ISSSTE, etc.).</p>
+                <p>Para cualquier comentario, puede escribir al desarrollador del proyecto a través del formulario de contacto disponible.</p>
+=======
+                <p class="mb-2 sm:mb-3">VIDA (Voz de Información y Donación Asistida) es una herramienta informativa que opera sin recopilar datos personales sensibles. No se almacenan nombres, ubicaciones, correos electrónicos ni respuestas específicas de los usuarios. Las conversaciones no son monitorizadas ni utilizadas con fines comerciales, publicitarios ni de perfilado.</p>
+                <p class="mb-2 sm:mb-3">El uso de esta plataforma es completamente anónimo y su único propósito es ofrecer orientación general sobre el sistema de donación de órganos y tejidos en España, con base en información pública y normativa vigente, incluida la Ley 30/1979 y los lineamientos de la Organización Nacional de Trasplantes (ONT).</p>
+                <p class="mb-2 sm:mb-3">VIDA no sustituye asesoramiento médico, psicológico ni legal. Si necesita atención médica o desea formalizar su voluntad de donar (a favor o en contra), debe acudir a las instancias oficiales correspondientes, como los registros autonómicos de Instrucciones Previas o el sitio web oficial de la ONT</p>
+                <p>Para cualquier comentario sobre esta herramienta, puede contactar con el equipo desarrollador a través del formulario de contacto disponible en esta página.</p>
+>>>>>>> 1c36224 (Subir proyecto VIDA completo)
+            </div>
+        </div>
+    </div>
+    
+    <div id="feedback-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-3 sm:p-4 z-50">
+        <div class="modal-card rounded-lg sm:rounded-2xl shadow-xl max-w-xs sm:max-w-lg w-full p-3 sm:p-8 relative overflow-hidden max-h-[85vh] sm:max-h-[90vh]">
+            <div id="feedback-form-container" class="overflow-y-auto max-h-full">
+                 <button id="close-feedback-modal-btn" class="absolute top-2 right-2 sm:top-4 sm:right-4 text-gray-500 hover:text-gray-800 z-10 bg-white rounded-full p-1 shadow-md">
+                     <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                 </button>
+                <h3 class="text-base sm:text-2xl font-bold text-[var(--vida-text-dark)] mb-1 sm:mb-2 pr-8">Encuesta anónima de satisfacción – VIDA</h3>
+                <p class="text-xs sm:text-sm text-gray-500 mb-4 sm:mb-6">Responde en menos de 1 minuto:</p>
+                <form id="feedback-form">
+                    <div class="space-y-3 sm:space-y-6">
+                        <div>
+                            <p class="font-semibold text-gray-700 mb-1 sm:mb-2 text-xs sm:text-base">1. ¿La información que recibiste fue clara y útil?</p>
+                            <div class="flex flex-col sm:flex-row sm:gap-4 feedback-radio-group text-xs sm:text-sm">
+                                <label><input type="radio" name="clarity" value="si" class="mr-2" required> Sí</label>
+                                <label><input type="radio" name="clarity" value="parcialmente" class="mr-2"> Parcialmente</label>
+                                <label><input type="radio" name="clarity" value="no" class="mr-2"> No</label>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gray-700 mb-1 sm:mb-2 text-xs sm:text-base">2. ¿El lenguaje utilizado te pareció comprensible?</p>
+                            <div class="flex flex-col sm:flex-row sm:gap-4 feedback-radio-group text-xs sm:text-sm">
+                                <label><input type="radio" name="language" value="si" class="mr-2" required> Sí</label>
+                                <label><input type="radio" name="language" value="regular" class="mr-2"> Regular</label>
+                                <label><input type="radio" name="language" value="dificil" class="mr-2"> Difícil de entender</label>
+                            </div>
+                        </div>
+                         <div>
+                            <p class="font-semibold text-gray-700 mb-1 sm:mb-2 text-xs sm:text-base">3. ¿Te ayudó a resolver tus dudas sobre donación?</p>
+                            <div class="flex flex-col sm:flex-row sm:gap-4 feedback-radio-group text-xs sm:text-sm">
+                                <label><input type="radio" name="solved_doubts" value="si" class="mr-2" required> Sí completamente</label>
+                                <label><input type="radio" name="solved_doubts" value="algunas" class="mr-2"> Algunas</label>
+                                <label><input type="radio" name="solved_doubts" value="no" class="mr-2"> No</label>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gray-700 mb-1 sm:mb-2 text-xs sm:text-base">4. ¿Recomendarías esta herramienta a otros usuarios?</p>
+                            <div class="flex flex-col sm:flex-row sm:gap-4 feedback-radio-group text-xs sm:text-sm">
+                                <label><input type="radio" name="recommend" value="si" class="mr-2" required> Sí</label>
+                                <label><input type="radio" name="recommend" value="no" class="mr-2"> No</label>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="comments" class="font-semibold text-gray-700 mb-1 sm:mb-2 block text-xs sm:text-base">Comentarios adicionales</label>
+                            <textarea id="comments" name="comments" rows="2" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--vida-btn-feedback)] text-xs sm:text-sm"></textarea>
+                        </div>
+                    </div>
+                    <div class="mt-4 sm:mt-8 text-right">
+                        <button type="submit" class="bg-[var(--vida-btn-green)] text-white font-bold py-2 px-4 sm:px-6 rounded-lg shadow-md hover:bg-[var(--vida-btn-green-hover)] transition-colors text-xs sm:text-base">Enviar respuesta</button>
+                    </div>
+                </form>
+            </div>
+             <div id="feedback-thanks" class="hidden text-center">
+                 <svg class="mx-auto h-12 w-12 sm:h-16 sm:w-16 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <h3 class="mt-2 sm:mt-4 text-lg sm:text-2xl font-bold text-[var(--vida-text-dark)]">¡Gracias!</h3>
+                <p class="mt-1 sm:mt-2 text-gray-600 text-sm sm:text-base">Tu opinión nos importa y nos ayuda a mejorar VIDA.</p>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="chat-screen" class="fixed inset-0 bg-slate-100 flex items-stretch justify-center p-0 sm:p-4 z-40 transition-opacity duration-300 opacity-0">
+        <div class="w-full h-full sm:max-w-4xl sm:h-[90vh] bg-white sm:rounded-2xl shadow-2xl flex flex-col relative overflow-hidden">
+            <header class="bg-white border-b border-gray-200 p-3 sm:p-4 sm:rounded-t-2xl flex items-center justify-between shadow-sm flex-shrink-0">
+                 <div class="flex items-center space-x-1">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-[var(--vida-text-dark)] rounded-full flex items-center justify-center mr-1">
+                        <!-- Heart Icon for VIDA logo in chat header -->
+                        <svg class="h-5 w-5 sm:h-7 sm:w-7 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    </div>
+                    <img src="Vidalogo.png" alt="VIDA Logo" class="h-10 sm:h-13 w-auto object-contain max-w-[80px] sm:max-w-[90px]" onerror="this.onerror=null;this.src='https://placehold.co/90x40/E3F2FD/0D47A1?text=VIDA';" />
+                 </div>
+                <button id="close-chat-btn" class="text-gray-500 hover:bg-gray-200 p-2 rounded-full">
+                     <svg class="h-5 w-5 sm:h-6 sm:w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </header>
+            <main class="flex-1 flex overflow-hidden min-h-0">
+                <div id="chat-container-wrapper" class="flex-1 flex flex-col p-3 sm:p-4 lg:p-6 overflow-y-auto chat-messages">
+                     <div id="chat-container" class="flex flex-col space-y-3 sm:space-y-4"></div>
+                </div>
+                <aside class="w-1/3 bg-slate-50 p-6 border-l border-slate-200 hidden lg:flex flex-col items-center justify-center">
+                    <!-- chat-robot-avatar element: using the provided image for the large avatar -->
+                    <div id="chat-robot-avatar-large" class="w-48 h-48 mb-4 rounded-full flex items-center justify-center shadow-lg overflow-hidden">
+                        <img src="robot.png" alt="Robot VIDA" class="w-full h-full object-contain" onerror="this.onerror=null;this.src='https://placehold.co/192x192/FFFFFF/FFFFFF?text=Robot';" />
+                    </div>
+                    <div class="text-center">
+                        <h3 class="font-bold text-lg text-[var(--vida-text-dark)]">Estoy para ayudarte</h3>
+                        <p class="text-sm text-[var(--vida-text-secondary)] mt-1">Pregúntame sobre el proceso de donación de órganos y tejidos.</p>
+                    </div>
+                </aside>
+            </main>
+            <footer class="p-2 sm:p-3 bg-white border-t border-gray-200 sm:rounded-b-2xl flex-shrink-0">
+                <div id="suggested-questions-container" class="flex flex-wrap gap-2 mb-2 sm:mb-3 hidden"></div>
+
+                <form id="chat-form" class="flex items-center space-x-2 sm:space-x-3">
+                    <button type="button" id="suggest-questions-btn" class="bg-[var(--vida-suggest-btn-bg)] text-[var(--vida-text-dark)] rounded-full p-2 sm:p-2.5 
+                                     hover:bg-[var(--vida-suggest-btn-hover)] transition-colors focus:outline-none focus:ring-4 focus:ring-blue-100 
+                                     disabled:bg-gray-200 disabled:cursor-not-allowed flex items-center justify-center flex-shrink-0">
+                        <svg class="h-4 w-4 sm:h-5 sm:w-5 text-yellow-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c-3.87 0-7 3.13-7 7 0 3.73 2.7 6.84 6.3 7.64V22h1.4c.26 0 .5-.11.6-.33.15-.36-.04-.77-.4-.92L11.5 20h1v-1.12c3.6-1.12 6.3-4.23 6.3-7.64 0-3.87-3.13-7-7-7zm0 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
+                        <span id="suggest-button-text" class="ml-1 text-xs sm:text-sm font-semibold hidden sm:inline">Sugiere</span> </button>
+                    <input type="text" id="chat-input" placeholder="Escribe tu pregunta aquí..." autocomplete="off" class="flex-1 w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[var(--vida-btn-green)] transition text-sm sm:text-base">
+                    <button type="submit" class="bg-[var(--vida-btn-green)] text-white rounded-full p-2 sm:p-3 hover:bg-[var(--vida-btn-green-hover)] transition-transform transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-green-200 disabled:bg-gray-400 disabled:cursor-not-allowed flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6" viewBox="0 0 20 20" fill="currentColor"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" /></svg>
+                    </button>
+                </form>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // Limpieza: solo dejamos lo esencial para la página principal
+        // Si necesitas agregar scripts para animaciones visuales, hazlo aquí
+        // Elimina referencias a chat, quiz y módulos que no se usan en la landing principal
+        // ...aquí puedes agregar scripts propios de la landing si los necesitas...
+
+        // Restaurar navegación a chat.html y quiz.html
+        document.getElementById('start-chat-btn').addEventListener('click', function() {
+            window.location.href = 'chat.html';
+        });
+        document.getElementById('start-quiz-btn').addEventListener('click', function() {
+            window.location.href = 'quiz.html';
+        });
+
+        // --- Restaurar funcionalidad de modales ---
+        // Privacidad
+        document.getElementById('privacy-btn').addEventListener('click', function() {
+            document.getElementById('privacy-modal').style.display = 'flex';
+        });
+        document.getElementById('close-privacy-modal-btn').addEventListener('click', function() {
+            document.getElementById('privacy-modal').style.display = 'none';
+        });
+        // ¿Qué hace VIDA?
+        document.getElementById('about-btn').addEventListener('click', function() {
+            document.getElementById('about-modal').style.display = 'flex';
+        });
+        document.getElementById('close-about-modal-btn').addEventListener('click', function() {
+            document.getElementById('about-modal').style.display = 'none';
+        });
+        // Feedback (desktop y móvil)
+        function openFeedbackModal() {
+            document.getElementById('feedback-modal').style.display = 'flex';
+        }
+        function closeFeedbackModal() {
+            document.getElementById('feedback-modal').style.display = 'none';
+            // Restaurar formulario para futuros envíos
+            document.getElementById('feedback-form-container').style.display = '';
+            document.getElementById('feedback-thanks').classList.add('hidden');
+            document.getElementById('feedback-form').reset();
+        }
+        var feedbackBtn = document.getElementById('feedback-btn');
+        if (feedbackBtn) feedbackBtn.addEventListener('click', openFeedbackModal);
+        var feedbackBtnMobile = document.getElementById('feedback-btn-mobile');
+        if (feedbackBtnMobile) feedbackBtnMobile.addEventListener('click', openFeedbackModal);
+        document.getElementById('close-feedback-modal-btn').addEventListener('click', closeFeedbackModal);
+
+        // --- Envío real del formulario de feedback a Google Forms ---
+        function mapFormValue(fieldName, value) {
+            if (!value) return '';
+            const mappings = {
+                'clarity': {
+                    'si': 'Si',
+                    'parcialmente': 'Parcialmente',
+                    'no': 'No'
+                },
+                'language': {
+                    'si': 'Si',
+                    'regular': 'Regular',
+                    'dificil': 'Difícil de entender'
+                },
+                'solved_doubts': {
+                    'si': 'Si completamente',
+                    'algunas': 'Algunas',
+                    'no': 'No'
+                },
+                'recommend': {
+                    'si': 'Si',
+                    'no': 'No'
+                }
+            };
+            const mapped = mappings[fieldName] && mappings[fieldName][value] ? mappings[fieldName][value] : value;
+            return mapped;
+        }
+
+        document.getElementById('feedback-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var form = e.target;
+            var submitButton = form.querySelector('button[type="submit"]');
+            var formData = new FormData(form);
+            submitButton.disabled = true;
+            submitButton.textContent = 'Enviando...';
+            try {
+                var fields = {
+                    clarity: mapFormValue('clarity', formData.get('clarity')),
+                    language: mapFormValue('language', formData.get('language')),
+                    solved_doubts: mapFormValue('solved_doubts', formData.get('solved_doubts')),
+                    recommend: mapFormValue('recommend', formData.get('recommend')),
+                    comments: formData.get('comments') || ''
+                };
+                var googleFormUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSfVcPvKM2TK63V-uT6JbQtbHrrg_OujPu__5jiowpDavE4p0A/formResponse';
+                var iframe = document.getElementById('feedback-iframe');
+                if (!iframe) {
+                    iframe = document.createElement('iframe');
+                    iframe.id = 'feedback-iframe';
+                    iframe.name = 'feedback-iframe';
+                    iframe.style.display = 'none';
+                    document.body.appendChild(iframe);
+                }
+                var tempForm = document.createElement('form');
+                tempForm.action = googleFormUrl;
+                tempForm.method = 'POST';
+                tempForm.target = 'feedback-iframe';
+                tempForm.style.display = 'none';
+                var entryFields = {
+                    'entry.1429993267': fields.clarity,
+                    'entry.962169197': fields.language,
+                    'entry.2266276': fields.solved_doubts,
+                    'entry.1344114409': fields.recommend,
+                    'entry.287412987': fields.comments
+                };
+                Object.keys(entryFields).forEach(function(key) {
+                    var input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = entryFields[key];
+                    tempForm.appendChild(input);
+                });
+                document.body.appendChild(tempForm);
+                iframe.onload = function() {
+                    setTimeout(function() {
+                        if (tempForm.parentNode) {
+                            document.body.removeChild(tempForm);
+                        }
+                    }, 1000);
+                };
+                tempForm.submit();
+                document.getElementById('feedback-form-container').style.display = 'none';
+                document.getElementById('feedback-thanks').classList.remove('hidden');
+                setTimeout(function() {
+                    document.getElementById('feedback-thanks').classList.add('hidden');
+                    document.getElementById('feedback-form-container').style.display = '';
+                    closeFeedbackModal();
+                    form.reset();
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Enviar respuesta';
+                }, 2500);
+            } catch (error) {
+                alert('Hubo un problema al enviar tu feedback. Por favor, intenta de nuevo.');
+                submitButton.disabled = false;
+                submitButton.textContent = 'Enviar respuesta';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "name": "vida-app",
+  "version": "1.0.0",
+  "description": "VIDA - Asistente de Donación",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "MIT"
+}

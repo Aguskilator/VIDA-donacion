@@ -279,10 +279,10 @@
         <header class="text-center mb-2 fade-in">
             <img src="Vidalogo.png" alt="VIDA" class="mx-auto h-24 mb-1">
             <h1 class="text-2xl md:text-3xl font-bold text-[var(--vida-primary-blue)] mb-1">
-                Desmitificador Express
+                Desmitificador Exprés
             </h1>
             <p class="text-gray-600 text-sm md:text-base">
-                Pon a prueba tus conocimientos sobre donación de órganos
+                Pon a prueba tus conocimientos sobre la donación de órganos en España
             </p>
         </header>
 
@@ -304,11 +304,11 @@
                 </div>
                 <h2 class="text-2xl font-bold mb-4">¡Bienvenido al Quiz!</h2>
                 <p class="text-gray-600 mb-6">
-                    Responde preguntas de verdadero o falso para desmentir mitos 
-                    y conocer más sobre la donación de órganos en México.
+                    Responde preguntas de verdadero o falso para desmontar mitos 
+                    y conocer más sobre la donación de órganos en España.
                 </p>
                 <button id="start-quiz" class="answer-btn bg-[var(--vida-btn-green)] text-white hover:bg-[var(--vida-btn-green-hover)] transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-500/50">
-                    🚀 Comenzar Quiz
+                    🚀 Empezar el Quiz
                 </button>
             </div>
 
@@ -447,12 +447,12 @@
             {
                 question: "Los donantes de órganos no pueden tener un funeral con ataúd abierto",
                 isTrue: false,
-                explanation: "Falso. Después de la donación, el cuerpo se trata con respeto y se reconstituye para que la familia pueda tener un funeral normal."
+                explanation: "Falso. El cuerpo se reconstruye con cuidado y respeto, permitiendo un velatorio abierto si la familia lo desea."
             },
             {
                 question: "Solo las personas jóvenes pueden ser donantes de órganos",
                 isTrue: false,
-                explanation: "Falso. No existe límite de edad para ser donante. Se evalúa la viabilidad de cada órgano individualmente."
+                explanation: "Falso. No hay una edad límite fija. Cada órgano y tejido se evalúa individualmente según su estado funcional."
             },
             {
                 question: "La muerte encefálica es lo mismo que estar en coma",
@@ -460,9 +460,9 @@
                 explanation: "Falso. La muerte encefálica es la pérdida total e irreversible de todas las funciones cerebrales."
             },
             {
-                question: "En México, la familia debe autorizar la donación aunque la persona haya manifestado su voluntad",
-                isTrue: true,
-                explanation: "Verdadero. Según la ley mexicana, la familia debe dar su autorización en el hospital para proceder con la donación."
+                question: "En España, la familia siempre debe autorizar la donación de órganos",
+                isTrue: false,
+                explanation: "Falso. En España rige el consentimiento presunto, aunque por respeto se consulta a la familia antes de proceder."
             },
             {
                 question: "Los órganos donados se asignan por orden de llegada",
@@ -480,9 +480,9 @@
                 explanation: "Falso. Los tatuajes no impiden la donación automáticamente. Se evalúa cada caso individualmente."
             },
             {
-                question: "México tiene uno de los índices de donación más altos de América Latina",
-                isTrue: false,
-                explanation: "Falso. México tiene uno de los índices más bajos de donación en la región, con aproximadamente 3.8 donantes por millón."
+                question: "España tiene uno de los índices más altos de donación del mundo",
+                isTrue: true,
+                explanation: "Verdadero. España lidera la donación mundial con más de 40 donantes por millón de habitantes."
             },
             {
                 question: "Las personas con diabetes pueden donar algunos órganos y tejidos",
@@ -492,7 +492,7 @@
             {
                 question: "La donación de órganos es gratuita tanto para el donante como para el receptor",
                 isTrue: true,
-                explanation: "Verdadero. La donación y el trasplante son completamente gratuitos en el sistema público de salud mexicano."
+                explanation: "Verdadero. En España, todo el proceso está cubierto por el sistema público de salud y no supone coste para los pacientes."
             }
         ];
 
@@ -701,16 +701,16 @@
             let feedbackColor = '';
             
             if (finalScore >= 9) {
-                feedbackMessage = '¡Excelente! Tienes un conocimiento sólido sobre donación de órganos. Eres un verdadero promotor de esta noble causa.';
+                feedbackMessage = '¡Excelente! Tienes un conocimiento muy sólido sobre la donación de órganos en España. Es estupendo contar con personas bien informadas.';
                 feedbackColor = 'text-green-600';
             } else if (finalScore >= 7) {
-                feedbackMessage = '¡Muy bien! Conoces bastante sobre donación de órganos. Con un poco más de información podrías ser un gran embajador del tema.';
+                feedbackMessage = '¡Muy bien! Demuestras un buen nivel de conocimiento. Con algunos detalles más, podrías resolver muchas dudas sobre el tema.';
                 feedbackColor = 'text-blue-600';
             } else if (finalScore >= 5) {
-                feedbackMessage = '¡Buen intento! Tienes conocimientos básicos. Te invitamos a seguir aprendiendo sobre la importancia de la donación de órganos.';
+                feedbackMessage = '¡Buen intento! Tienes una base general. Te animamos a seguir informándote sobre cómo funciona la donación en nuestro país.';
                 feedbackColor = 'text-yellow-600';
             } else {
-                feedbackMessage = 'Gracias por participar. La donación de órganos es un tema complejo, pero cada pregunta resuelta es un paso hacia mayor conciencia. ¡Sigue aprendiendo!';
+                feedbackMessage = 'Gracias por participar. La donación de órganos puede parecer compleja, pero cada respuesta es una oportunidad para aprender más. ¡Sigue adelante!';
                 feedbackColor = 'text-orange-600';
             }
             
@@ -828,7 +828,7 @@
                     "mitos populares y creencias erróneas",
                     "procedimientos hospitalarios específicos",
                     "aspectos éticos y familiares",
-                    "estadísticas mexicanas actuales",
+                    "estadísticas españolas actuales",
                     "tipos específicos de tejidos y órganos",
                     "condiciones médicas particulares",
                     "procesos administrativos y legales",
@@ -853,29 +853,29 @@
                 const currentTime = new Date().getTime();
                 
                 const prompt = `
-                Eres VIDA, un asistente experto en donación de órganos, tejidos y sangre en México.
-                Genera exactamente 5 preguntas ADICIONALES Y ÚNICAS de VERDADERO o FALSO sobre donación de órganos en México.
+                Eres VIDA, un asistente experto en donación de órganos, tejidos y sangre en España.
+                Genera exactamente 5 preguntas ADICIONALES Y ÚNICAS de VERDADERO o FALSO sobre donación de órganos en España.
                 
                 INSTRUCCIONES ESPECÍFICAS:
                 - Enfócate especialmente en: ${randomFocus}
                 - Incluye aspectos de: ${randomAdvanced}
-                - Estas son preguntas 6-10, deben ser MÁS ESPECÍFICAS y DESAFIANTES
+                - Estas son preguntas 1-5, deben ser ESPECÍFICAS y DESAFIANTES
                 - Incluye datos técnicos o menos conocidos
                 - Usa un tono educativo y profesional
                 - Las preguntas deben ser claras y directas, con respuestas de verdadero o falso
                 - Cada pregunta debe tener una EXPLICACIÓN breve (máximo 2 líneas) que explique por qué la respuesta es correcta o incorrecta
                 - No repitas preguntas anteriores (preguntas 1-5)
                 - No uses preguntas del banco de preguntas de respaldo
-                - Las preguntas  debes ser basadas en informacion actual de normas en México.
+                - Las preguntas  debes ser basadas en informacion actual de normas en España.
                 - Las preguntas y respuestas deben ser ciertas y basadas en información verificada.
-                - Siempre se necesita el consentimiento de la familia para la donación, incluso si la persona ha manifestado su voluntad.
-                - Las preguntas deben ser apropiadas para un público general, sin tecnicismos excesivos.
-                - Considera que las donaciones de tejido idealmente son en menores de 70 años, de órganos se individaliza el caso, en general cada caso es único.
-                - Las preguntas deben ser relevantes para el contexto mexicano actual.
-                - No uses preguntas que ya estén en el banco de preguntas de respaldo.
-                - No uses preguntas que ya hayan sido generadas en el primer bloque (preguntas 1-5).
+                - Las preguntas deben estar basadas en información actual y verificada en España
+                - Considera que en España todas las personas son consideradas donantes salvo que hayan manifestado lo contrario (consentimiento presunto)
+                - Aunque el consentimiento es presunto, siempre se consulta a la familia en la práctica
+                - Las preguntas deben ser apropiadas para un público general, sin tecnicismos excesivos
+                - En el caso de tejidos, la edad suele ser menor de 70 años; en órganos se individualiza
+                - Cita prácticas o normas reales del sistema español de trasplantes (ONT, hospitales, criterios médicos)
                 - No uses preguntas que ya hayan sido generadas en el segundo bloque.
-                - Brinda infromacion en el contexto de México.   
+                - Brinda información en el contexto de España.
                 - Cada pregunta debe ser DIFERENTE y ORIGINAL
                 - Número de sesión avanzada: ${randomNumber}
                 - Timestamp: ${currentTime}
@@ -888,9 +888,9 @@
                 Ejemplo del formato esperado:
                 [
                   {
-                    "question": "La donación de córneas puede realizarse hasta 12 horas después del fallecimiento",
+                    "question": "En España, se pueden donar órganos incluso si no se ha dejado constancia expresa en vida",
                     "isTrue": true,
-                    "explanation": "Verdadero. Las córneas pueden extraerse hasta 12 horas después del fallecimiento, a diferencia de otros órganos que requieren tiempos menores."
+                    "explanation": "Verdadero. En España rige el consentimiento presunto, aunque se consulta a la familia antes de proceder."
                   }
                 ]
                 `;
@@ -960,9 +960,9 @@
                         explanation: "Falso. Los tatuajes no impiden la donación automáticamente. Se evalúa cada caso individualmente considerando factores como antigüedad y tipo de tinta."
                     },
                     {
-                        question: "México tiene uno de los índices de donación más altos de América Latina",
-                        isTrue: false,
-                        explanation: "Falso. México tiene uno de los índices más bajos de donación en la región, con aproximadamente 3.8 donantes por millón de habitantes."
+                        question: "España tiene uno de los índices más altos de donación del mundo",
+                        isTrue: true,
+                        explanation: "Verdadero. España lidera la donación mundial con más de 40 donantes por millón de habitantes."
                     },
                     {
                         question: "Las personas con diabetes pueden donar algunos órganos y tejidos",
@@ -972,7 +972,7 @@
                     {
                         question: "La donación de órganos es gratuita tanto para el donante como para el receptor",
                         isTrue: true,
-                        explanation: "Verdadero. La donación y el trasplante son completamente gratuitos en el sistema público de salud mexicano. No hay costo para las familias donantes."
+                        explanation: "Verdadero. En España, todo el proceso está cubierto por el sistema público de salud y no supone coste para los pacientes."
                     }
                 ];
                 
@@ -1014,7 +1014,7 @@
                     "aspectos legales y familiares",
                     "criterios médicos y de compatibilidad",
                     "procesos hospitalarios y administrativos",
-                    "estadísticas y realidades mexicanas",
+                    "estadísticas y realidades españolas",
                     "tipos de órganos y tejidos",
                     "condiciones médicas y donación",
                     "tiempos y procedimientos",
@@ -1027,13 +1027,13 @@
                 const currentTime = new Date().getTime();
                 
                 const prompt = `
-                Eres VIDA, un asistente experto en donación de órganos, tejidos y sangre en México.
-                Genera exactamente 5 preguntas ÚNICAS de VERDADERO o FALSO sobre donación de órganos en México.
-                
+                Eres VIDA, un asistente experto en donación de órganos, tejidos y sangre en España.
+                Genera exactamente 5 preguntas ÚNICAS de VERDADERO o FALSO sobre donación de órganos en España.
+
                 INSTRUCCIONES ESPECÍFICAS:
                 - Enfócate especialmente en: ${randomFocus}
                 - Cada pregunta debe ser DIFERENTE y ORIGINAL
-                - Incluye datos específicos de México cuando sea relevante
+                - Incluye datos específicos de España cuando sea relevante
                 - Mezcla preguntas obvias con otras más desafiantes.
                 - Estas son preguntas 6-10, deben ser MÁS ESPECÍFICAS y DESAFIANTES
                 - Incluye datos técnicos o menos conocidos
@@ -1042,16 +1042,16 @@
                 - Cada pregunta debe tener una EXPLICACIÓN breve (máximo 2 líneas) que explique por qué la respuesta es correcta o incorrecta
                 - No repitas preguntas anteriores (preguntas 1-5)
                 - No uses preguntas del banco de preguntas de respaldo
-                - Las preguntas  debes ser basadas en informacion actual de normas en México.
+                - Las preguntas  debes ser basadas en informacion actual de normas en España.
                 - Las preguntas y respuestas deben ser ciertas y basadas en información verificada.
-                - Siempre se necesita el consentimiento de la familia para la donación, incluso si la persona ha manifestado su voluntad.
-                - Las preguntas deben ser apropiadas para un público general, sin tecnicismos excesivos.
-                - Considera que las donaciones de tejido idealmente son en menores de 70 años, de órganos se individaliza el caso, en general cada caso es único.
-                - Las preguntas deben ser relevantes para el contexto mexicano actual.
-                - No uses preguntas que ya estén en el banco de preguntas de respaldo.
-                - No uses preguntas que ya hayan sido generadas en el primer bloque (preguntas 1-5).
+                - Las preguntas deben estar basadas en información actual y verificada en España
+                - Considera que en España todas las personas son consideradas donantes salvo que hayan manifestado lo contrario (consentimiento presunto)
+                - Aunque el consentimiento es presunto, siempre se consulta a la familia en la práctica
+                - Las preguntas deben ser apropiadas para un público general, sin tecnicismos excesivos
+                - En el caso de tejidos, la edad suele ser menor de 70 años; en órganos se individualiza
+                - Cita prácticas o normas reales del sistema español de trasplantes (ONT, hospitales, criterios médicos)
                 - No uses preguntas que ya hayan sido generadas en el segundo bloque.
-                - Brinda infromacion en el contexto de México.    
+                - Brinda información en el contexto de España.
                 - Cada pregunta debe ser DIFERENTE y ORIGINAL
                 - Número de sesión: ${randomNumber}
                 - Timestamp: ${currentTime}

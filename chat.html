@@ -334,7 +334,7 @@
                         <span id="suggest-button-text" class="ml-2 text-sm font-semibold hidden sm:inline">Sugerir</span>
                     </button>
                     <button type="button" id="mic-btn" class="bg-slate-100 text-slate-600 rounded-full p-2.5 h-12 w-12 flex items-center justify-center hover:bg-blue-100 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--vida-secondary)]" title="Dictar por voz">
-                        <img id="mic-icon" src="mic.png" alt="Micrófono" class="h-8 w-8 object-contain" style="filter: grayscale(0.2) brightness(0.7); transition: filter 0.2s;" />
+                        <img id="mic-icon" src="mic2.png" alt="Micrófono" class="h-8 w-8 object-contain" style="filter: grayscale(0.2) brightness(0.7); transition: filter 0.2s;" />
                     </button>
                     <input type="text" id="chat-input" placeholder="Escribe tu pregunta aquí..." autocomplete="off" class="flex-1 w-full px-5 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[var(--vida-primary)] transition shadow-sm">
                     <button type="submit" id="send-btn" class="bg-gradient-to-br from-[var(--vida-primary)] to-[var(--vida-secondary)] text-white rounded-full p-3 h-12 w-12 hover:opacity-90 transition-all transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--vida-secondary)] disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed" title="Enviar mensaje">
@@ -352,45 +352,87 @@
         const micBtn = document.getElementById('mic-btn');
         const micIcon = document.getElementById('mic-icon');
 
+        // Función para detectar si es Chrome en móvil
+        function isMobileChrome() {
+            const ua = navigator.userAgent;
+            return /Android/.test(ua) && /Chrome\//.test(ua) && !/Edg\//.test(ua);
+        }
+
+        // Función para mostrar alertas personalizadas
+        function showDictationError(msg) {
+            alert(msg + '\n\nSugerencia: Usa Google Chrome en Android, con permisos de micrófono y conexión HTTPS. En iPhone/iPad, la función no está disponible por limitaciones de Apple.');
+        }
+
         if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            recognition = new SpeechRecognition();
-            recognition.lang = 'es-ES';
-            recognition.continuous = false;
-            recognition.interimResults = false;
+            try {
+                recognition = new SpeechRecognition();
+                recognition.lang = 'es-ES';
+                recognition.continuous = false;
+                recognition.interimResults = false;
 
-            recognition.onstart = function() {
-                recognizing = true;
-                micBtn.classList.add('bg-blue-200');
-                micIcon.classList.add('text-blue-700');
-            };
-            recognition.onend = function() {
-                recognizing = false;
-                micBtn.classList.remove('bg-blue-200');
-                micIcon.classList.remove('text-blue-700');
-            };
-            recognition.onerror = function(event) {
-                recognizing = false;
-                micBtn.classList.remove('bg-blue-200');
-                micIcon.classList.remove('text-blue-700');
-                alert('No se pudo reconocer el audio. Intenta de nuevo.');
-            };
-            recognition.onresult = function(event) {
-                const transcript = event.results[0][0].transcript;
-                chatInput.value = transcript;
-                chatInput.focus();
-            };
+                recognition.onstart = function() {
+                    recognizing = true;
+                    micBtn.classList.add('bg-blue-200');
+                    micIcon.classList.add('text-blue-700');
+                };
+                recognition.onend = function() {
+                    recognizing = false;
+                    micBtn.classList.remove('bg-blue-200');
+                    micIcon.classList.remove('text-blue-700');
+                };
+                recognition.onerror = function(event) {
+                    recognizing = false;
+                    micBtn.classList.remove('bg-blue-200');
+                    micIcon.classList.remove('text-blue-700');
+                    let msg = 'No se pudo reconocer el audio. Intenta de nuevo.';
+                    if (event.error === 'not-allowed') {
+                        msg = 'Permiso de micrófono denegado. Por favor, permite el acceso al micrófono en la configuración del navegador.';
+                    } else if (event.error === 'no-speech') {
+                        msg = 'No se detectó voz. Intenta hablar más cerca del micrófono.';
+                    } else if (event.error === 'aborted') {
+                        msg = 'El dictado fue interrumpido. Intenta de nuevo.';
+                    } else if (event.error === 'audio-capture') {
+                        msg = 'No se detectó micrófono. Verifica los permisos y la conexión de tu micrófono.';
+                    }
+                    showDictationError(msg);
+                };
+                recognition.onresult = function(event) {
+                    const transcript = event.results[0][0].transcript;
+                    chatInput.value = transcript;
+                    chatInput.focus();
+                };
 
-            micBtn.addEventListener('click', function() {
-                if (recognizing) {
-                    recognition.stop();
-                } else {
-                    recognition.start();
-                }
-            });
+                micBtn.addEventListener('click', function() {
+                    if (window.isSecureContext !== true) {
+                        showDictationError('El dictado por voz solo funciona en sitios HTTPS.');
+                        return;
+                    }
+                    if (recognizing) {
+                        recognition.stop();
+                    } else {
+                        try {
+                            recognition.start();
+                        } catch (err) {
+                            showDictationError('No se pudo iniciar el dictado. Puede que otra app esté usando el micrófono o que el navegador tenga una restricción.');
+                        }
+                    }
+                });
+            } catch (e) {
+                micBtn.disabled = true;
+                micBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                micBtn.title = 'Dictado por voz no disponible en este navegador.';
+                micBtn.addEventListener('click', function() {
+                    showDictationError('El dictado por voz no está disponible en este navegador o dispositivo.');
+                });
+            }
         } else {
+            // Desactivar el botón y mostrar advertencia clara
+            micBtn.disabled = true;
+            micBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            micBtn.title = 'Dictado por voz no compatible en este dispositivo/navegador.';
             micBtn.addEventListener('click', function() {
-                alert('El dictado por voz no es compatible con este navegador.');
+                showDictationError('El dictado por voz no es compatible con este navegador o dispositivo.');
             });
         }
         // --- DOM Elements ---
@@ -419,10 +461,15 @@
         - Usa distintas estructuras: "Me alegra saber que...", "Qué bien que lo estés considerando...", "Te agradezco que lo menciones...", "Es muy valioso que te intereses..."
         - Sé breve, claro y empático. Usa un lenguaje sencillo, sin tecnicismos.
         - Nunca por ningun motivo uses asteriscos. Puedes usar listas numeradas o guiones si es necesario.
-        - Si percibes dolor, miedo o pérdida, prioriza el acompañamiento emocional.
         - Solo respondes sobre donación de órganos y tejidos en el marco español.
         - En España, todas las personas son consideradas donantes salvo que hayan manifestado lo contrario. Pero siempre se consulta a la familia.
         - Si te preguntan sobre otros temas, responde amablemente: "Lo siento, solo puedo ayudarte con preguntas sobre donación de órganos y tejidos."
+
+        **Acompañamiento en pérdida y duelo:**
+        Si el usuario expresa pérdida, duelo, fallecimiento, tristeza, dolor emocional, luto, muerte de un ser querido, o emociones similares:
+        1. Prioriza el acompañamiento tanatológico y psicológico: valida sus emociones, ofrece consuelo, escucha activa, comprensión y apoyo emocional. Puedes sugerir recursos de apoyo psicológico o tanatológico si es apropiado.
+        2. No fuerces el tema de la donación. Solo si la persona lo menciona o si el contexto lo permite, conecta de manera sensible y respetuosa el tema de la donación, explicando cómo puede ser un acto de amor y trascendencia, pero siempre respetando el proceso de duelo y el ritmo de la persona.
+        3. Nunca minimices el dolor ni des consejos simplistas. Sé empático, humano y acompaña desde la comprensión.
 
         **PROHIBIDO ABSOLUTAMENTE:**
         - NUNCA pidas ni almacenes datos personales (nombre, DNI, dirección, etc.).
@@ -575,7 +622,7 @@
                 ttsBtn.type = 'button';
                 ttsBtn.title = 'Escuchar respuesta';
                 ttsBtn.className = 'mt-1 bg-slate-100 rounded-full p-2 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-300 shadow flex items-center';
-                ttsBtn.innerHTML = `<img src="bocina.png" alt="Escuchar" class="h-6 w-6 object-contain" onerror=\"this.onerror=null;this.src='https://placehold.co/24x24/cccccc/ffffff?text=%F0%9F%94%8A';\" />`;
+                ttsBtn.innerHTML = `<img src="bocina2.png" alt="Escuchar" class="h-6 w-6 object-contain" onerror=\"this.onerror=null;this.src='https://placehold.co/24x24/cccccc/ffffff?text=%F0%9F%94%8A';\" />`;
                 ttsBtn.addEventListener('click', async (e) => {
                     e.preventDefault();
                     ttsBtn.disabled = true;

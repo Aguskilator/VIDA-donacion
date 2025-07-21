@@ -371,15 +371,23 @@
                 recognition.continuous = false;
                 recognition.interimResults = false;
 
+                let lastTranscript = '';
+
                 recognition.onstart = function() {
                     recognizing = true;
                     micBtn.classList.add('bg-blue-200');
                     micIcon.classList.add('text-blue-700');
+                    lastTranscript = '';
                 };
                 recognition.onend = function() {
                     recognizing = false;
                     micBtn.classList.remove('bg-blue-200');
                     micIcon.classList.remove('text-blue-700');
+                    // Si no llegó onresult pero hay transcript, usarlo
+                    if (lastTranscript) {
+                        chatInput.value = lastTranscript;
+                        setTimeout(() => { chatInput.focus(); }, 100);
+                    }
                 };
                 recognition.onerror = function(event) {
                     recognizing = false;
@@ -398,9 +406,11 @@
                     showDictationError(msg);
                 };
                 recognition.onresult = function(event) {
-                    const transcript = event.results[0][0].transcript;
-                    chatInput.value = transcript;
-                    chatInput.focus();
+                    if (event.results && event.results[0] && event.results[0][0]) {
+                        lastTranscript = event.results[0][0].transcript;
+                        chatInput.value = lastTranscript;
+                        setTimeout(() => { chatInput.focus(); }, 100);
+                    }
                 };
 
                 micBtn.addEventListener('click', function() {

@@ -334,7 +334,7 @@
                         <span id="suggest-button-text" class="ml-2 text-sm font-semibold hidden sm:inline">Sugerir</span>
                     </button>
                     <button type="button" id="mic-btn" class="bg-slate-100 text-slate-600 rounded-full p-2.5 h-12 w-12 flex items-center justify-center hover:bg-blue-100 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--vida-secondary)]" title="Dictar por voz">
-                        <img id="mic-icon" src="mic2.png" alt="Micrófono" class="h-8 w-8 object-contain" style="filter: grayscale(0.2) brightness(0.7); transition: filter 0.2s;" />
+                        <img id="mic-icon" src="mic2.png" alt="Micrófono" class="h-8 w-8 object-contain" style="filter: grayscale(0.2) brightness(0.7); transition: filter 0.2s;" onerror="this.style.display='none';this.insertAdjacentHTML('afterend', '<svg class=\'h-8 w-8 text-slate-600\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' d=\'M12 18c3.314 0 6-2.686 6-6V7a6 6 0 10-12 0v5c0 3.314 2.686 6 6 6zm0 0v3m-4 0h8\'/></svg>');" />
                     </button>
                     <input type="text" id="chat-input" placeholder="Escribe tu pregunta aquí..." autocomplete="off" class="flex-1 w-full px-5 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[var(--vida-primary)] transition shadow-sm">
                     <button type="submit" id="send-btn" class="bg-gradient-to-br from-[var(--vida-primary)] to-[var(--vida-secondary)] text-white rounded-full p-3 h-12 w-12 hover:opacity-90 transition-all transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--vida-secondary)] disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed" title="Enviar mensaje">
@@ -623,6 +623,8 @@
                 ttsBtn.title = 'Escuchar respuesta';
                 ttsBtn.className = 'mt-1 bg-slate-100 rounded-full p-2 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-300 shadow flex items-center';
                 ttsBtn.innerHTML = `<img src="bocina2.png" alt="Escuchar" class="h-6 w-6 object-contain" onerror=\"this.onerror=null;this.src='https://placehold.co/24x24/cccccc/ffffff?text=%F0%9F%94%8A';\" />`;
+                // Fallback SVG para bocina si no carga la imagen
+                ttsBtn.innerHTML = `<img src="bocina2.png" alt="Escuchar" class="h-6 w-6 object-contain" onerror=\"this.style.display='none';this.insertAdjacentHTML('afterend', '<svg class=\\'h-6 w-6 text-slate-600\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'2\\' viewBox=\\'0 0 24 24\\'><path stroke-linecap=\\'round\\' stroke-linejoin=\\'round\\' d=\\'M9 19V6l-2 2H5a2 2 0 00-2 2v4a2 2 0 002 2h2l2 2zm7-5a3 3 0 00-3-3m3 3a6 6 0 01-6 6m6-6V9a6 6 0 00-6-6\'/></svg>');\" />`;
                 ttsBtn.addEventListener('click', async (e) => {
                     e.preventDefault();
                     ttsBtn.disabled = true;

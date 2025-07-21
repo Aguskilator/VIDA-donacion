@@ -560,11 +560,14 @@
             messageWrapper.appendChild(textBubbleDiv);
             // Botón de audio (text-to-speech) fuera de la burbuja
             if (role !== 'user') {
+                // Botón de audio centrado debajo de la burbuja
+                const ttsBtnWrapper = document.createElement('div');
+                ttsBtnWrapper.className = 'w-full flex justify-center';
                 const ttsBtn = document.createElement('button');
                 ttsBtn.type = 'button';
                 ttsBtn.title = 'Escuchar respuesta';
-                ttsBtn.className = 'mt-1 ml-12 bg-slate-100 rounded-full p-2 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-300 shadow flex items-center';
-                ttsBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="#2563EB" d="M12 3a1 1 0 0 1 1 1v16a1 1 0 1 1-2 0V4a1 1 0 0 1 1-1Z"></path><path fill="#2563EB" d="M5.636 5.636a1 1 0 0 1 1.414 0l1.414 1.414a1 1 0 1 1-1.414 1.414L5.636 7.05a1 1 0 0 1 0-1.414Zm12.728 0a1 1 0 0 1 0 1.414l-1.414 1.414a1 1 0 1 1-1.414-1.414l1.414-1.414a1 1 0 0 1 1.414 0ZM3 12a1 1 0 0 1 1-1h2a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1Zm16 0a1 1 0 0 1 1-1h2a1 1 0 1 1 0 2h-2a1 1 0 0 1-1-1Zm-9.95 5.636a1 1 0 0 1 0-1.414l1.414-1.414a1 1 0 1 1 1.414 1.414l-1.414 1.414a1 1 0 0 1-1.414 0Zm7.778-1.414a1 1 0 0 1 1.414 1.414l-1.414 1.414a1 1 0 1 1-1.414-1.414l1.414-1.414Z"></path></g></svg>`;
+                ttsBtn.className = 'mt-2 bg-slate-100 rounded-full p-2 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-300 shadow flex items-center';
+                ttsBtn.innerHTML = `<img src="volume.png" alt="Escuchar" class="h-6 w-6 object-contain" onerror=\"this.onerror=null;this.src='https://placehold.co/24x24/cccccc/ffffff?text=%F0%9F%94%8A';\" />`;
                 ttsBtn.addEventListener('click', async (e) => {
                     e.preventDefault();
                     ttsBtn.disabled = true;
@@ -577,7 +580,8 @@
                     ttsBtn.disabled = false;
                     ttsBtn.classList.remove('opacity-60');
                 });
-                messageWrapper.appendChild(ttsBtn);
+                ttsBtnWrapper.appendChild(ttsBtn);
+                messageWrapper.appendChild(ttsBtnWrapper);
             }
             chatContainer.appendChild(messageWrapper);
             // Solo hacer scroll automático si es un mensaje del usuario O si el usuario estaba al final
@@ -598,7 +602,7 @@
                     body: JSON.stringify({
                         input: text,
                         model: 'gpt-4o-mini-tts',
-                        voice: 'fable'
+                        voice: 'fable' // Asegura que siempre se use la voz fable
                     })
                 });
                 if (!response.ok) throw new Error('TTS error');

@@ -18,58 +18,42 @@
     
     <!-- Custom Styles -->
     <style>
-        /* Bocina reproduciendo: animación de palpitación */
-        .tts-playing {
-            background: #60a5fa !important; /* azul claro */
-            animation: tts-pulse 1s infinite;
-            box-shadow: 0 0 0 0 rgba(96,165,250,0.7);
-        }
-        @keyframes tts-pulse {
-            0% { box-shadow: 0 0 0 0 rgba(96,165,250,0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(96,165,250,0); }
-            100% { box-shadow: 0 0 0 0 rgba(96,165,250,0.7); }
-        }
-        /* Micrófono grabando: animación de palpitación */
-        .mic-recording {
-            background: #f87171 !important; /* rojo claro */
-            animation: mic-pulse 1s infinite;
-            box-shadow: 0 0 0 0 rgba(248,113,113,0.7);
-        }
-        @keyframes mic-pulse {
-            0% { box-shadow: 0 0 0 0 rgba(248,113,113,0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(248,113,113,0); }
-            100% { box-shadow: 0 0 0 0 rgba(248,113,113,0.7); }
-        }
         :root {
+            --vida-bg: #E3F2FD;
+            --vida-text-dark: #0D47A1;
+            --vida-btn-green: #66BB6A;
+            --vida-btn-green-hover: #43A047;
+            --vida-text-secondary: #757575;
+            --vida-bg-footer: #F5F5F5;
+            --vida-chat-bot-bg: #F9F9F9;
+            --vida-chat-user-bg: #E8F5E9;
+            --vida-btn-feedback: #4FC3F7;
+            --vida-suggest-btn-bg: #E0F2F7;
+            --vida-suggest-btn-hover: #B3E5FC;
             --vida-primary: #2563EB;
             --vida-secondary: #3B82F6;
-            --text-dark: #1E293B;
-            --text-light: #64748B;
-            --bg-light: #F1F5F9;
-            --user-bubble-bg: #2563EB;
-            --bot-bubble-bg: #FFFFFF;
-            --border-color: #E2E8F0;
+            --vida-border: #E2E8F0;
+            --vida-scrollbar: #BDBDBD;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            overflow: hidden;
-            background-color: #e0e7ff;
-            animation: gradient-animation 20s ease infinite;
-            background-size: 200% 200%;
-            background-image: linear-gradient(45deg, #e0e7ff 0%, #c7d2fe 25%, #e0f2f1 50%, #f0f9ff 75%, #e0e7ff 100%);
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f9ff;
+            background-image: 
+                radial-gradient(at 47% 33%, hsl(200, 51%, 82%) 0px, transparent 50%),
+                radial-gradient(at 9% 62%, hsl(215, 51%, 76%) 0px, transparent 50%),
+                radial-gradient(at 82% 65%, hsl(210, 60%, 75%) 0px, transparent 50%),
+                radial-gradient(at 24% 88%, hsl(220, 60%, 85%) 0px, transparent 50%),
+                radial-gradient(at 75% 8%, hsl(205, 37%, 79%) 0px, transparent 50%),
+                radial-gradient(at 56% 33%, hsl(260.00, 80%, 85%) 0px, transparent 50%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            overflow-x: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
             margin: 0;
             padding: 0;
-        }
-        
-        @keyframes gradient-animation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
         }
 
         #bg-canvas {
@@ -79,15 +63,22 @@
             width: 100%;
             height: 100%;
             z-index: -1;
+            pointer-events: none;
         }
-        
+
         #chat-screen-container {
             animation: popIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             max-width: 1000px;
             width: 100%;
             margin: 0 auto;
+            box-shadow: 0 10px 35px rgba(13, 27, 42, 0.12), 0 5px 15px rgba(255,255,255,0.3), inset 0 1px 0 rgba(255,255,255,0.8);
+            border-radius: 2rem;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(24px) saturate(1.2);
+            -webkit-backdrop-filter: blur(24px) saturate(1.2);
+            border: 1.5px solid rgba(59,130,246,0.10);
         }
-        
+
         @media (min-width: 640px) {
             #chat-screen-container {
                 max-width: 900px;
@@ -96,17 +87,19 @@
             }
         }
 
-        /* Forzar altura fija para el contenedor principal */
         #chat-screen {
             height: 85vh;
             max-height: 85vh;
+            background: linear-gradient(135deg, #e0e7ff 0%, #f0fdfa 50%, #e3f2fd 100%);
+            border-radius: 2rem;
+            border: 1px solid var(--vida-border);
+            box-shadow: 0 4px 24px 0 rgba(31,38,135,0.10);
         }
 
-        /* Asegurar que el área de chat tenga scroll interno */
         #chat-container-wrapper {
             flex: 1;
             overflow-y: auto;
-            max-height: calc(85vh - 140px); /* Restar altura del header y footer */
+            max-height: calc(85vh - 140px);
         }
 
         .chat-bubble {
@@ -114,7 +107,7 @@
             transform: translateY(20px) scale(0.95);
             animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
-        
+
         .bot-bubble .chat-bubble-text {
             opacity: 0;
             animation: fadeInText 0.3s ease-out 0.2s forwards;
@@ -125,13 +118,99 @@
             line-height: 1.6;
             word-break: break-word;
             hyphens: auto;
+            font-size: 1.08rem;
         }
-        
+
+        .bot-bubble {
+            background: var(--vida-chat-bot-bg) !important;
+            color: var(--vida-text-dark) !important;
+            border-radius: 1.5rem 1.5rem 1.5rem 0.5rem !important;
+            box-shadow: 0 2px 8px rgba(33,150,243,0.08);
+            border: 1px solid #e3f2fd;
+        }
+        .user-bubble {
+            background: var(--vida-chat-user-bg) !important;
+            color: var(--vida-text-dark) !important;
+            border-radius: 1.5rem 1.5rem 0.5rem 1.5rem !important;
+            box-shadow: 0 2px 8px rgba(102,187,106,0.08);
+            border: 1px solid #e8f5e9;
+        }
+
+        .bot-bubble::after {
+            content: '';
+            position: absolute;
+            left: -10px;
+            bottom: 0px;
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+            border-right-color: var(--vida-chat-bot-bg);
+            border-left: 0;
+            border-bottom: 0;
+            opacity: 0;
+            animation: fadeInText 0.2s ease-out 0.1s forwards;
+        }
+        .user-bubble::after {
+            content: '';
+            position: absolute;
+            right: -10px;
+            bottom: 0px;
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+            border-left-color: var(--vida-chat-user-bg);
+            border-right: 0;
+            border-bottom: 0;
+        }
+
+        .tts-playing {
+            background: var(--vida-btn-feedback) !important;
+            animation: tts-pulse 1s infinite;
+            box-shadow: 0 0 0 0 rgba(79,195,247,0.7);
+        }
+        @keyframes tts-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(79,195,247,0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(79,195,247,0); }
+            100% { box-shadow: 0 0 0 0 rgba(79,195,247,0.7); }
+        }
+        .mic-recording {
+            background: #66BB6A !important;
+            animation: mic-pulse 1s infinite;
+            box-shadow: 0 0 0 0 rgba(102,187,106,0.7);
+        }
+        @keyframes mic-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(102,187,106,0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(102,187,106,0); }
+            100% { box-shadow: 0 0 0 0 rgba(102,187,106,0.7); }
+        }
+
+        .bot-avatar-breathing {
+            animation: breathing 3s ease-in-out infinite;
+        }
+        @keyframes breathing {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+        .logo-heartbeat {
+            animation: heart-beat 2.5s ease-in-out infinite;
+        }
+        @keyframes heart-beat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .active-feedback {
+            transform: scale(0.95);
+            transition: transform 0.1s ease-out;
+        }
+
         .chat-messages::-webkit-scrollbar { width: 8px; }
-        .chat-messages::-webkit-scrollbar-track { background: transparent; }
-        .chat-messages::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 10px; }
-        .chat-messages::-webkit-scrollbar-thumb:hover { background: #CBD5E1; }
-        
+        .chat-messages::-webkit-scrollbar-track { background: #FFFFFF; }
+        .chat-messages::-webkit-scrollbar-thumb { background: var(--vida-scrollbar); border-radius: 10px; }
+        .chat-messages::-webkit-scrollbar-thumb:hover { background: var(--vida-text-dark); }
+
         @keyframes popIn {
             from {
                 opacity: 0;
@@ -142,7 +221,6 @@
                 transform: scale(1);
             }
         }
-        
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -153,88 +231,54 @@
                 transform: translateY(0) scale(1);
             }
         }
-
         @keyframes fadeInText {
             from { opacity: 0; }
             to { opacity: 1; }
         }
-        
-        .bot-bubble::after {
-            content: '';
-            position: absolute;
-            left: -10px;
-            bottom: 0px;
-            width: 0;
-            height: 0;
-            border: 10px solid transparent;
-            border-right-color: var(--bot-bubble-bg);
-            border-left: 0;
-            border-bottom: 0;
-            opacity: 0;
-            animation: fadeInText 0.2s ease-out 0.1s forwards;
+
+        /* Botones principales */
+        #send-btn {
+            background: linear-gradient(135deg, var(--vida-btn-green), var(--vida-btn-green-hover));
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(102,187,106,0.12);
+            transition: all 0.2s;
+        }
+        #send-btn:hover {
+            background: linear-gradient(135deg, var(--vida-btn-green-hover), #388E3C);
+            transform: scale(1.08);
+            box-shadow: 0 4px 16px rgba(76,175,80,0.18);
+        }
+        #mic-btn {
+            background: linear-gradient(135deg, #42A5F5, #1976D2);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(33,150,243,0.12);
+            transition: all 0.2s;
+        }
+        #mic-btn:hover {
+            background: linear-gradient(135deg, #1976D2, #42A5F5);
+            transform: scale(1.08);
+            box-shadow: 0 4px 16px rgba(33,150,243,0.18);
+        }
+        #suggest-questions-btn {
+            background: linear-gradient(135deg, var(--vida-suggest-btn-bg), var(--vida-suggest-btn-hover));
+            color: var(--vida-text-dark);
+            box-shadow: 0 2px 8px rgba(33,150,243,0.10);
+            transition: all 0.2s;
+        }
+        #suggest-questions-btn:hover {
+            background: linear-gradient(135deg, var(--vida-suggest-btn-hover), var(--vida-suggest-btn-bg));
+            transform: scale(1.08);
+            box-shadow: 0 4px 16px rgba(33,150,243,0.15);
         }
 
-        .user-bubble::after {
-            content: '';
-            position: absolute;
-            right: -10px;
-            bottom: 0px;
-            width: 0;
-            height: 0;
-            border: 10px solid transparent;
-            border-left-color: var(--user-bubble-bg);
-            border-right: 0;
-            border-bottom: 0;
-        }
-
-        @keyframes breathing {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.03); }
-            100% { transform: scale(1); }
-        }
-
-        .bot-avatar-breathing {
-            animation: breathing 3s ease-in-out infinite;
-        }
-
-        @keyframes heart-beat {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        .logo-heartbeat {
-            animation: heart-beat 2.5s ease-in-out infinite;
-        }
-
-        .active-feedback {
-            transform: scale(0.95);
-            transition: transform 0.1s ease-out;
-        }
-        
-        /* Específico para móviles - manejo del teclado virtual */
-        :root {
-            --vh: 1vh;
-        }
-        
-        @supports (-webkit-touch-callout: none) {
-            body {
-                /* Usar viewport fijo para iOS */
-                height: 100vh;
-                height: calc(var(--vh, 1vh) * 100);
-            }
-        }
-        
-        /* Mejoras para el chat en móviles */
+        /* Responsive y mobile: mantener mejoras previas */
         @media (max-width: 640px) {
             html, body {
-                /* Prevenir el scroll del body cuando el chat está abierto */
                 overflow: hidden;
                 position: fixed;
                 width: 100%;
                 height: 100%;
             }
-            
             body {
                 display: block !important;
                 padding: 0 !important;
@@ -242,7 +286,6 @@
                 align-items: unset !important;
                 justify-content: unset !important;
             }
-            
             #chat-screen-container {
                 height: 100vh !important;
                 height: calc(var(--vh, 1vh) * 100) !important;
@@ -258,7 +301,6 @@
                 right: 0 !important;
                 bottom: 0 !important;
             }
-            
             #chat-screen {
                 height: 100vh !important;
                 height: calc(var(--vh, 1vh) * 100) !important;
@@ -267,18 +309,13 @@
                 border-radius: 0 !important;
                 border: none !important;
             }
-            
             #chat-input {
-                /* Prevenir zoom en inputs */
                 font-size: 16px !important;
                 -webkit-appearance: none;
                 appearance: none;
-                /* Prevenir el scroll automático al enfocar */
                 transform: translateZ(0);
                 -webkit-transform: translateZ(0);
             }
-            
-            /* Asegurar que el footer se mantenga visible */
             footer {
                 position: relative;
                 z-index: 10;
@@ -286,23 +323,16 @@
                 bottom: 0;
                 border-radius: 0 !important;
             }
-            
-            /* Mejorar el scroll del contenedor de mensajes */
             #chat-container-wrapper {
                 flex: 1;
                 overflow-y: auto;
                 -webkit-overflow-scrolling: touch;
-                /* Prevenir el rebote del scroll */
                 overscroll-behavior: contain;
             }
-            
-            /* Prevenir el zoom en toda la pantalla de chat */
             * {
                 -webkit-text-size-adjust: 100%;
                 text-size-adjust: 100%;
             }
-            
-            /* Header más compacto en móviles */
             header {
                 padding: 0.75rem !important;
                 border-radius: 0 !important;
@@ -504,7 +534,7 @@
         - No hagas cierres repetitivos o automatizados. Varía tus cierres y no des cierres en cada respuesta.
         - No siempre cierres con "estoy aquí para ayudarte" o "si tienes más preguntas, no dudes en preguntar". Varía tus cierres y no des cierres en cada respuesta.
         - No siempre pongas "Si tienes más preguntas, no dudes en preguntar" o similiares a ese al final de cada respuesta. Varía tus cierres y no des cierres en cada respuesta.
-        - Si te preguntan sobre otros temas, redirige amablemente hacia la donación de órganos y tejidos en el país."
+        - Si te preguntan sobre otros temas ajenos a donacion de organos, tejidos y sangre en el contexto español, redirige amablemente hacia la donación de órganos y tejidos en el país."
 
         **Acompañamiento en pérdida y duelo:**
         Si el usuario expresa pérdida, duelo, fallecimiento, tristeza, dolor emocional, luto, muerte de un ser querido, o emociones similares:
@@ -617,7 +647,7 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
                         prompt: messages,
-                        model: 'gpt-3.5-turbo',
+                        model: 'gpt-4o',
                         temperature: 0.7,
                         max_tokens: 700
                     })
@@ -699,6 +729,8 @@
                     });
                 }, 100);
             }
+        }
+
         // --- OpenAI TTS (Text-to-Speech) ---
         async function playOpenAITTS(text) {
             // ttsBtn, bocinaImg, bocinaSvg son opcionales (solo para animación)
@@ -708,7 +740,7 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         input: text,
-                        model: 'gpt-4o-mini-tts',
+                        model: 'tts-1',
                         voice: 'fable'
                     })
                 });
@@ -760,7 +792,6 @@
                 }
                 alert('No se pudo reproducir el audio.');
             }
-        }
         }
 
         function showTypingIndicator(show) {

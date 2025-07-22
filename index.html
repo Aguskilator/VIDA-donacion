@@ -561,15 +561,7 @@
         }
 
         /* Fade-in animation for a smooth load */
-        .fade-in-element {
-            opacity: 0;
-            animation: fadeIn 1s ease-out forwards;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        /* .fade-in-element and fadeIn removed */
         
         /* Asegurar que el contenido principal sea visible */
         body {
@@ -1199,7 +1191,7 @@
     <!-- Welcome Screen -->
     <div id="welcome-screen" class="min-h-screen flex flex-col">
         <!-- Header -->
-        <header class="w-full p-4 sm:p-6 bg-transparent fade-in-element" style="animation-delay: 0.2s;">
+<header class="w-full p-4 sm:p-6 bg-transparent">
             <div class="container mx-auto flex justify-between items-center">
                 <div class="flex items-center space-x-0.5 sm:space-x-2 lg:space-x-2">
                     <div class="w-8 h-8 sm:w-10 sm:h-10 lg:w-14 lg:h-14 bg-[var(--vida-text-dark)] rounded-full flex items-center justify-center shadow-lg">
@@ -1210,7 +1202,7 @@
                 </div>
                 <div class="flex items-center space-x-2 sm:space-x-3">
                     <!-- Social Media Buttons -->
-                    <div class="flex items-center space-x-1 sm:space-x-2 mr-2 sm:mr-3 fade-in-element" style="animation-delay: 0.2s;">
+<div class="flex items-center space-x-1 sm:space-x-2 mr-2 sm:mr-3">
                         <!-- Instagram Button -->
                         <a href="https://www.instagram.com/ont.esp/#" target="_blank" rel="noopener noreferrer" 
                            class="social-btn w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-pink-300 focus:ring-offset-2"
@@ -1260,11 +1252,11 @@
         <main class="flex-1 flex flex-col lg:flex-row items-center justify-center container mx-auto px-4 py-6 sm:py-8 lg:py-8 text-center lg:text-left gap-6 sm:gap-8 lg:gap-12">
             <div class="lg:w-3/5 flex flex-col items-center lg:items-start space-y-4 sm:space-y-6">
                 <!-- Banner principal con diseño elegante -->
-                <div class="vida-hero-banner fade-in-element w-full" style="animation-delay: 0.3s;">
-                    <h2 class="vida-main-title text-base sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-[var(--vida-text-dark)] fade-in-element leading-tight" style="animation-delay: 0.4s;">
+<div class="vida-hero-banner w-full">
+<h2 class="vida-main-title text-base sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-[var(--vida-text-dark)] leading-tight">
                         Voz de Información y Donación Asistida
                     </h2>
-                    <div class="vida-main-subtitle text-xs sm:text-base md:text-lg lg:text-xl mt-2 sm:mt-5 fade-in-element" style="animation-delay: 0.6s;">
+<div class="vida-main-subtitle text-xs sm:text-base md:text-lg lg:text-xl mt-2 sm:mt-5">
                         <p class="subtitle-line-1 mb-1 sm:mb-3 text-center lg:text-left text-xs sm:text-base">
                             <span class="font-semibold">Tu guía de confianza</span> en momentos delicados
                         </p>
@@ -1276,7 +1268,7 @@
                 </div>
                 
                 <!-- Botones de acción debajo del banner, centrados con respecto al banner -->
-                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center self-center w-full max-w-2xl fade-in-element lg:justify-start lg:self-start" style="animation-delay: 0.8s;">
+<div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center self-center w-full max-w-2xl lg:justify-start lg:self-start">
                     <button id="start-chat-btn" class="btn-primary-enhanced bg-[var(--vida-btn-green)] text-white font-bold py-2 px-4 sm:py-4 sm:px-8 text-xs sm:text-base rounded-full shadow-lg hover:bg-[var(--vida-btn-green-hover)] transition-all transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-green-300 enhanced-button flex items-center justify-center gap-2 w-full sm:w-auto">
                         <svg class="h-3 w-3 sm:h-5 sm:w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M4.913 2.658c2.075-.27 4.19-.408 6.337-.408 2.147 0 4.262.139 6.337.408 1.922.25 3.291 1.861 3.405 3.727a4.403 4.403 0 00-1.032-.211 50.89 50.89 0 00-8.42 0c-2.358.196-4.04 2.19-4.04 4.434v4.286a4.47 4.47 0 002.433 3.984L7.28 21.53A.75.75 0 016 21v-4.03a48.527 48.527 0 01-1.087-.128C2.905 16.58 1.5 14.833 1.5 12.862V6.638c0-1.97 1.405-3.718 3.413-3.979z"/>
@@ -1295,7 +1287,7 @@
             </div>
             
             <!-- Robot Image mejorado -->
-            <div id="main-robot-container" class="lg:w-2/5 flex items-center justify-center lg:items-start lg:justify-start mt-6 sm:mt-8 lg:mt-[-2rem] lg:ml-[-3rem] fade-in-element" style="animation-delay: 1s;">
+<div id="main-robot-container" class="lg:w-2/5 flex items-center justify-center lg:items-start lg:justify-start mt-6 sm:mt-8 lg:mt-[-2rem] lg:ml-[-3rem]">
                 <div class="robot-circle-bg">
                     <img src="robot.png" alt="Robot VIDA" class="robot-img-main" onerror="this.onerror=null;this.src='https://placehold.co/437x437/FFFFFF/FFFFFF?text=Robot';" />
                 </div>
@@ -1303,7 +1295,7 @@
         </main>
 
         <!-- Botón de feedback ARRIBA del footer - SOLO para móviles -->
-        <div class="feedback-mobile-container block sm:hidden px-4 py-2 fade-in-element" style="animation-delay: 1.4s;">
+<div class="feedback-mobile-container block sm:hidden px-4 py-2">
             <button id="feedback-btn-mobile" class="bg-[var(--vida-btn-feedback)] text-white font-semibold py-2 px-4 rounded-full shadow-lg hover:scale-105 transition-transform flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.08-3.239A8.939 8.939 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM4.416 11.603a.75.75 0 00-.029.048l.029-.048zM5.022 13.013a.75.75 0 00.213.024l.028-.024z" clip-rule="evenodd" /></svg>
                 Danos tu opinión
@@ -1314,7 +1306,7 @@
     <!-- Aquí puedes agregar nuevas secciones debajo de la principal -->
 
     <!-- Sección: ¿Tienes dudas rápidas? (Paleta ONT, glassmorphism y cards resaltadas) -->
-    <section class="w-full py-20 px-2 sm:px-0 flex flex-col items-center gap-12 fade-in-up" style="min-height: 500px; background: linear-gradient(120deg, #e3f2fd 0%, #bbdefb 60%, #64b5f6 100%); box-shadow: 0 8px 32px 0 #1976d233; border-radius: 2.5rem; border: 2.5px solid #90caf9;">
+<section class="w-full py-20 px-2 sm:px-0 flex flex-col items-center gap-12" style="min-height: 500px; background: linear-gradient(120deg, #e3f2fd 0%, #bbdefb 60%, #64b5f6 100%); box-shadow: 0 8px 32px 0 #1976d233; border-radius: 2.5rem; border: 2.5px solid #90caf9;">
         <h2 class="text-4xl sm:text-5xl font-extrabold text-center mb-12 tracking-tight" style="color:#0d47a1; letter-spacing:-1px; text-shadow:0 2px 16px #fff8,0 1px 0 #fff,0 0 12px #90caf9,0 0 24px #2196f3;">Para decidir con información y tranquilidad</h2>
         <div class="w-full max-w-6xl flex flex-col sm:flex-row justify-center items-stretch gap-8">
             <!-- Card 1 -->
@@ -1350,7 +1342,7 @@
         </div>
     </section>
     <!-- MITO VS REALIDAD -->
-    <section class="w-full py-12 px-2 sm:px-0 flex flex-col items-center gap-12 fade-in-up">
+<section class="w-full py-12 px-2 sm:px-0 flex flex-col items-center gap-12">
         <div class="w-full max-w-5xl mx-auto flex flex-col items-center mb-8">
             <h2 class="text-2xl sm:text-3xl font-bold text-[var(--vida-text-dark)] mb-6 tracking-tight">Mito vs Realidad</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 w-full">
@@ -1624,7 +1616,7 @@
 
     <!-- Sección: Preguntas Frecuentes (en recuadro) -->
 
-    <section id="faq-section" class="w-full py-12 px-2 sm:px-0 flex flex-col items-center gap-8 fade-in-up" style="min-height: 420px; background: linear-gradient(120deg, #e3f2fd 0%, #bbdefb 60%, #64b5f6 100%); box-shadow: 0 8px 32px 0 #1976d233; border-radius: 2.5rem; border: 2.5px solid #90caf9;">
+<section id="faq-section" class="w-full py-12 px-2 sm:px-0 flex flex-col items-center gap-8" style="min-height: 420px; background: linear-gradient(120deg, #e3f2fd 0%, #bbdefb 60%, #64b5f6 100%); box-shadow: 0 8px 32px 0 #1976d233; border-radius: 2.5rem; border: 2.5px solid #90caf9;">
         <h2 class="text-3xl sm:text-4xl font-extrabold text-center mb-4 tracking-tight flex items-center justify-center gap-3" style="color:#1565c0; letter-spacing:-1px; text-shadow:0 2px 16px #fff8,0 1px 0 #fff,0 0 12px #90caf9,0 0 24px #2196f3;">
           <svg class="inline-block w-9 h-9 text-blue-400 drop-shadow" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#1976d2" stroke-width="2.5" fill="#e3f2fd"/><path d="M12 8v4m0 4h.01" stroke="#1976d2" stroke-width="2.5" stroke-linecap="round"/></svg>
           Preguntas Frecuentes
@@ -1751,65 +1743,65 @@
     </section>
 
     <!-- Sección: Impacto de la Donación (fuera del recuadro) -->
-    <section id="impacto-donacion" class="w-full py-24 px-2 sm:px-0 flex flex-col items-center fade-in-up">
+<section id="impacto-donacion" class="w-full py-24 px-2 sm:px-0 flex flex-col items-center">
       <h2 class="text-5xl sm:text-6xl font-extrabold text-center mb-8 tracking-tight" style="color:#0d47a1; letter-spacing:-2px; text-shadow:0 4px 32px #90caf9cc,0 1px 0 #fff,0 0 24px #2196f3;">
         Impacto de la Donación
       </h2>
       <p class="text-xl sm:text-2xl font-semibold text-center mb-14 max-w-3xl text-blue-900" style="text-shadow:0 2px 16px #fff8;">Cada donante es una historia de esperanza. Estos números reflejan vidas transformadas y segundas oportunidades gracias a la generosidad.</p>
       <div class="w-full max-w-6xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
         <!-- Card 1 -->
-        <div class="impact-card flex flex-col items-center justify-center p-5 sm:p-6 rounded-3xl shadow-xl border-2 border-pink-300/70 backdrop-blur-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_32px_8px_#e91e63aa] group relative gap-1" style="background:linear-gradient(135deg,rgba(255,255,255,0.32) 60%,rgba(233,30,99,0.13) 100%); border:2.5px solid #e3f2fd;min-height:180px;max-width:240px;margin:auto;">
-          <div class="flex flex-col items-center gap-0 mb-1">
-            <div class="impact-icon" style="font-size:2.1rem;color:#e91e63;filter:drop-shadow(0 2px 12px #e91e6344);">🫀</div>
-            <div class="text-3xl sm:text-4xl font-extrabold text-pink-600 drop-shadow-lg tracking-tight leading-tight">6 464</div>
+        <div class="impact-card uniform-impact-card flex flex-col items-center justify-center p-5 sm:p-6 rounded-3xl shadow-xl border-2 border-pink-300/70 backdrop-blur-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_32px_8px_#e91e63aa] group relative gap-1" style="background:linear-gradient(135deg,rgba(255,255,255,0.32) 60%,rgba(233,30,99,0.13) 100%); border:2.5px solid #e3f2fd;">
+          <div class="flex flex-col items-center gap-0 mb-1 w-full">
+            <div class="impact-icon" style="font-size:2.2rem;color:#e91e63;filter:drop-shadow(0 2px 12px #e91e6344);">🫀</div>
+            <div class="text-4xl font-extrabold text-pink-600 drop-shadow-lg tracking-tight leading-tight">6 464</div>
           </div>
-          <div class="flex flex-col items-center gap-0 mt-0">
-            <div class="text-base sm:text-lg font-extrabold text-pink-900 text-center leading-tight mb-1 uppercase" style="letter-spacing:-0.5px;">Trasplantes realizados</div>
-            <div class="text-xs sm:text-sm font-semibold text-pink-700/90 text-center leading-tight" style="text-align:center;">Máximo histórico alcanzado en España.</div>
+          <div class="flex flex-col items-center gap-0 mt-0 w-full">
+            <div class="text-base font-bold text-pink-900 text-center leading-tight mb-1 uppercase tracking-wide" style="letter-spacing:-0.5px;">Trasplantes realizados</div>
+            <div class="text-xs font-medium text-pink-700/90 text-center leading-tight italic px-1" style="text-align:center;">Máximo histórico alcanzado en España</div>
           </div>
         </div>
         <!-- Card 2 -->
-        <div class="impact-card flex flex-col items-center justify-center p-5 sm:p-6 rounded-3xl shadow-xl border-2 border-blue-300/70 backdrop-blur-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_32px_8px_#1976d2aa] group relative gap-1" style="background:linear-gradient(135deg,rgba(255,255,255,0.32) 60%,rgba(25,118,210,0.13) 100%); border:2.5px solid #bbdefb;min-height:180px;max-width:240px;margin:auto;">
-          <div class="flex flex-col items-center gap-0 mb-1">
-            <div class="impact-icon" style="font-size:2.1rem;color:#1976d2;filter:drop-shadow(0 2px 12px #1976d244);">👤</div>
-            <div class="text-3xl sm:text-4xl font-extrabold text-blue-700 drop-shadow-lg tracking-tight leading-tight">2 562</div>
+        <div class="impact-card uniform-impact-card flex flex-col items-center justify-center p-5 sm:p-6 rounded-3xl shadow-xl border-2 border-blue-300/70 backdrop-blur-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_32px_8px_#1976d2aa] group relative gap-1" style="background:linear-gradient(135deg,rgba(255,255,255,0.32) 60%,rgba(25,118,210,0.13) 100%); border:2.5px solid #bbdefb;">
+          <div class="flex flex-col items-center gap-0 mb-1 w-full">
+            <div class="impact-icon" style="font-size:2.2rem;color:#1976d2;filter:drop-shadow(0 2px 12px #1976d244);">👤</div>
+            <div class="text-4xl font-extrabold text-blue-700 drop-shadow-lg tracking-tight leading-tight">2 562</div>
           </div>
-          <div class="flex flex-col items-center gap-0 mt-0">
-            <div class="text-base sm:text-lg font-extrabold text-blue-900 text-center leading-tight mb-1 uppercase" style="letter-spacing:-0.5px;">Donantes fallecidos</div>
-            <div class="text-xs sm:text-sm font-semibold text-blue-700/90 text-center leading-tight" style="text-align:center;">Personas que donaron tras fallecer, permitiendo salvar vidas.</div>
+          <div class="flex flex-col items-center gap-0 mt-0 w-full">
+            <div class="text-base font-bold text-blue-900 text-center leading-tight mb-1 uppercase tracking-wide" style="letter-spacing:-0.5px;">Donantes fallecidos</div>
+            <div class="text-xs font-medium text-blue-700/90 text-center leading-tight italic px-1" style="text-align:center;">Personas que donaron tras fallecer y salvaron vidas</div>
           </div>
         </div>
         <!-- Card 3 -->
-        <div class="impact-card flex flex-col items-center justify-center p-5 sm:p-6 rounded-3xl shadow-xl border-2 border-rose-300/70 backdrop-blur-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_32px_8px_#e91e63aa] group relative gap-1" style="background:linear-gradient(135deg,rgba(255,255,255,0.32) 60%,rgba(233,30,99,0.13) 100%); border:2.5px solid #90caf9;min-height:180px;max-width:240px;margin:auto;">
-          <div class="flex flex-col items-center gap-0 mb-1">
-            <div class="impact-icon" style="font-size:2.1rem;color:#e91e63;filter:drop-shadow(0 2px 12px #e91e6344);">❤️</div>
-            <div class="text-3xl sm:text-4xl font-extrabold text-rose-600 drop-shadow-lg tracking-tight leading-tight">404</div>
+        <div class="impact-card uniform-impact-card flex flex-col items-center justify-center p-5 sm:p-6 rounded-3xl shadow-xl border-2 border-rose-300/70 backdrop-blur-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_32px_8px_#e91e63aa] group relative gap-1" style="background:linear-gradient(135deg,rgba(255,255,255,0.32) 60%,rgba(233,30,99,0.13) 100%); border:2.5px solid #90caf9;">
+          <div class="flex flex-col items-center gap-0 mb-1 w-full">
+            <div class="impact-icon" style="font-size:2.2rem;color:#e91e63;filter:drop-shadow(0 2px 12px #e91e6344);">❤️</div>
+            <div class="text-4xl font-extrabold text-rose-600 drop-shadow-lg tracking-tight leading-tight">404</div>
           </div>
-          <div class="flex flex-col items-center gap-0 mt-0">
-            <div class="text-base sm:text-lg font-extrabold text-rose-900 text-center leading-tight mb-1 uppercase" style="letter-spacing:-0.5px;">Donantes vivos</div>
-            <div class="text-xs sm:text-sm font-semibold text-rose-700/90 text-center leading-tight" style="text-align:center;">Mayormente familiares que donaron un riñón o parte del hígado.</div>
+          <div class="flex flex-col items-center gap-0 mt-0 w-full">
+            <div class="text-base font-bold text-rose-900 text-center leading-tight mb-1 uppercase tracking-wide" style="letter-spacing:-0.5px;">Donantes vivos</div>
+            <div class="text-xs font-medium text-rose-700/90 text-center leading-tight italic px-1" style="text-align:center;">Personas que donaron un órgano en vida</div>
           </div>
         </div>
         <!-- Card 4 -->
-        <div class="impact-card flex flex-col items-center justify-center p-5 sm:p-6 rounded-3xl shadow-xl border-2 border-indigo-300/70 backdrop-blur-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_32px_8px_#3949abaa] group relative gap-1" style="background:linear-gradient(135deg,rgba(255,255,255,0.32) 60%,rgba(57,73,171,0.13) 100%); border:2.5px solid #1976d2;min-height:180px;max-width:240px;margin:auto;">
-          <div class="flex flex-col items-center gap-0 mb-1">
-            <div class="impact-icon" style="font-size:2.1rem;color:#3949ab;filter:drop-shadow(0 2px 12px #3949ab44);">⏱️</div>
-            <div class="text-3xl sm:text-4xl font-extrabold text-indigo-700 drop-shadow-lg tracking-tight leading-tight">8 / 17</div>
+        <div class="impact-card uniform-impact-card flex flex-col items-center justify-center p-5 sm:p-6 rounded-3xl shadow-xl border-2 border-indigo-300/70 backdrop-blur-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_32px_8px_#3949abaa] group relative gap-1" style="background:linear-gradient(135deg,rgba(255,255,255,0.32) 60%,rgba(57,73,171,0.13) 100%); border:2.5px solid #1976d2;">
+          <div class="flex flex-col items-center gap-0 mb-1 w-full">
+            <div class="impact-icon" style="font-size:2.2rem;color:#3949ab;filter:drop-shadow(0 2px 12px #3949ab44);">⏱️</div>
+            <div class="text-4xl font-extrabold text-indigo-700 drop-shadow-lg tracking-tight leading-tight">8 / 17</div>
           </div>
-          <div class="flex flex-col items-center gap-0 mt-0">
-            <div class="text-base sm:text-lg font-extrabold text-indigo-900 text-center leading-tight mb-1 uppercase" style="letter-spacing:-0.5px;">Donaciones / Trasplantes diarios</div>
-            <div class="text-xs sm:text-sm font-semibold text-indigo-700/90 text-center leading-tight" style="text-align:center;">Cada día, 8 donaciones hacen posibles 17 trasplantes.</div>
+          <div class="flex flex-col items-center gap-0 mt-0 w-full">
+            <div class="text-base font-bold text-indigo-900 text-center leading-tight mb-1 uppercase tracking-wide" style="letter-spacing:-0.5px;">Donaciones / Trasplantes diarios</div>
+            <div class="text-xs font-medium text-indigo-700/90 text-center leading-tight italic px-1" style="text-align:center;">Cada día, 8 donaciones hacen posibles 17 trasplantes</div>
           </div>
         </div>
         <!-- Card 5 -->
-        <div class="impact-card flex flex-col items-center justify-center p-5 sm:p-6 rounded-3xl shadow-xl border-2 border-yellow-300/70 backdrop-blur-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_32px_8px_#fbc02daa] group relative gap-1" style="background:linear-gradient(135deg,rgba(255,255,255,0.32) 60%,rgba(251,192,45,0.13) 100%); border:2.5px solid #fbc02d;min-height:180px;max-width:240px;margin:auto;">
-          <div class="flex flex-col items-center gap-0 mb-1">
-            <div class="impact-icon" style="font-size:2.1rem;color:#fbc02d;filter:drop-shadow(0 2px 12px #fbc02d44);">🌍</div>
-            <div class="text-3xl sm:text-4xl font-extrabold text-yellow-600 drop-shadow-lg tracking-tight leading-tight">52,6 pmp</div>
+        <div class="impact-card uniform-impact-card flex flex-col items-center justify-center p-5 sm:p-6 rounded-3xl shadow-xl border-2 border-yellow-300/70 backdrop-blur-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_32px_8px_#fbc02daa] group relative gap-1" style="background:linear-gradient(135deg,rgba(255,255,255,0.32) 60%,rgba(251,192,45,0.13) 100%); border:2.5px solid #fbc02d;">
+          <div class="flex flex-col items-center gap-0 mb-1 w-full">
+            <div class="impact-icon" style="font-size:2.2rem;color:#fbc02d;filter:drop-shadow(0 2px 12px #fbc02d44);">🌍</div>
+            <div class="text-4xl font-extrabold text-yellow-600 drop-shadow-lg tracking-tight leading-tight">52,6 pmp</div>
           </div>
-          <div class="flex flex-col items-center gap-0 mt-0">
-            <div class="text-base sm:text-lg font-extrabold text-yellow-900 text-center leading-tight mb-1 uppercase" style="letter-spacing:-0.5px;">Donantes por millón de habitantes</div>
-            <div class="text-xs sm:text-sm font-semibold text-yellow-700/90 text-center leading-tight" style="text-align:center;">La más alta del mundo por 32º año consecutivo.</div>
+          <div class="flex flex-col items-center gap-0 mt-0 w-full">
+            <div class="text-base font-bold text-yellow-900 text-center leading-tight mb-1 uppercase tracking-wide" style="letter-spacing:-0.5px;">Donantes por millón de habitantes</div>
+            <div class="text-xs font-medium text-yellow-700/90 text-center leading-tight italic px-1" style="text-align:center;">Récord mundial durante 32 años consecutivos</div>
           </div>
         </div>
       </div>
@@ -1823,9 +1815,14 @@
           position: relative;
           overflow: hidden;
           transition: border-color 0.2s, box-shadow 0.2s;
-          min-height: 140px;
-          max-width: 240px;
           margin: auto;
+        }
+        #impacto-donacion .uniform-impact-card {
+          min-width: 200px;
+          max-width: 220px;
+          min-height: 200px;
+          max-height: 220px;
+          display: flex;
         }
         #impacto-donacion .impact-card:before {
           content: '';
@@ -1859,7 +1856,7 @@
     </section>
 
     <!-- Footer SIEMPRE al final de la página -->
-    <footer class="w-full py-1 px-0 sm:p-1 bg-[var(--vida-bg-footer)] fade-in-element" style="animation-delay: 1.2s;">
+<footer class="w-full py-1 px-0 sm:p-1 bg-[var(--vida-bg-footer)]">
         <div class="container mx-auto max-w-xl lg:max-w-2xl px-4 sm:px-12 lg:px-16">
             <div class="flex flex-col items-center justify-center py-1 sm:py-2">
                 <p class="text-[10px] sm:text-base md:text-xs text-slate-700 font-medium mb-0 leading-tight max-w-xs sm:max-w-md lg:max-w-lg text-center">

@@ -546,7 +546,7 @@
             generate: async function() {
                 try {
                     const suggestionPrompt = [
-                        { role: "system", content: "Eres VIDA. Genera exactamente 4 preguntas cortas (máximo 6 palabras cada una) sobre donación de órganos en España que una persona común haría. Deben ser preguntas concisas, en donde se entienda perfectamente lo que se esta preguntado.Responde SOLO con las 4 preguntas, una por línea, sin numeración ni puntos. Ejemplos: '¿Duele donar órganos?', '¿Qué órganos se donan?', '¿Cómo me registro?', '¿Es seguro donar?'" },
+                        { role: "system", content: "Eres VIDA. Genera exactamente 4 preguntas cortas (máximo 6 palabras cada una) sobre donación de órganos en España que una persona común haría. Deben ser preguntas concisas, no repetidas de las anteriores que sugeriste, en donde se entienda perfectamente lo que se esta preguntado.Responde SOLO con las 4 preguntas, una por línea, sin numeración ni puntos. Ejemplos: '¿Duele donar órganos?', '¿Qué órganos se donan?', '¿Cómo me registro?', '¿Es seguro donar?'" },
                         { role: "user", content: "Genera 4 preguntas cortas sobre donación de órganos" }
                     ];
                     const result = await callOpenAI(suggestionPrompt);

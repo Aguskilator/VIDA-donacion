@@ -505,9 +505,14 @@
 
         **Acompañamiento en pérdida y duelo:**
         Si el usuario expresa pérdida, duelo, fallecimiento, tristeza, dolor emocional, luto, muerte de un ser querido, o emociones similares:
-        1. Prioriza SIEMPRE el acompañamiento tanatológico y psicológico: valida primero sus emociones, ofrece consuelo, escucha activa, comprensión y apoyo emocional. Haz sentir a la persona acompañada y comprendida antes de cualquier otra información.
+        1. Prioriza  el acompañamiento tanatológico y psicológico: valida primero sus emociones, ofrece consuelo, escucha activa, comprensión y apoyo emocional. Haz sentir a la persona acompañada y comprendida antes de cualquier otra información.
         2. Introduce el tema de la donación de órganos de manera natural y sutil, como una posibilidad que existe en España, pero nunca como una recomendación ni como un paso obligatorio. Puedes mencionar que la donación puede ser un acto de amor y trascendencia para algunas familias, pero siempre respetando el proceso de duelo y el ritmo de la persona. Si la persona no desea hablar del tema, no insistas.
         3. Nunca minimices el dolor ni des consejos simplistas. Sé empático, humano y acompaña desde la comprensión. Puedes sugerir recursos de apoyo psicológico o tanatológico si es apropiado.
+        4. No des asesoramiento médico ni legal. Tu función es brindar apoyo emocional y acompañamiento en el proceso de duelo.
+
+        **VARIEDAD OBLIGATORIA:**
+        - Si el usuario repite una pregunta o pide la misma información varias veces, responde de forma diferente a la vez anterior. Cambia el enfoque, usa ejemplos, metáforas, analogías o diferentes estructuras, pero mantén la claridad y empatía.
+        - No repitas nunca la misma respuesta textual a la misma pregunta en una misma conversación.
 
         **PROHIBIDO ABSOLUTAMENTE:**
         - NUNCA pidas ni almacenes datos personales (nombre, DNI, dirección, etc.).
@@ -819,10 +824,25 @@
             chatForm.querySelector('button[type="submit"]').disabled = true; 
             suggestQuestionsBtn.disabled = true; 
 
-            const messages = [
+            // Detectar si la pregunta ya fue hecha antes
+            let repeated = false;
+            const normalizedUserMsg = userMessage.trim().toLowerCase();
+            for (let i = 0; i < chatHistory.length; i++) {
+                if (chatHistory[i].role === 'user' && chatHistory[i].content.trim().toLowerCase() === normalizedUserMsg) {
+                    repeated = true;
+                    break;
+                }
+            }
+            let messages = [
                 { role: "system", content: systemPrompt },
                 ...chatHistory
             ];
+            if (repeated) {
+                messages.push({
+                    role: "system",
+                    content: "El usuario ya preguntó esto antes en esta conversación. Responde de forma diferente a la vez anterior, usando otro enfoque, ejemplos, metáforas o analogías, pero manteniendo claridad y empatía. No repitas la misma respuesta textual."
+                });
+            }
             try {
                 const result = await callOpenAI(messages);
                 let botResponseText = result.choices?.[0]?.message?.content || "Lo siento, hubo un problema. Por favor, intenta de nuevo.";

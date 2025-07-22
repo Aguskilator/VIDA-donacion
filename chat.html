@@ -18,6 +18,28 @@
     
     <!-- Custom Styles -->
     <style>
+        /* Bocina reproduciendo: animación de palpitación */
+        .tts-playing {
+            background: #60a5fa !important; /* azul claro */
+            animation: tts-pulse 1s infinite;
+            box-shadow: 0 0 0 0 rgba(96,165,250,0.7);
+        }
+        @keyframes tts-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(96,165,250,0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(96,165,250,0); }
+            100% { box-shadow: 0 0 0 0 rgba(96,165,250,0.7); }
+        }
+        /* Micrófono grabando: animación de palpitación */
+        .mic-recording {
+            background: #f87171 !important; /* rojo claro */
+            animation: mic-pulse 1s infinite;
+            box-shadow: 0 0 0 0 rgba(248,113,113,0.7);
+        }
+        @keyframes mic-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(248,113,113,0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(248,113,113,0); }
+            100% { box-shadow: 0 0 0 0 rgba(248,113,113,0.7); }
+        }
         :root {
             --vida-primary: #2563EB;
             --vida-secondary: #3B82F6;
@@ -375,14 +397,16 @@
 
                 recognition.onstart = function() {
                     recognizing = true;
-                    micBtn.classList.add('bg-blue-200');
-                    micIcon.classList.add('text-blue-700');
+                    micBtn.classList.add('mic-recording');
+                    micIcon.classList.add('text-red-600');
+                    micIcon.style.filter = 'none';
                     lastTranscript = '';
                 };
                 recognition.onend = function() {
                     recognizing = false;
-                    micBtn.classList.remove('bg-blue-200');
-                    micIcon.classList.remove('text-blue-700');
+                    micBtn.classList.remove('mic-recording');
+                    micIcon.classList.remove('text-red-600');
+                    micIcon.style.filter = 'grayscale(0.2) brightness(0.7)';
                     // Si no llegó onresult pero hay transcript, usarlo
                     if (lastTranscript) {
                         chatInput.value = lastTranscript;
@@ -391,8 +415,9 @@
                 };
                 recognition.onerror = function(event) {
                     recognizing = false;
-                    micBtn.classList.remove('bg-blue-200');
-                    micIcon.classList.remove('text-blue-700');
+                    micBtn.classList.remove('mic-recording');
+                    micIcon.classList.remove('text-red-600');
+                    micIcon.style.filter = 'grayscale(0.2) brightness(0.7)';
                     let msg = 'No se pudo reconocer el audio. Intenta de nuevo.';
                     if (event.error === 'not-allowed') {
                         msg = 'Permiso de micrófono denegado. Por favor, permite el acceso al micrófono en la configuración del navegador.';
@@ -638,14 +663,23 @@
                 ttsBtn.addEventListener('click', async (e) => {
                     e.preventDefault();
                     ttsBtn.disabled = true;
+                    ttsBtn.classList.add('tts-playing');
                     ttsBtn.classList.add('opacity-60');
+                    // Cambiar color del icono bocina si es SVG fallback
+                    const bocinaImg = ttsBtn.querySelector('img');
+                    const bocinaSvg = ttsBtn.querySelector('svg');
+                    if (bocinaImg) bocinaImg.classList.add('text-blue-600');
+                    if (bocinaSvg) bocinaSvg.classList.add('text-blue-600');
                     try {
                         await playOpenAITTS(text.replace(/<br>/g, ' '));
                     } catch (err) {
                         alert('No se pudo reproducir el audio.');
                     }
                     ttsBtn.disabled = false;
+                    ttsBtn.classList.remove('tts-playing');
                     ttsBtn.classList.remove('opacity-60');
+                    if (bocinaImg) bocinaImg.classList.remove('text-blue-600');
+                    if (bocinaSvg) bocinaSvg.classList.remove('text-blue-600');
                 });
                 ttsBtnWrapper.appendChild(ttsBtn);
                 botTextAndBtn.appendChild(ttsBtnWrapper);

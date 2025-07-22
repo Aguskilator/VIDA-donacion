@@ -1,6 +1,30 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <!-- Estilos para sección dudas rápidas (copiados de copia 2) -->
+    <style>
+        .testimonial-gradient-bg {
+            background: linear-gradient(135deg,#e3f2fd 0%,#fce4ec 100%);
+        .quick-info-card {
+            background: rgba(24,32,48,0.97);
+            border-radius: 1.25rem;
+            box-shadow: 0 4px 24px 0 rgba(31,38,135,0.10);
+            padding: 1.5rem 1.2rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .quick-info-card:hover {
+            transform: translateY(-4px) scale(1.04);
+            box-shadow: 0 8px 32px 0 rgba(31,38,135,0.18);
+        }
+        .fade-in-up {
+            opacity:0;
+            transform:translateY(30px);
+            animation:fadeInUp 1s forwards;
+        }
+        @keyframes fadeInUp {
+            to{opacity:1;transform:translateY(0);}
+        }
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VIDA - Asistente de Donación</title>
@@ -44,11 +68,11 @@
             /* Fondo con degradado suave y tenue como el quiz */
             background-color: #f0f9ff;
             background-image: 
-                radial-gradient(at 47% 33%, hsl(200.00, 80%, 85%) 0px, transparent 50%),
-                radial-gradient(at 9% 62%, hsl(215.00, 80%, 80%) 0px, transparent 50%),
-                radial-gradient(at 82% 65%, hsl(140.00, 80%, 80%) 0px, transparent 50%),
-                radial-gradient(at 24% 88%, hsl(20.00, 80%, 85%) 0px, transparent 50%),
-                radial-gradient(at 75% 8%, hsl(340.00, 80%, 85%) 0px, transparent 50%),
+                radial-gradient(at 47% 33%, hsl(200, 51%, 82%) 0px, transparent 50%),
+                radial-gradient(at 9% 62%, hsl(215, 51%, 76%) 0px, transparent 50%),
+                radial-gradient(at 82% 65%, hsl(210, 60%, 75%) 0px, transparent 50%),
+                radial-gradient(at 24% 88%, hsl(220, 60%, 85%) 0px, transparent 50%),
+                radial-gradient(at 75% 8%, hsl(205, 37%, 79%) 0px, transparent 50%),
                 radial-gradient(at 56% 33%, hsl(260.00, 80%, 85%) 0px, transparent 50%);
             background-attachment: fixed;
             min-height: 100vh;
@@ -101,6 +125,65 @@
                     0 4px 16px rgba(15, 27, 60, 0.3);
             }
         }
+        
+        /* Estilos para el título "Testimonios de Esperanza" */
+        .testimonios-title {
+            background: linear-gradient(90deg, #1565c0 0%, #1976d2 40%, #42a5f5 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+            letter-spacing: 0.01em;
+            position: relative;
+            text-shadow: 0 2px 16px #fff8, 0 1px 0 #fff, 0 0 12px #90caf9, 0 0 24px #2196f3;
+            filter: drop-shadow(0 2px 8px #1976d288);
+            animation: testimoniosGlow 4s ease-in-out infinite alternate;
+        }
+
+        .testimonios-title::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(135deg, rgba(102, 187, 106, 0.4) 0%, rgba(67, 160, 71, 0.4) 50%, rgba(56, 142, 60, 0.4) 100%);
+            filter: blur(8px);
+            z-index: -1;
+            border-radius: 0.5rem;
+            opacity: 0.6;
+        }
+
+        .testimonios-title::after {
+            content: '✨';
+            position: absolute;
+            right: -1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2em;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+
+        @keyframes testimoniosGlow {
+            0% {
+                filter: drop-shadow(0 2px 4px rgba(76, 175, 80, 0.3));
+            }
+            100% {
+                filter: drop-shadow(0 4px 8px rgba(146, 203, 231, 0.5)) drop-shadow(0 0 12px rgba(102, 187, 106, 0.4));
+            }
+        }
+
+        @keyframes sparkle {
+            0%, 100% {
+                opacity: 0.6;
+                transform: translateY(-50%) scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: translateY(-50%) scale(1.2);
+            }
+        }
+
         /* Subtítulo con color y formato mejorado */
         .vida-main-subtitle {
             color: #0D1B2A;
@@ -537,6 +620,20 @@
         .chat-bubble-text {
             text-align: justify;
         }
+
+        /* Centrar solo los textos de testimonios y limpiar duplicados */
+        .testimonio-card p {
+            text-align: center !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            display: block !important;
+            width: 100% !important;
+            background: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
         
         /* Custom scrollbar for chat */
         .chat-messages::-webkit-scrollbar { width: 6px; }
@@ -652,17 +749,18 @@
             max-width: 450px;
             max-height: 450px;
             border-radius: 50%;
-            background: linear-gradient(135deg, 
-                rgba(255, 255, 255, 0.9) 0%, 
-                rgba(255, 255, 255, 0.75) 50%, 
-                rgba(255, 255, 255, 0.9) 100%);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 
-                0 15px 45px rgba(13, 27, 42, 0.12), 
-                0 8px 25px rgba(255, 255, 255, 0.3),
-                inset 0 2px 0 rgba(255, 255, 255, 0.8);
+            background: radial-gradient(circle at 60% 40%, rgba(255,255,255,0.90) 60%, rgba(33,150,243,0.18) 100%);
+            backdrop-filter: blur(36px) saturate(1.3);
+            -webkit-backdrop-filter: blur(36px) saturate(1.3);
+            border: none;
+            box-shadow:
+                0 0 0 0px rgba(33,150,243,0.13),
+                0 0 64px 24px rgba(144,202,249,0.18),
+                0 24px 80px 0 rgba(33,150,243,0.10),
+                0 2px 24px 0 rgba(33,150,243,0.10),
+                0 0 0 0 rgba(144,202,249,0.13),
+                0 0 0 0 rgba(33,150,243,0.10),
+                inset 0 2px 0 rgba(144,202,249,0.85);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -670,7 +768,102 @@
             position: relative;
             z-index: 1;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            animation: breathe 4s ease-in-out infinite;
+            animation: enhancedBreathe 6s ease-in-out infinite;
+        }
+
+        /* Halo difuso animado más suave */
+        .robot-circle-bg::before {
+            content: '';
+            position: absolute;
+            top: -32px; left: -32px; right: -32px; bottom: -32px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(25,118,210,0.38) 0%, rgba(21,101,192,0.28) 60%, transparent 100%);
+            filter: blur(32px) saturate(1.5);
+            z-index: 0;
+            pointer-events: none;
+            animation: haloPulse 7s ease-in-out infinite alternate;
+        }
+
+        @keyframes haloPulse {
+            0% { opacity: 0.5; filter: blur(24px); }
+            100% { opacity: 0.8; filter: blur(40px); }
+        }
+
+        @keyframes enhancedBreathe {
+            0% {
+                transform: scale(1) rotate(0deg);
+                box-shadow:
+                    0 0 0 0px rgba(33,150,243,0.10),
+                    0 0 64px 24px rgba(255,255,255,0.18),
+                    0 24px 80px 0 rgba(13, 27, 42, 0.10),
+                    0 2px 24px 0 rgba(100,181,246,0.10),
+                    0 0 0 0 rgba(144,202,249,0.10),
+                    0 0 0 0 rgba(255,255,255,0.12),
+                    inset 0 2px 0 rgba(255,255,255,0.85);
+            }
+            50% {
+                transform: scale(1.018) rotate(0.5deg);
+                box-shadow:
+                    0 0 0 0px rgba(33,150,243,0.13),
+                    0 0 80px 32px rgba(255,255,255,0.22),
+                    0 32px 100px 0 rgba(13, 27, 42, 0.13),
+                    0 4px 32px 0 rgba(100,181,246,0.13),
+                    0 0 0 0 rgba(144,202,249,0.13),
+                    0 0 0 0 rgba(255,255,255,0.16),
+                    inset 0 2px 0 rgba(255,255,255,0.90);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                box-shadow:
+                    0 0 0 0px rgba(33,150,243,0.10),
+                    0 0 64px 24px rgba(255,255,255,0.18),
+                    0 24px 80px 0 rgba(13, 27, 42, 0.10),
+                    0 2px 24px 0 rgba(100,181,246,0.10),
+                    0 0 0 0 rgba(144,202,249,0.10),
+                    0 0 0 0 rgba(255,255,255,0.12),
+                    inset 0 2px 0 rgba(255,255,255,0.85);
+            }
+        }
+
+        /* Halo animado */
+        /* Eliminada segunda regla duplicada de halo para evitar stacking y mezcla de colores */
+
+        @keyframes haloPulse {
+            0% { opacity: 0.7; filter: blur(8px); }
+            100% { opacity: 1; filter: blur(16px); }
+        }
+
+        @keyframes enhancedBreathe {
+            0% {
+                transform: scale(1) rotate(0deg);
+                box-shadow:
+                    0 0 0 12px rgba(102,187,106,0.10),
+                    0 0 32px 8px rgba(255,183,77,0.10),
+                    0 18px 55px rgba(13, 27, 42, 0.13),
+                    0 10px 30px rgba(255,255,255,0.35),
+                    0 0 64px 0 rgba(255,255,255,0.12),
+                    inset 0 2px 0 rgba(255,255,255,0.85);
+            }
+            50% {
+                transform: scale(1.025) rotate(0.5deg);
+                box-shadow:
+                    0 0 0 20px rgba(102,187,106,0.13),
+                    0 0 48px 16px rgba(255,183,77,0.13),
+                    0 24px 70px rgba(13, 27, 42, 0.16),
+                    0 14px 40px rgba(255,255,255,0.40),
+                    0 0 80px 0 rgba(255,255,255,0.16),
+                    inset 0 2px 0 rgba(255,255,255,0.90);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                box-shadow:
+                    0 0 0 12px rgba(102,187,106,0.10),
+                    0 0 32px 8px rgba(255,183,77,0.10),
+                    0 18px 55px rgba(13, 27, 42, 0.13),
+                    0 10px 30px rgba(255,255,255,0.35),
+                    0 0 64px 0 rgba(255,255,255,0.12),
+                    inset 0 2px 0 rgba(255,255,255,0.85);
+            }
         }
 
         .robot-circle-bg:hover {
@@ -693,13 +886,13 @@
         }
 
         .robot-img-main {
-            width: 115%;
-            height: 115%;
+            width: 110%;
+            height: 110%;
             object-fit: contain;
             display: block;
             margin: 0 auto;
-            filter: drop-shadow(0 4px 16px rgba(76,175,80,0.10));
-            transition: all 0.4s ease;
+            filter: drop-shadow(0 6px 24px rgba(76,175,80,0.13)) drop-shadow(0 0px 0px #fff);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* Animación mejorada de respiración del robot */
@@ -771,19 +964,37 @@
         }
 
         /* Glassmorphism para cards/modales */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.95);
+
+
+        /* Fondo glassmorphism solo para los recuadros de mito, realidad y testimonios */
+        #mito-card, #realidad-card, .testimonio-card {
+            background: rgba(255, 255, 255, 0.48);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.4);
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
         }
+
+        .glass-card p {
+            text-align: justify;
+            color: inherit;
+        }
+
+        /* Solo para los textos de mito vs realidad */
+        #mito-card p, #realidad-card p {
+            background: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+        }
         
         /* Clase específica para modales con mejor legibilidad */
         .modal-card {
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: #fff !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
             border: 1px solid rgba(255, 255, 255, 0.5);
             box-shadow: 0 10px 40px 0 rgba(31, 38, 135, 0.25);
         }
@@ -893,7 +1104,97 @@
     </style>
 </head>
 <body class="text-slate-800 antialiased">
-    <canvas id="bg-canvas"></canvas>
+    <!-- Fondo animado SVG tipo ondas ONT + partículas luminosas -->
+    <div id="animated-bg" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-1;pointer-events:none;overflow:hidden;">
+      <!-- Fondo base con degradado suave y tenue tipo quiz -->
+      <div style="position:absolute;top:0;left:0;width:100vw;height:100vh;z-index:0;
+        background-color: #f0f9ff;
+        background-image: 
+          radial-gradient(at 47% 33%, hsl(200, 33%, 74%) 0px, transparent 50%),
+          radial-gradient(at 9% 62%, hsl(215, 51%, 76%) 0px, transparent 50%),
+          radial-gradient(at 82% 65%, hsl(120, 14%, 62%) 0px, transparent 50%),
+          radial-gradient(at 24% 88%, hsl(195, 31%, 72%) 0px, transparent 50%),
+          radial-gradient(at 75% 8%, hsl(38, 47%, 78%) 0px, transparent 50%),
+          radial-gradient(at 56% 33%, hsl(261, 35%, 81%) 0px, transparent 50%);
+        background-attachment: fixed;"></div>
+      <!-- Canvas de partículas luminosas, ahora entre el fondo y las ondas -->
+      <canvas id="particles-bg" width="1440" height="900" style="position:absolute;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:1;"></canvas>
+      <!-- Ondas SVG por encima de las partículas -->
+      <svg id="waves-bg" viewBox="0 0 1440 900" width="100%" height="100%" preserveAspectRatio="none" style="position:absolute;top:0;left:0;width:100vw;height:100vh;z-index:2;">
+        <defs>
+          <linearGradient id="wave-gradient" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#e3f2fd"/>
+            <stop offset="30%" stop-color="#64b5f6"/>
+            <stop offset="70%" stop-color="#2196f3"/>
+            <stop offset="100%" stop-color="#1976d2"/>
+          </linearGradient>
+        </defs>
+        <path id="wave1" fill="url(#wave-gradient)" fill-opacity="0.85">
+          <animate attributeName="d" dur="12s" repeatCount="indefinite"
+            values="M0,400 Q360,320 720,400 T1440,400 V900 H0Z;
+                    M0,420 Q360,480 720,420 T1440,420 V900 H0Z;
+                    M0,400 Q360,320 720,400 T1440,400 V900 H0Z"/>
+        </path>
+        <path id="wave2" fill="#bbdefb" fill-opacity="0.6">
+          <animate attributeName="d" dur="10s" repeatCount="indefinite"
+            values="M0,500 Q400,600 800,500 T1440,500 V900 H0Z;
+                    M0,520 Q400,420 800,520 T1440,520 V900 H0Z;
+                    M0,500 Q400,600 800,500 T1440,500 V900 H0Z"/>
+        </path>
+        <path id="wave3" fill="#1976d2" fill-opacity="0.22">
+          <animate attributeName="d" dur="14s" repeatCount="indefinite"
+            values="M0,600 Q600,700 1440,600 V900 H0Z;
+                    M0,620 Q600,540 1440,620 V900 H0Z;
+                    M0,600 Q600,700 1440,600 V900 H0Z"/>
+        </path>
+      </svg>
+    </div>
+    <script>
+    // Partículas luminosas animadas sobre el fondo
+    const canvas = document.getElementById('particles-bg');
+    const ctx = canvas.getContext('2d');
+    let w = window.innerWidth, h = window.innerHeight;
+    canvas.width = w; canvas.height = h;
+    window.addEventListener('resize',()=>{w=window.innerWidth;h=window.innerHeight;canvas.width=w;canvas.height=h;});
+    const particles = Array.from({length: 32},()=>({
+      x: Math.random()*w,
+      y: Math.random()*h,
+      r: 18+Math.random()*18,
+      dx: (Math.random()-0.5)*0.4,
+      dy: (Math.random()-0.5)*0.4,
+      o: 0.12+Math.random()*0.18,
+      c: [
+        'rgba(33,150,243,','rgba(25,118,210,','rgba(100,181,246,','rgba(227,242,253,'
+      ][Math.floor(Math.random()*4)]
+    }));
+    function drawParticles(){
+      ctx.clearRect(0,0,w,h);
+      for(const p of particles){
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r,0,2*Math.PI);
+        ctx.fillStyle = `${p.c}${p.o})`;
+        ctx.shadowColor = p.c.replace(',','a,').replace('(','(0.7)');
+        ctx.shadowBlur = 24;
+        ctx.fill();
+        p.x += p.dx; p.y += p.dy;
+        if(p.x<0||p.x>w) p.dx*=-1;
+        if(p.y<0||p.y>h) p.dy*=-1;
+      }
+      requestAnimationFrame(drawParticles);
+    }
+    drawParticles();
+    </script>
+    <script>
+    // Animación de entrada fade-in-up para la sección dudas rápidas
+    document.addEventListener('DOMContentLoaded',function(){
+      let observer=new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('fade-in-up');});
+      },{threshold:0.1});
+      document.querySelectorAll('.fade-in-up').forEach(el=>observer.observe(el));
+    });
+    </script>
+    <!-- ...existing code... -->
+    <!-- ...existing code... -->
 
     <!-- Welcome Screen -->
     <div id="welcome-screen" class="min-h-screen flex flex-col">
@@ -1008,30 +1309,220 @@
                 Danos tu opinión
             </button>
         </div>
+    </div>
 
-        <footer class="w-full py-1 px-0 sm:p-1 bg-[var(--vida-bg-footer)] fade-in-element" style="animation-delay: 1.2s;">
-            <div class="container mx-auto max-w-xl lg:max-w-2xl px-4 sm:px-12 lg:px-16">
-                <div class="flex flex-col items-center justify-center py-1 sm:py-2">
-                    <p class="text-[10px] sm:text-base md:text-xs text-slate-700 font-medium mb-0 leading-tight max-w-xs sm:max-w-md lg:max-w-lg text-center">
-                        VIDA es una herramienta informativa. No sustituye la atención médica ni legal.<br class="hidden sm:block">
-                        <span class="block sm:inline">© 2025 José Agustín Gutiérrez Iglesias | PROYECTO VIDA. Todos los derechos reservados.</span>
-                    </p>
-                    <a href="https://www.ont.es/" target="_blank" class="text-[10px] sm:text-xs text-[var(--vida-btn-feedback)] underline font-semibold hover:text-[var(--vida-text-dark)] transition-colors block mt-0 text-center">
-                        Ir a la Organización Nacional de Trasplantes
-                    </a>
+    <!-- Aquí puedes agregar nuevas secciones debajo de la principal -->
+
+    <!-- Sección: ¿Tienes dudas rápidas? (Paleta ONT, glassmorphism y cards resaltadas) -->
+    <section class="w-full py-20 px-2 sm:px-0 flex flex-col items-center gap-12 fade-in-up" style="min-height: 500px; background: linear-gradient(120deg, #e3f2fd 0%, #bbdefb 60%, #64b5f6 100%); box-shadow: 0 8px 32px 0 #1976d233; border-radius: 2.5rem; border: 2.5px solid #90caf9;">
+        <h2 class="text-4xl sm:text-5xl font-extrabold text-center mb-12 tracking-tight" style="color:#0d47a1; letter-spacing:-1px; text-shadow:0 2px 16px #fff8,0 1px 0 #fff,0 0 12px #90caf9,0 0 24px #2196f3;">Para decidir con información y tranquilidad</h2>
+        <div class="w-full max-w-6xl flex flex-col sm:flex-row justify-center items-stretch gap-8">
+            <!-- Card 1 -->
+            <div class="glass-card flex-1 flex flex-col items-center rounded-3xl p-10 shadow-2xl border-2 border-blue-300/90 backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_32px_8px_#64b5f6aa] group" style="background:rgba(255,255,255,0.18); box-shadow:0 8px 32px 0 #1976d244,0 0 0 4px #e3f2fd55; border-image: linear-gradient(120deg,#64b5f6,#1976d2,#e3f2fd) 1;">
+                <div class="mb-4 drop-shadow-xl">
+                    <svg class="w-16 h-16 mx-auto" fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#90caf9" stroke-width="2.5" fill="none"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l3.5 3.5"/></svg>
+                </div>
+                <h3 class="font-extrabold text-2xl mb-3 text-blue-900 drop-shadow-lg tracking-tight">¿Quién puede donar?</h3>
+                <p class="text-blue-900 text-base text-center font-medium">La mayoría de las personas pueden ser donantes, sin importar su edad o condición médica. Lo importante es expresar tu voluntad: cada caso se valora de forma individual por el equipo médico.</p>
+            </div>
+            <!-- Card 2 -->
+            <div class="glass-card flex-1 flex flex-col items-center rounded-3xl p-10 shadow-2xl border-2 border-blue-400/90 backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_32px_8px_#1976d2aa] group" style="background:rgba(255,255,255,0.22); box-shadow:0 8px 32px 0 #1976d244,0 0 0 4px #e3f2fd44; border-image: linear-gradient(120deg,#1976d2,#64b5f6,#e3f2fd) 1;">
+                <div class="mb-4 drop-shadow-xl">
+                    <svg class="w-16 h-16 mx-auto" fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#42a5f5" stroke-width="2.5" fill="none"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v8M8 12h8"/></svg>
+                </div>
+                <h3 class="font-extrabold text-2xl mb-3 text-blue-900 drop-shadow-lg tracking-tight">¿Qué se puede donar?</h3>
+                <p class="text-blue-900 text-base text-center font-medium">Se pueden donar órganos vitales como el corazón, los riñones, el hígado y los pulmones, así como tejidos como córneas, piel, hueso, válvulas cardíacas y tendones. Cada donación puede salvar o mejorar muchas vidas.</p>
+            </div>
+            <!-- Card 3 -->
+            <div class="glass-card flex-1 flex flex-col items-center rounded-3xl p-10 shadow-2xl border-2 border-blue-200/90 backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_32px_8px_#bbdefbaa] group" style="background:rgba(255,255,255,0.20); box-shadow:0 8px 32px 0 #1976d244,0 0 0 4px #e3f2fd44; border-image: linear-gradient(120deg,#e3f2fd,#64b5f6,#1976d2) 1;">
+                <div class="mb-4 drop-shadow-xl">
+                    <svg class="w-16 h-16 mx-auto" fill="none" stroke="#1565c0" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#fff" stroke-width="2.5" fill="none"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l3.5 3.5"/></svg>
+                </div>
+                <h3 class="font-extrabold text-2xl mb-3 text-blue-900 drop-shadow-lg tracking-tight">¿Cómo es el proceso?</h3>
+                <p class="text-blue-900 text-base text-center font-medium">La donación se realiza con rigor ético, confidencialidad y acompañamiento médico en todo momento. La familia recibe apoyo emocional y profesional durante el proceso.</p>
+            </div>
+        </div>
+        <div class="mt-12 flex flex-col items-center">
+            <button onclick="window.location.href='chat.html'" class="bg-gradient-to-r from-blue-400 via-blue-500 to-blue-700 hover:from-blue-500 hover:to-blue-800 text-white font-bold py-4 px-14 rounded-full shadow-2xl text-xl transition-all mb-3 enhanced-button border-2 border-blue-200/60" style="box-shadow:0 4px 24px 0 #1976d288;">Quiero saber más</button>
+            <span class="mt-2 text-lg font-semibold text-blue-900 text-center block drop-shadow" style="letter-spacing:0.01em;">
+                ¿Tienes una pregunta? <span class="font-bold text-blue-700">VIDA</span> te responde en segundos.
+            </span>
+        </div>
+    </section>
+    <!-- MITO VS REALIDAD -->
+    <section class="w-full py-12 px-2 sm:px-0 flex flex-col items-center gap-12 fade-in-up">
+        <div class="w-full max-w-5xl mx-auto flex flex-col items-center mb-8">
+            <h2 class="text-2xl sm:text-3xl font-bold text-[var(--vida-text-dark)] mb-6 tracking-tight">Mito vs Realidad</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 w-full">
+                <div id="mito-card" class="glass-card rounded-2xl p-8 flex flex-col items-center shadow-xl transition-transform duration-300 group">
+                    <div class="mb-3 text-4xl" id="mito-icon">⏰</div>
+                    <h3 class="text-xl font-bold text-red-600 mb-2">Mito</h3>
+                    <p class="text-slate-700 text-center text-lg" id="mito-text">“Si soy donante, los médicos no harán todo lo posible por salvarme.”</p>
+                </div>
+                <div id="realidad-card" class="glass-card rounded-2xl p-8 flex flex-col items-center shadow-xl transition-transform duration-300 group">
+                    <div class="mb-3 text-4xl" id="realidad-icon">✔️</div>
+                    <h3 class="text-xl font-bold text-green-600 mb-2">Realidad</h3>
+                    <p class="text-slate-700 text-center text-lg" id="realidad-text">Ser donante <b>no afecta</b> la atención médica. Los equipos que salvan vidas y los que gestionan donaciones son independientes.</p>
                 </div>
             </div>
-        </footer>
-    </div>
-    
+            <div class="flex gap-2 mt-4">
+                <button id="prev-mito-btn" class="rounded-full bg-slate-200 hover:bg-slate-300 text-slate-600 px-3 py-1 text-lg font-bold shadow transition-all">&#8592;</button>
+                <button id="next-mito-btn" class="rounded-full bg-slate-200 hover:bg-slate-300 text-slate-600 px-3 py-1 text-lg font-bold shadow transition-all">&#8594;</button>
+            </div>
+        </div>
+        <div class="w-full max-w-xl mx-auto flex flex-col items-center mb-8">
+            <div class="text-center mb-6">
+                <h2 class="text-4xl sm:text-5xl font-extrabold text-center mb-4 tracking-tight" style="color:#0d47a1; letter-spacing:-1px; text-shadow:0 2px 16px #fff8,0 1px 0 #fff,0 0 12px #90caf9,0 0 24px #2196f3;">
+                    Testimonios de Esperanza
+                </h2>
+                <span class="mt-2 text-lg font-semibold text-blue-900 text-center block drop-shadow" style="letter-spacing:0.01em;">
+                    Historias reales que inspiran y transforman vidas
+                </span>
+            </div>
+            <div class="glass-card rounded-3xl shadow-2xl p-6 w-full flex flex-col items-center relative backdrop-blur-xl border border-blue-100/40">
+                <div id="testimonial-carousel" class="w-full flex flex-col items-center"></div>
+                <div class="testimonial-nav mt-5 flex items-center gap-4">
+                    <button id="testimonial-prev" class="testimonial-arrow bg-white/80 shadow-lg hover:bg-blue-100 text-slate-700 flex items-center justify-center" aria-label="Anterior" style="width:38px;height:38px;font-size:1.3rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="22" height="22"><circle cx="12" cy="12" r="11" stroke="#90caf9" stroke-width="2" fill="#fff"/><path stroke="#1976d2" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M14.5 8l-4 4 4 4"/></svg>
+                    </button>
+                    <div id="testimonial-dots" class="flex gap-3"></div>
+                    <button id="testimonial-next" class="testimonial-arrow bg-white/80 shadow-lg hover:bg-blue-100 text-slate-700 flex items-center justify-center" aria-label="Siguiente" style="width:38px;height:38px;font-size:1.3rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="22" height="22"><circle cx="12" cy="12" r="11" stroke="#90caf9" stroke-width="2" fill="#fff"/><path stroke="#1976d2" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M9.5 8l4 4-4 4"/></svg>
+                    </button>
+                </div>
+                <style>
+                .glass-card {
+                    background: rgba(255,255,255,0.82);
+                    box-shadow: 0 8px 32px 0 #1976d244, 0 0 0 4px #e3f2fd33;
+                    border-radius: 2rem;
+                    border: 1.5px solid #e3f2fd88;
+                    backdrop-filter: blur(18px);
+                }
+                .testimonial-slide img { box-shadow: 0 4px 24px 0 #90caf9cc, 0 0 0 6px #e3f2fdcc; border-radius: 50%; background: linear-gradient(135deg,#e3f2fd 60%,#bbdefb 100%); transition: box-shadow 0.3s; }
+                .testimonial-slide img:hover { box-shadow: 0 8px 32px 0 #1976d288, 0 0 0 10px #bbdefb99; }
+                .testimonial-slide { padding: 2rem 1rem 1.2rem 1rem; border-radius: 1.5rem; background: rgba(255,255,255,0.96); box-shadow: 0 2px 16px 0 #1976d211; margin-bottom: 0.5rem; }
+                .testimonial-dot { width: 14px; height: 14px; border-radius: 50%; background: #e3f2fd; opacity: 0.7; transition: all 0.2s; border: 2px solid #bbdefb; }
+                .testimonial-dot.active { background: #64b5f6; opacity: 1; border: 2.5px solid #1976d2; }
+                .testimonial-arrow { border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; transition: background 0.2s, box-shadow 0.2s; padding: 0; }
+                .testimonial-arrow:active { background: #bbdefb; }
+                </style>
+            </div>
+        </div>
+        <script>
+        // --- Mitos y Realidades dinámicos ---
+        const mitos = [
+          {
+            icon: '⏰',
+            mito: '“Si soy donante, los médicos no harán todo lo posible por salvarme.”',
+            realidad: 'Ser donante <b>no afecta</b> la atención médica. Los equipos que salvan vidas y los que gestionan donaciones son independientes.',
+            realidadIcon: '✔️'
+          },
+          {
+            icon: '🧬',
+            mito: '“Me pueden quitar órganos sin estar realmente muerto.”',
+            realidad: 'La donación solo ocurre tras el fallecimiento certificado por varios médicos independientes.',
+            realidadIcon: '✔️'
+          },
+          {
+            icon: '💸',
+            mito: '“La donación de órganos es para ricos.”',
+            realidad: 'La asignación de órganos es ética y transparente, basada en criterios médicos, no económicos.',
+            realidadIcon: '✔️'
+          },
+          {
+            icon: '👵',
+            mito: '“Soy demasiado mayor para ser donante.”',
+            realidad: 'No hay una edad máxima para donar. La decisión depende del estado de los órganos, no de la edad.',
+            realidadIcon: '✔️'
+          }
+        ];
+        let mitoIdx = 0;
+        function renderMito(idx) {
+          const m = mitos[idx];
+          document.getElementById('mito-icon').textContent = m.icon;
+          document.getElementById('mito-text').innerHTML = m.mito;
+          document.getElementById('realidad-icon').textContent = m.realidadIcon;
+          document.getElementById('realidad-text').innerHTML = m.realidad;
+        }
+        document.getElementById('prev-mito-btn').addEventListener('click',()=>{
+          mitoIdx = (mitoIdx - 1 + mitos.length) % mitos.length;
+          renderMito(mitoIdx);
+        });
+        document.getElementById('next-mito-btn').addEventListener('click',()=>{
+          mitoIdx = (mitoIdx + 1) % mitos.length;
+          renderMito(mitoIdx);
+        });
+        renderMito(mitoIdx);
+
+        // --- Testimonios dinámicos ---
+        const testimonios = [
+          {
+            img: 'https://randomuser.me/api/portraits/women/44.jpg',
+            text: '“Gracias a la donación, mi hijo tiene una nueva oportunidad de vida. VIDA me ayudó a entender y decidir con el corazón.”',
+            name: 'María G., Sevilla'
+          },
+          {
+            img: 'https://randomuser.me/api/portraits/men/32.jpg',
+            text: '“Perdí a mi esposa, pero su generosidad vive en otros. El acompañamiento de VIDA fue clave para mi familia.”',
+            name: 'Carlos R., Madrid'
+          },
+          {
+            img: 'https://randomuser.me/api/portraits/women/65.jpg',
+            text: '“Tenía miedo y dudas, pero encontré respuestas claras y humanas. Hoy soy donante.”',
+            name: 'Lucía P., Valencia'
+          },
+          {
+            img: 'https://randomuser.me/api/portraits/men/43.jpg',
+            text: '“Recibí un trasplante y ahora puedo disfrutar de mi familia. Eternamente agradecido.”',
+            name: 'Javier S., Málaga'
+          }
+        ];
+        let testIdx = 0;
+        const testimonialContainer = document.getElementById('testimonial-carousel');
+        const testimonialDots = document.getElementById('testimonial-dots');
+        function renderTestimonial(idx) {
+          const t = testimonios[idx];
+          testimonialContainer.innerHTML = `
+            <div class="testimonial-slide text-center fade-in-element" style="animation-delay:0s;">
+              <img src="${t.img}" alt="Testimonio" class="w-14 h-14 rounded-full mx-auto mb-2 border-2 border-[var(--vida-btn-green)] shadow">
+              <p class="text-slate-700 italic mb-1">${t.text}</p>
+              <span class="text-slate-500 text-sm font-medium">${t.name}</span>
+            </div>
+          `;
+          testimonialDots.innerHTML = testimonios.map((_,i)=>
+            `<span class="testimonial-dot${i===idx?' active':''}" data-idx="${i}"></span>`
+          ).join('');
+          document.querySelectorAll('.testimonial-dot').forEach(dot=>{
+            dot.addEventListener('click',()=>{
+              testIdx = parseInt(dot.getAttribute('data-idx'));
+              renderTestimonial(testIdx);
+            });
+          });
+        }
+        document.getElementById('testimonial-prev').addEventListener('click',()=>{
+          testIdx = (testIdx - 1 + testimonios.length) % testimonios.length;
+          renderTestimonial(testIdx);
+        });
+        document.getElementById('testimonial-next').addEventListener('click',()=>{
+          testIdx = (testIdx + 1) % testimonios.length;
+          renderTestimonial(testIdx);
+        });
+        renderTestimonial(testIdx);
+        setInterval(()=>{
+          testIdx = (testIdx + 1) % testimonios.length;
+          renderTestimonial(testIdx);
+        }, 7000);
+        </script>
+    </section>
+
     <!-- Botón de feedback flotante solo para desktop -->
     <button id="feedback-btn" class="bg-[var(--vida-btn-feedback)] text-white font-semibold py-2 px-4 rounded-full shadow-lg hover:scale-105 transition-transform items-center gap-2 enhanced-button fade-in-element" style="animation-delay: 1.4s;">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.08-3.239A8.939 8.939 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM4.416 11.603a.75.75 0 00-.029.048l.029-.048zM5.022 13.013a.75.75 0 00.213.024l.028-.024z" clip-rule="evenodd" /></svg>
         Danos tu opinión
     </button>
-    
+
     <div id="about-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-3 sm:p-4 z-50">
-        <div class="modal-card rounded-lg sm:rounded-2xl shadow-xl max-w-xs sm:max-w-lg w-full p-3 sm:p-8 relative max-h-[85vh] sm:max-h-[90vh] overflow-y-auto">
+        <div class="modal-card rounded-lg sm:rounded-2xl shadow-xl max-w-xs sm:max-w-lg w-full p-3 sm:p-8 relative max-h-[85vh] sm:max-h-[90vh] overflow-y-auto" style="background:#fff !important;">
             <button id="close-about-modal-btn" class="absolute top-2 right-2 sm:top-4 sm:right-4 text-gray-500 hover:text-gray-800 z-10 bg-white rounded-full p-1 shadow-md">
                 <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
@@ -1053,7 +1544,7 @@
     </div>
     
     <div id="privacy-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-3 sm:p-4 z-50">
-        <div class="modal-card rounded-lg sm:rounded-2xl shadow-xl max-w-xs sm:max-w-lg w-full p-3 sm:p-8 relative max-h-[85vh] sm:max-h-[90vh] overflow-y-auto">
+        <div class="modal-card rounded-lg sm:rounded-2xl shadow-xl max-w-xs sm:max-w-lg w-full p-3 sm:p-8 relative max-h-[85vh] sm:max-h-[90vh] overflow-y-auto" style="background:#fff !important;">
             <button id="close-privacy-modal-btn" class="absolute top-2 right-2 sm:top-4 sm:right-4 text-gray-500 hover:text-gray-800 z-10 bg-white rounded-full p-1 shadow-md">
                 <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
@@ -1068,7 +1559,7 @@
     </div>
     
     <div id="feedback-modal" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-3 sm:p-4 z-50">
-        <div class="modal-card rounded-lg sm:rounded-2xl shadow-xl max-w-xs sm:max-w-lg w-full p-3 sm:p-8 relative overflow-hidden max-h-[85vh] sm:max-h-[90vh]">
+        <div class="modal-card rounded-lg sm:rounded-2xl shadow-xl max-w-xs sm:max-w-lg w-full p-3 sm:p-8 relative overflow-hidden max-h-[85vh] sm:max-h-[90vh]" style="background:#fff !important;">
             <div id="feedback-form-container" class="overflow-y-auto max-h-full">
                  <button id="close-feedback-modal-btn" class="absolute top-2 right-2 sm:top-4 sm:right-4 text-gray-500 hover:text-gray-800 z-10 bg-white rounded-full p-1 shadow-md">
                      <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
@@ -1126,6 +1617,261 @@
         </div>
     </div>
 
+    <!-- ...existing code... -->
+    <!-- Sección: Preguntas Frecuentes -->
+
+    <!-- Sección combinada: Preguntas Frecuentes + Impacto de la Donación -->
+
+    <!-- Sección: Preguntas Frecuentes (en recuadro) -->
+
+    <section id="faq-section" class="w-full py-12 px-2 sm:px-0 flex flex-col items-center gap-8 fade-in-up" style="min-height: 420px; background: linear-gradient(120deg, #e3f2fd 0%, #bbdefb 60%, #64b5f6 100%); box-shadow: 0 8px 32px 0 #1976d233; border-radius: 2.5rem; border: 2.5px solid #90caf9;">
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-center mb-4 tracking-tight flex items-center justify-center gap-3" style="color:#1565c0; letter-spacing:-1px; text-shadow:0 2px 16px #fff8,0 1px 0 #fff,0 0 12px #90caf9,0 0 24px #2196f3;">
+          <svg class="inline-block w-9 h-9 text-blue-400 drop-shadow" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#1976d2" stroke-width="2.5" fill="#e3f2fd"/><path d="M12 8v4m0 4h.01" stroke="#1976d2" stroke-width="2.5" stroke-linecap="round"/></svg>
+          Preguntas Frecuentes
+        </h2>
+        <p class="text-blue-900 text-base sm:text-lg text-center font-medium max-w-2xl mb-4" style="text-shadow:0 1px 8px #fff8;">Resuelve tus dudas más comunes sobre la donación de órganos y el funcionamiento de <span class="font-bold text-blue-700">VIDA</span>. Haz clic en cada pregunta para ver la respuesta.</p>
+        <div class="w-full max-w-4xl flex flex-col gap-4">
+            <!-- Pregunta 1 -->
+            <div class="faq-q bg-[#232837] text-blue-50 rounded-2xl px-6 py-4 flex items-center justify-between shadow-xl cursor-pointer transition hover:scale-[1.02] border-2 border-blue-900/30 group relative overflow-hidden">
+                <span class="flex items-center gap-3 font-semibold text-base sm:text-lg">
+                  <svg class="w-6 h-6 text-blue-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#1976d2" stroke-width="2.2" fill="#e3f2fd"/><path d="M9 12h6" stroke="#1976d2" stroke-width="2.2" stroke-linecap="round"/></svg>
+                  ¿Puedo registrar mi voluntad de donar aunque mis familiares no estén de acuerdo?
+                </span>
+                <span class="ml-4 text-2xl group-hover:rotate-90 transition-transform text-blue-200 drop-shadow">&#9654;</span>
+            </div>
+            <div class="faq-answer hidden text-base text-blue-900 bg-white/95 rounded-xl px-6 py-4 mb-1 border-l-4 border-blue-200/80 shadow-lg transition-all duration-300 relative">
+              <span class="absolute left-0 top-0 h-full w-1.5 rounded-l-xl bg-gradient-to-b from-blue-300/60 to-blue-100/0"></span>
+              <span class="block pl-2">Sí. En España, puedes dejar constancia de tu voluntad en el Registro de Donantes o a través de tu tarjeta de donante. Aunque se intenta respetar siempre tu decisión, el equipo médico dialoga con la familia para evitar conflictos en momentos delicados.</span>
+            </div>
+            <!-- Pregunta 2 -->
+            <div class="faq-q bg-[#232837] text-blue-50 rounded-2xl px-6 py-4 flex items-center justify-between shadow-xl cursor-pointer transition hover:scale-[1.02] border-2 border-blue-900/30 group relative overflow-hidden">
+                <span class="flex items-center gap-3 font-semibold text-base sm:text-lg">
+                  <svg class="w-6 h-6 text-blue-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#1976d2" stroke-width="2.2" fill="#e3f2fd"/><path d="M9 12h6" stroke="#1976d2" stroke-width="2.2" stroke-linecap="round"/></svg>
+                  ¿Qué diferencia hay entre donación en vida y donación tras fallecimiento?
+                </span>
+                <span class="ml-4 text-2xl group-hover:rotate-90 transition-transform text-blue-200 drop-shadow">&#9654;</span>
+            </div>
+            <div class="faq-answer hidden text-base text-blue-900 bg-white/95 rounded-xl px-6 py-4 mb-1 border-l-4 border-blue-200/80 shadow-lg transition-all duration-300 relative">
+              <span class="absolute left-0 top-0 h-full w-1.5 rounded-l-xl bg-gradient-to-b from-blue-300/60 to-blue-100/0"></span>
+              <span class="block pl-2">La donación en vida se realiza, por ejemplo, cuando una persona dona un riñón o parte del hígado a un ser querido. La donación post mortem, en cambio, ocurre después del fallecimiento, con órganos y tejidos que aún pueden salvar vidas.</span>
+            </div>
+            <!-- Pregunta 3 -->
+            <div class="faq-q bg-[#232837] text-blue-50 rounded-2xl px-6 py-4 flex items-center justify-between shadow-xl cursor-pointer transition hover:scale-[1.02] border-2 border-blue-900/30 group relative overflow-hidden">
+                <span class="flex items-center gap-3 font-semibold text-base sm:text-lg">
+                  <svg class="w-6 h-6 text-blue-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#1976d2" stroke-width="2.2" fill="#e3f2fd"/><path d="M9 12h6" stroke="#1976d2" stroke-width="2.2" stroke-linecap="round"/></svg>
+                  ¿Puedo cambiar de opinión si ya me registré como donante?
+                </span>
+                <span class="ml-4 text-2xl group-hover:rotate-90 transition-transform text-blue-200 drop-shadow">&#9654;</span>
+            </div>
+            <div class="faq-answer hidden text-base text-blue-900 bg-white/95 rounded-xl px-6 py-4 mb-1 border-l-4 border-blue-200/80 shadow-lg transition-all duration-300 relative">
+              <span class="absolute left-0 top-0 h-full w-1.5 rounded-l-xl bg-gradient-to-b from-blue-300/60 to-blue-100/0"></span>
+              <span class="block pl-2">Por supuesto. Puedes modificar o revocar tu decisión en cualquier momento. Basta con comunicarlo al Registro de Donantes o actualizar tu tarjeta si la tienes. Tu voluntad es flexible y siempre respetada.</span>
+            </div>
+            <!-- Pregunta 4 -->
+            <div class="faq-q bg-[#232837] text-blue-50 rounded-2xl px-6 py-4 flex items-center justify-between shadow-xl cursor-pointer transition hover:scale-[1.02] border-2 border-blue-900/30 group relative overflow-hidden">
+                <span class="flex items-center gap-3 font-semibold text-base sm:text-lg">
+                  <svg class="w-6 h-6 text-blue-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#1976d2" stroke-width="2.2" fill="#e3f2fd"/><path d="M9 12h6" stroke="#1976d2" stroke-width="2.2" stroke-linecap="round"/></svg>
+                  ¿La aplicación VIDA recoge datos personales?
+                </span>
+                <span class="ml-4 text-2xl group-hover:rotate-90 transition-transform text-blue-200 drop-shadow">&#9654;</span>
+            </div>
+            <div class="faq-answer hidden text-base text-blue-900 bg-white/95 rounded-xl px-6 py-4 mb-1 border-l-4 border-blue-200/80 shadow-lg transition-all duration-300 relative">
+              <span class="absolute left-0 top-0 h-full w-1.5 rounded-l-xl bg-gradient-to-b from-blue-300/60 to-blue-100/0"></span>
+              <span class="block pl-2">No. VIDA es completamente anónima. No recopila ni almacena tu nombre, ubicación ni ninguna información sensible.</span>
+            </div>
+            <!-- Pregunta 5 -->
+            <div class="faq-q bg-[#232837] text-blue-50 rounded-2xl px-6 py-4 flex items-center justify-between shadow-xl cursor-pointer transition hover:scale-[1.02] border-2 border-blue-900/30 group relative overflow-hidden">
+                <span class="flex items-center gap-3 font-semibold text-base sm:text-lg">
+                  <svg class="w-6 h-6 text-blue-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#1976d2" stroke-width="2.2" fill="#e3f2fd"/><path d="M9 12h6" stroke="#1976d2" stroke-width="2.2" stroke-linecap="round"/></svg>
+                  ¿VIDA me registra como donante automáticamente?
+                </span>
+                <span class="ml-4 text-2xl group-hover:rotate-90 transition-transform text-blue-200 drop-shadow">&#9654;</span>
+            </div>
+            <div class="faq-answer hidden text-base text-blue-900 bg-white/95 rounded-xl px-6 py-4 mb-1 border-l-4 border-blue-200/80 shadow-lg transition-all duration-300 relative">
+              <span class="absolute left-0 top-0 h-full w-1.5 rounded-l-xl bg-gradient-to-b from-blue-300/60 to-blue-100/0"></span>
+              <span class="block pl-2">No. VIDA no realiza registros oficiales. Solo te ofrece orientación y te guía hacia los canales adecuados de información o registro voluntario.</span>
+            </div>
+            <!-- Pregunta 6 -->
+            <div class="faq-q bg-[#232837] text-blue-50 rounded-2xl px-6 py-4 flex items-center justify-between shadow-xl cursor-pointer transition hover:scale-[1.02] border-2 border-blue-900/30 group relative overflow-hidden">
+                <span class="flex items-center gap-3 font-semibold text-base sm:text-lg">
+                  <svg class="w-6 h-6 text-blue-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#1976d2" stroke-width="2.2" fill="#e3f2fd"/><path d="M9 12h6" stroke="#1976d2" stroke-width="2.2" stroke-linecap="round"/></svg>
+                  ¿Qué puedo preguntarle a VIDA?
+                </span>
+                <span class="ml-4 text-2xl group-hover:rotate-90 transition-transform text-blue-200 drop-shadow">&#9654;</span>
+            </div>
+            <div class="faq-answer hidden text-base text-blue-900 bg-white/95 rounded-xl px-6 py-4 mb-1 border-l-4 border-blue-200/80 shadow-lg transition-all duration-300 relative">
+              <span class="absolute left-0 top-0 h-full w-1.5 rounded-l-xl bg-gradient-to-b from-blue-300/60 to-blue-100/0"></span>
+              <span class="block pl-2">Puedes hacerle cualquier pregunta sobre el proceso de donación de órganos, tejidos y sangre. VIDA está diseñada para explicarte todo con empatía y claridad.</span>
+            </div>
+        <style>
+        #faq-section .faq-q {
+          position: relative;
+          overflow: hidden;
+        }
+        #faq-section .faq-q:before {
+          content: '';
+          position: absolute;
+          left: 0; top: 0; bottom: 0;
+          width: 6px;
+          border-radius: 8px;
+          background: linear-gradient(180deg,#1976d2 60%,#64b5f6 100%);
+          opacity: 0.18;
+        }
+        #faq-section .faq-q:hover:before {
+          opacity: 0.32;
+        }
+        #faq-section .faq-q .text-blue-400 {
+          filter: drop-shadow(0 2px 8px #90caf9cc);
+        }
+        #faq-section .faq-answer {
+          background: linear-gradient(90deg,#e3f2fd 60%,#fff 100%);
+        }
+        </style>
+        </div>
+        <script>
+        // FAQ toggle con animación
+        document.addEventListener('DOMContentLoaded', function() {
+          document.querySelectorAll('#faq-section .faq-q').forEach((q, i) => {
+            q.addEventListener('click', function() {
+              const ans = q.nextElementSibling;
+              const icon = q.querySelector('span:last-child');
+              if(ans.classList.contains('hidden')) {
+                document.querySelectorAll('#faq-section .faq-answer').forEach(a=>a.classList.add('hidden'));
+                document.querySelectorAll('#faq-section .faq-q span:last-child').forEach(ic=>ic.classList.remove('rotate-90'));
+                ans.classList.remove('hidden');
+                icon.classList.add('rotate-90');
+              } else {
+                ans.classList.add('hidden');
+                icon.classList.remove('rotate-90');
+              }
+            });
+          });
+        });
+        </script>
+    </section>
+
+    <!-- Sección: Impacto de la Donación (fuera del recuadro) -->
+    <section id="impacto-donacion" class="w-full py-24 px-2 sm:px-0 flex flex-col items-center fade-in-up">
+      <h2 class="text-5xl sm:text-6xl font-extrabold text-center mb-8 tracking-tight" style="color:#0d47a1; letter-spacing:-2px; text-shadow:0 4px 32px #90caf9cc,0 1px 0 #fff,0 0 24px #2196f3;">
+        Impacto de la Donación
+      </h2>
+      <p class="text-xl sm:text-2xl font-semibold text-center mb-14 max-w-3xl text-blue-900" style="text-shadow:0 2px 16px #fff8;">Cada donante es una historia de esperanza. Estos números reflejan vidas transformadas y segundas oportunidades gracias a la generosidad.</p>
+      <div class="w-full max-w-6xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
+        <!-- Card 1 -->
+        <div class="impact-card flex flex-col items-center justify-center p-5 sm:p-6 rounded-3xl shadow-xl border-2 border-pink-300/70 backdrop-blur-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_32px_8px_#e91e63aa] group relative gap-1" style="background:linear-gradient(135deg,rgba(255,255,255,0.32) 60%,rgba(233,30,99,0.13) 100%); border:2.5px solid #e3f2fd;min-height:180px;max-width:240px;margin:auto;">
+          <div class="flex flex-col items-center gap-0 mb-1">
+            <div class="impact-icon" style="font-size:2.1rem;color:#e91e63;filter:drop-shadow(0 2px 12px #e91e6344);">🫀</div>
+            <div class="text-3xl sm:text-4xl font-extrabold text-pink-600 drop-shadow-lg tracking-tight leading-tight">6 464</div>
+          </div>
+          <div class="flex flex-col items-center gap-0 mt-0">
+            <div class="text-base sm:text-lg font-extrabold text-pink-900 text-center leading-tight mb-1 uppercase" style="letter-spacing:-0.5px;">Trasplantes realizados</div>
+            <div class="text-xs sm:text-sm font-semibold text-pink-700/90 text-center leading-tight" style="text-align:center;">Máximo histórico alcanzado en España.</div>
+          </div>
+        </div>
+        <!-- Card 2 -->
+        <div class="impact-card flex flex-col items-center justify-center p-5 sm:p-6 rounded-3xl shadow-xl border-2 border-blue-300/70 backdrop-blur-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_32px_8px_#1976d2aa] group relative gap-1" style="background:linear-gradient(135deg,rgba(255,255,255,0.32) 60%,rgba(25,118,210,0.13) 100%); border:2.5px solid #bbdefb;min-height:180px;max-width:240px;margin:auto;">
+          <div class="flex flex-col items-center gap-0 mb-1">
+            <div class="impact-icon" style="font-size:2.1rem;color:#1976d2;filter:drop-shadow(0 2px 12px #1976d244);">👤</div>
+            <div class="text-3xl sm:text-4xl font-extrabold text-blue-700 drop-shadow-lg tracking-tight leading-tight">2 562</div>
+          </div>
+          <div class="flex flex-col items-center gap-0 mt-0">
+            <div class="text-base sm:text-lg font-extrabold text-blue-900 text-center leading-tight mb-1 uppercase" style="letter-spacing:-0.5px;">Donantes fallecidos</div>
+            <div class="text-xs sm:text-sm font-semibold text-blue-700/90 text-center leading-tight" style="text-align:center;">Personas que donaron tras fallecer, permitiendo salvar vidas.</div>
+          </div>
+        </div>
+        <!-- Card 3 -->
+        <div class="impact-card flex flex-col items-center justify-center p-5 sm:p-6 rounded-3xl shadow-xl border-2 border-rose-300/70 backdrop-blur-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_32px_8px_#e91e63aa] group relative gap-1" style="background:linear-gradient(135deg,rgba(255,255,255,0.32) 60%,rgba(233,30,99,0.13) 100%); border:2.5px solid #90caf9;min-height:180px;max-width:240px;margin:auto;">
+          <div class="flex flex-col items-center gap-0 mb-1">
+            <div class="impact-icon" style="font-size:2.1rem;color:#e91e63;filter:drop-shadow(0 2px 12px #e91e6344);">❤️</div>
+            <div class="text-3xl sm:text-4xl font-extrabold text-rose-600 drop-shadow-lg tracking-tight leading-tight">404</div>
+          </div>
+          <div class="flex flex-col items-center gap-0 mt-0">
+            <div class="text-base sm:text-lg font-extrabold text-rose-900 text-center leading-tight mb-1 uppercase" style="letter-spacing:-0.5px;">Donantes vivos</div>
+            <div class="text-xs sm:text-sm font-semibold text-rose-700/90 text-center leading-tight" style="text-align:center;">Mayormente familiares que donaron un riñón o parte del hígado.</div>
+          </div>
+        </div>
+        <!-- Card 4 -->
+        <div class="impact-card flex flex-col items-center justify-center p-5 sm:p-6 rounded-3xl shadow-xl border-2 border-indigo-300/70 backdrop-blur-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_32px_8px_#3949abaa] group relative gap-1" style="background:linear-gradient(135deg,rgba(255,255,255,0.32) 60%,rgba(57,73,171,0.13) 100%); border:2.5px solid #1976d2;min-height:180px;max-width:240px;margin:auto;">
+          <div class="flex flex-col items-center gap-0 mb-1">
+            <div class="impact-icon" style="font-size:2.1rem;color:#3949ab;filter:drop-shadow(0 2px 12px #3949ab44);">⏱️</div>
+            <div class="text-3xl sm:text-4xl font-extrabold text-indigo-700 drop-shadow-lg tracking-tight leading-tight">8 / 17</div>
+          </div>
+          <div class="flex flex-col items-center gap-0 mt-0">
+            <div class="text-base sm:text-lg font-extrabold text-indigo-900 text-center leading-tight mb-1 uppercase" style="letter-spacing:-0.5px;">Donaciones / Trasplantes diarios</div>
+            <div class="text-xs sm:text-sm font-semibold text-indigo-700/90 text-center leading-tight" style="text-align:center;">Cada día, 8 donaciones hacen posibles 17 trasplantes.</div>
+          </div>
+        </div>
+        <!-- Card 5 -->
+        <div class="impact-card flex flex-col items-center justify-center p-5 sm:p-6 rounded-3xl shadow-xl border-2 border-yellow-300/70 backdrop-blur-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_32px_8px_#fbc02daa] group relative gap-1" style="background:linear-gradient(135deg,rgba(255,255,255,0.32) 60%,rgba(251,192,45,0.13) 100%); border:2.5px solid #fbc02d;min-height:180px;max-width:240px;margin:auto;">
+          <div class="flex flex-col items-center gap-0 mb-1">
+            <div class="impact-icon" style="font-size:2.1rem;color:#fbc02d;filter:drop-shadow(0 2px 12px #fbc02d44);">🌍</div>
+            <div class="text-3xl sm:text-4xl font-extrabold text-yellow-600 drop-shadow-lg tracking-tight leading-tight">52,6 pmp</div>
+          </div>
+          <div class="flex flex-col items-center gap-0 mt-0">
+            <div class="text-base sm:text-lg font-extrabold text-yellow-900 text-center leading-tight mb-1 uppercase" style="letter-spacing:-0.5px;">Donantes por millón de habitantes</div>
+            <div class="text-xs sm:text-sm font-semibold text-yellow-700/90 text-center leading-tight" style="text-align:center;">La más alta del mundo por 32º año consecutivo.</div>
+          </div>
+        </div>
+      </div>
+      <style>
+        #impacto-donacion .impact-card {
+          background: linear-gradient(135deg,rgba(255,255,255,0.32) 60%,rgba(233,30,99,0.13) 100%);
+          box-shadow: 0 6px 24px 0 #1976d233, 0 0 0 2px #e3f2fd33;
+          border-radius: 2rem;
+          border-width: 2.5px;
+          backdrop-filter: blur(18px) saturate(1.2);
+          position: relative;
+          overflow: hidden;
+          transition: border-color 0.2s, box-shadow 0.2s;
+          min-height: 140px;
+          max-width: 240px;
+          margin: auto;
+        }
+        #impacto-donacion .impact-card:before {
+          content: '';
+          position: absolute;
+          left: 0; top: 0; right: 0; height: 8px;
+          border-radius: 2rem 2rem 0 0;
+          background: linear-gradient(90deg,#e3f2fd 0%,#bbdefb 60%,#64b5f6 100%);
+          opacity: 0.22;
+        }
+        #impacto-donacion .impact-icon {
+          filter: drop-shadow(0 2px 12px #90caf9cc);
+          transition: transform 0.18s;
+        }
+        #impacto-donacion .impact-card:hover .impact-icon {
+          transform: scale(1.08) rotate(-3deg);
+        }
+        #impacto-donacion .impact-card:hover {
+          box-shadow: 0 12px 48px 0 #1976d288, 0 0 0 6px #e3f2fd77;
+          border-color: #1976d2;
+        }
+        #impacto-donacion .impact-card .text-base, #impacto-donacion .impact-card .text-lg {
+          font-weight: 800;
+          text-align: center;
+          letter-spacing: -0.5px;
+        }
+        #impacto-donacion .impact-card .text-xs, #impacto-donacion .impact-card .text-sm {
+          font-weight: 600;
+          text-align: center;
+        }
+      </style>
+    </section>
+
+    <!-- Footer SIEMPRE al final de la página -->
+    <footer class="w-full py-1 px-0 sm:p-1 bg-[var(--vida-bg-footer)] fade-in-element" style="animation-delay: 1.2s;">
+        <div class="container mx-auto max-w-xl lg:max-w-2xl px-4 sm:px-12 lg:px-16">
+            <div class="flex flex-col items-center justify-center py-1 sm:py-2">
+                <p class="text-[10px] sm:text-base md:text-xs text-slate-700 font-medium mb-0 leading-tight max-w-xs sm:max-w-md lg:max-w-lg text-center">
+                    VIDA es una herramienta informativa. No sustituye la atención médica ni legal.<br class="hidden sm:block">
+                    <span class="block sm:inline">© 2025 José Agustín Gutiérrez Iglesias | PROYECTO VIDA. Todos los derechos reservados.</span>
+                </p>
+                <a href="https://www.ont.es/" target="_blank" class="text-[10px] sm:text-xs text-[var(--vida-btn-feedback)] underline font-semibold hover:text-[var(--vida-text-dark)] transition-colors block mt-0 text-center">
+                    Ir a la Organización Nacional de Trasplantes
+                </a>
+            </div>
+        </div>
+    </footer>
 
     <div id="chat-screen" class="fixed inset-0 bg-slate-100 flex items-stretch justify-center p-0 sm:p-4 z-40 transition-opacity duration-300 opacity-0">
         <div class="w-full h-full sm:max-w-4xl sm:h-[90vh] bg-white sm:rounded-2xl shadow-2xl flex flex-col relative overflow-hidden">

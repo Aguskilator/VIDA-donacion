@@ -19,9 +19,12 @@ export default async function handler(req, res) {
     return;
   }
 
-  const { input, model, voice } = req.body;
-  if (!input || !model || !voice) {
-    res.status(400).json({ error: 'Faltan parámetros requeridos (input, model, voice).' });
+
+  const { input, model } = req.body;
+  // Forzar siempre la voz 'fable' para máxima seguridad
+  const voice = 'fable';
+  if (!input || !model) {
+    res.status(400).json({ error: 'Faltan parámetros requeridos (input, model).' });
     return;
   }
 
@@ -35,7 +38,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         input,
         model,
-        voice
+        voice // siempre 'fable'
       })
     });
     if (!openaiRes.ok) {

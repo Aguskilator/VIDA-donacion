@@ -663,23 +663,16 @@
                 ttsBtn.addEventListener('click', async (e) => {
                     e.preventDefault();
                     ttsBtn.disabled = true;
-                    ttsBtn.classList.add('tts-playing');
-                    ttsBtn.classList.add('opacity-60');
                     // Cambiar color del icono bocina si es SVG fallback
                     const bocinaImg = ttsBtn.querySelector('img');
                     const bocinaSvg = ttsBtn.querySelector('svg');
-                    if (bocinaImg) bocinaImg.classList.add('text-blue-600');
-                    if (bocinaSvg) bocinaSvg.classList.add('text-blue-600');
+                    // Lógica de animación y color se mueve a playOpenAITTS
                     try {
-                        await playOpenAITTS(text.replace(/<br>/g, ' '));
+                        await playOpenAITTS(text.replace(/<br>/g, ' '), ttsBtn, bocinaImg, bocinaSvg);
                     } catch (err) {
                         alert('No se pudo reproducir el audio.');
                     }
                     ttsBtn.disabled = false;
-                    ttsBtn.classList.remove('tts-playing');
-                    ttsBtn.classList.remove('opacity-60');
-                    if (bocinaImg) bocinaImg.classList.remove('text-blue-600');
-                    if (bocinaSvg) bocinaSvg.classList.remove('text-blue-600');
                 });
                 ttsBtnWrapper.appendChild(ttsBtn);
                 botTextAndBtn.appendChild(ttsBtnWrapper);
@@ -697,6 +690,7 @@
             }
         // --- OpenAI TTS (Text-to-Speech) ---
         async function playOpenAITTS(text) {
+            // ttsBtn, bocinaImg, bocinaSvg son opcionales (solo para animación)
             try {
                 const response = await fetch('/api/tts', {
                     method: 'POST',
@@ -704,7 +698,7 @@
                     body: JSON.stringify({
                         input: text,
                         model: 'gpt-4o-mini-tts',
-                        voice: 'fable' // Asegura que siempre se use la voz fable
+                        voice: 'fable'
                     })
                 });
                 if (!response.ok) throw new Error('TTS error');
@@ -712,15 +706,47 @@
                 const url = URL.createObjectURL(blob);
                 const audio = new Audio();
                 audio.src = url;
+                // --- Animación SOLO mientras reproduce ---
+                let ttsBtn, bocinaImg, bocinaSvg;
+                if (arguments.length > 1) {
+                    ttsBtn = arguments[1];
+                    bocinaImg = arguments[2];
+                    bocinaSvg = arguments[3];
+                }
+                const startAnim = () => {
+                    if (ttsBtn) {
+                        ttsBtn.classList.add('tts-playing', 'opacity-60');
+                        if (bocinaImg) bocinaImg.classList.add('text-blue-600');
+                        if (bocinaSvg) bocinaSvg.classList.add('text-blue-600');
+                    }
+                };
+                const stopAnim = () => {
+                    if (ttsBtn) {
+                        ttsBtn.classList.remove('tts-playing', 'opacity-60');
+                        if (bocinaImg) bocinaImg.classList.remove('text-blue-600');
+                        if (bocinaSvg) bocinaSvg.classList.remove('text-blue-600');
+                    }
+                };
+                audio.onplay = startAnim;
                 audio.onended = () => {
+                    stopAnim();
                     URL.revokeObjectURL(url);
                 };
                 audio.onerror = () => {
+                    stopAnim();
                     URL.revokeObjectURL(url);
                     alert('No se pudo reproducir el audio.');
                 };
                 await audio.play();
             } catch (err) {
+                if (arguments.length > 1) {
+                    const ttsBtn = arguments[1];
+                    const bocinaImg = arguments[2];
+                    const bocinaSvg = arguments[3];
+                    if (ttsBtn) ttsBtn.classList.remove('tts-playing', 'opacity-60');
+                    if (bocinaImg) bocinaImg.classList.remove('text-blue-600');
+                    if (bocinaSvg) bocinaSvg.classList.remove('text-blue-600');
+                }
                 alert('No se pudo reproducir el audio.');
             }
         }

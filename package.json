@@ -1,10 +1,32 @@
 {
-  "name": "vida-app",
+  "name": "josegutierrez",
   "version": "1.0.0",
-  "description": "VIDA - Asistente de Donación",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "keywords": [],
   "author": "",
-  "license": "MIT"
+  "license": "ISC",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.52.1",
+    "cors": "^2.8.5",
+    "dotenv": "^17.0.1",
+    "express": "^5.1.0",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.11"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tu-usuario/vida-app.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tu-usuario/vida-app/issues"
+  },
+  "homepage": "https://github.com/tu-usuario/vida-app#readme",
+  "description": ""
 }

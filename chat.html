@@ -755,8 +755,9 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         input: text,
-                        model: 'tts-1',
-                        voice: 'fable'
+                        // modelo y voz controlados en backend
+                        // voice_prompt para acento y estilo
+                        voice_prompt: 'Habla con acento español, tono cálido, velocidad natural, estilo empático y humano, adecuado para acompañar y explicar sobre donación de órganos en España.'
                     })
                 });
                 if (!response.ok) throw new Error('TTS error');

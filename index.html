@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <!-- Tailwind CSS for styling (debe ir en el head para evitar FOUC) -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Estilos para sección dudas rápidas (copiados de copia 2) -->
     <style>
         .testimonial-gradient-bg {
@@ -29,16 +31,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VIDA - Asistente de Donación</title>
     
-    <!-- Tailwind CSS for styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
     <!-- Google Fonts: Roboto as requested -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    
-    <!-- three.js for interactive background -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     
     <!-- Custom Styles and Animations -->
     <style>
@@ -1097,6 +1093,8 @@
 </head>
 <body class="text-slate-800 antialiased">
     <!-- Fondo animado SVG tipo ondas ONT + partículas luminosas -->
+    <!-- three.js para fondo interactivo -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
     <div id="animated-bg" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-1;pointer-events:none;overflow:hidden;">
       <!-- Fondo base con degradado suave y tenue tipo quiz -->
       <div style="position:absolute;top:0;left:0;width:100vw;height:100vh;z-index:0;
@@ -1748,111 +1746,216 @@
         Impacto de la Donación
       </h2>
       <p class="text-xl sm:text-2xl font-semibold text-center mb-14 max-w-3xl text-blue-900" style="text-shadow:0 2px 16px #fff8;">Cada donante es una historia de esperanza. Estos números reflejan vidas transformadas y segundas oportunidades gracias a la generosidad.</p>
-      <div class="w-full max-w-6xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
+
+      <!-- Tarjetas de impacto con flip profesional -->
+      <div class="vida-impact-cards flex flex-row justify-center gap-6 w-full max-w-5xl" style="flex-wrap:nowrap;">
         <!-- Card 1 -->
-        <div class="impact-card uniform-impact-card flex flex-col items-center justify-center p-5 sm:p-6 rounded-3xl shadow-xl border-2 border-pink-300/70 backdrop-blur-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_32px_8px_#e91e63aa] group relative gap-1" style="background:linear-gradient(135deg,rgba(255,255,255,0.32) 60%,rgba(233,30,99,0.13) 100%); border:2.5px solid #e3f2fd;">
-          <div class="flex flex-col items-center gap-0 mb-1 w-full">
-            <div class="impact-icon" style="font-size:2.2rem;color:#e91e63;filter:drop-shadow(0 2px 12px #e91e6344);">🫀</div>
-            <div class="text-4xl font-extrabold text-pink-600 drop-shadow-lg tracking-tight leading-tight">6 464</div>
-          </div>
-          <div class="flex flex-col items-center gap-0 mt-0 w-full">
-            <div class="text-base font-bold text-pink-900 text-center leading-tight mb-1 uppercase tracking-wide" style="letter-spacing:-0.5px;">Trasplantes realizados</div>
-            <div class="text-xs font-medium text-pink-700/90 text-center leading-tight italic px-1" style="text-align:center;">Máximo histórico alcanzado en España</div>
+        <div class="vida-flip-card-impact" tabindex="0" aria-label="Trasplantes realizados" style="background:linear-gradient(135deg,#e3f2fd 60%,#bbdefb 100%);">
+          <div class="vida-flip-card-inner">
+            <div class="vida-flip-card-front flex flex-col items-center justify-center px-2 py-4">
+              <img src="corazontarjeta.png" alt="Trasplantes realizados" class="vida-impact-icon mb-2" style="width:80px;height:80px;object-fit:contain;border-radius:1.2rem;box-shadow:0 4px 18px #90caf9cc;background:linear-gradient(90deg,#e3f2fd 60%,#bbdefb 100%);padding:0.5rem 0.7rem;display:block;margin:0 auto;margin-bottom:12px;" />
+              <span class="vida-impact-title text-base font-bold mb-1 text-blue-900 text-center tracking-tight" style="font-size:1.1rem;">Trasplantes realizados</span>
+            </div>
+            <div class="vida-flip-card-back flex flex-col items-center justify-center px-2 py-4" style="background:linear-gradient(135deg,#fff 60%,#e3f2fd 100%); border-radius:1.25rem; box-shadow:0 2px 12px #90caf9cc;">
+              <span class="vida-impact-number text-2xl font-extrabold mb-2 tracking-tight" style="color:#1565c0; font-family:'Roboto Mono',monospace; font-size:1.5rem;">6,464</span>
+              <span class="vida-impact-desc text-sm text-center font-semibold text-blue-800 mb-1">Máximo histórico alcanzado</span>
+              <span class="vida-impact-extra text-xs text-blue-600">Líder mundial en trasplantes</span>
+            </div>
           </div>
         </div>
         <!-- Card 2 -->
-        <div class="impact-card uniform-impact-card flex flex-col items-center justify-center p-5 sm:p-6 rounded-3xl shadow-xl border-2 border-blue-300/70 backdrop-blur-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_32px_8px_#1976d2aa] group relative gap-1" style="background:linear-gradient(135deg,rgba(255,255,255,0.32) 60%,rgba(25,118,210,0.13) 100%); border:2.5px solid #bbdefb;">
-          <div class="flex flex-col items-center gap-0 mb-1 w-full">
-            <div class="impact-icon" style="font-size:2.2rem;color:#1976d2;filter:drop-shadow(0 2px 12px #1976d244);">👤</div>
-            <div class="text-4xl font-extrabold text-blue-700 drop-shadow-lg tracking-tight leading-tight">2 562</div>
-          </div>
-          <div class="flex flex-col items-center gap-0 mt-0 w-full">
-            <div class="text-base font-bold text-blue-900 text-center leading-tight mb-1 uppercase tracking-wide" style="letter-spacing:-0.5px;">Donantes fallecidos</div>
-            <div class="text-xs font-medium text-blue-700/90 text-center leading-tight italic px-1" style="text-align:center;">Personas que donaron tras fallecer y salvaron vidas</div>
+        <div class="vida-flip-card-impact" tabindex="0" aria-label="Donantes fallecidos" style="background:linear-gradient(135deg,#e3f2fd 60%,#bbdefb 100%);">
+          <div class="vida-flip-card-inner">
+            <div class="vida-flip-card-front flex flex-col items-center justify-center px-2 py-4">
+              <img src="donantefallecidos.png" alt="Donantes fallecidos" class="vida-impact-icon mb-2" style="width:80px;height:80px;object-fit:contain;border-radius:1.2rem;box-shadow:0 4px 18px #d81b6044;background:linear-gradient(90deg,#e3f2fd 60%,#bbdefb 100%);padding:0.5rem 0.7rem;display:block;margin:0 auto;margin-bottom:12px;" />
+              <span class="vida-impact-title text-base font-bold mb-1 text-blue-900 text-center tracking-tight" style="font-size:1.1rem;">Donantes fallecidos</span>
+            </div>
+            <div class="vida-flip-card-back flex flex-col items-center justify-center px-2 py-4" style="background:linear-gradient(135deg,#fff 60%,#e3f2fd 100%); border-radius:1.25rem; box-shadow:0 2px 12px #d81b6044;">
+              <span class="vida-impact-number text-2xl font-extrabold mb-2 tracking-tight" style="color:#d81b60; font-family:'Roboto Mono',monospace; font-size:1.5rem;">2,562</span>
+              <span class="vida-impact-desc text-sm text-center font-semibold text-blue-800 mb-1">Salvaron vidas tras fallecer</span>
+              <span class="vida-impact-extra text-xs text-blue-600">Generosidad que trasciende</span>
+            </div>
           </div>
         </div>
         <!-- Card 3 -->
-        <div class="impact-card uniform-impact-card flex flex-col items-center justify-center p-5 sm:p-6 rounded-3xl shadow-xl border-2 border-rose-300/70 backdrop-blur-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_32px_8px_#e91e63aa] group relative gap-1" style="background:linear-gradient(135deg,rgba(255,255,255,0.32) 60%,rgba(233,30,99,0.13) 100%); border:2.5px solid #90caf9;">
-          <div class="flex flex-col items-center gap-0 mb-1 w-full">
-            <div class="impact-icon" style="font-size:2.2rem;color:#e91e63;filter:drop-shadow(0 2px 12px #e91e6344);">❤️</div>
-            <div class="text-4xl font-extrabold text-rose-600 drop-shadow-lg tracking-tight leading-tight">404</div>
-          </div>
-          <div class="flex flex-col items-center gap-0 mt-0 w-full">
-            <div class="text-base font-bold text-rose-900 text-center leading-tight mb-1 uppercase tracking-wide" style="letter-spacing:-0.5px;">Donantes vivos</div>
-            <div class="text-xs font-medium text-rose-700/90 text-center leading-tight italic px-1" style="text-align:center;">Personas que donaron un órgano en vida</div>
+        <div class="vida-flip-card-impact" tabindex="0" aria-label="Donantes vivos" style="background:linear-gradient(135deg,#e3f2fd 60%,#bbdefb 100%);">
+          <div class="vida-flip-card-inner">
+            <div class="vida-flip-card-front flex flex-col items-center justify-center px-2 py-4">
+              <img src="donantesvivos.png" alt="Donantes vivos" class="vida-impact-icon mb-2" style="width:80px;height:80px;object-fit:contain;border-radius:1.2rem;box-shadow:0 4px 18px #e91e6344;background:linear-gradient(90deg,#e3f2fd 60%,#bbdefb 100%);padding:0.5rem 0.7rem;display:block;margin:0 auto;margin-bottom:12px;" />
+              <span class="vida-impact-title text-base font-bold mb-1 text-blue-900 text-center tracking-tight" style="font-size:1.1rem;">Donantes vivos</span>
+            </div>
+            <div class="vida-flip-card-back flex flex-col items-center justify-center px-2 py-4" style="background:linear-gradient(135deg,#fff 60%,#e3f2fd 100%); border-radius:1.25rem; box-shadow:0 2px 12px #e91e6344;">
+              <span class="vida-impact-number text-2xl font-extrabold mb-2 tracking-tight" style="color:#e91e63; font-family:'Roboto Mono',monospace; font-size:1.5rem;">404</span>
+              <span class="vida-impact-desc text-sm text-center font-semibold text-blue-800 mb-1">Donaron riñón o hígado</span>
+              <span class="vida-impact-extra text-xs text-blue-600">Acto de amor y solidaridad</span>
+            </div>
           </div>
         </div>
         <!-- Card 4 -->
-        <div class="impact-card uniform-impact-card flex flex-col items-center justify-center p-5 sm:p-6 rounded-3xl shadow-xl border-2 border-indigo-300/70 backdrop-blur-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_32px_8px_#3949abaa] group relative gap-1" style="background:linear-gradient(135deg,rgba(255,255,255,0.32) 60%,rgba(57,73,171,0.13) 100%); border:2.5px solid #1976d2;">
-          <div class="flex flex-col items-center gap-0 mb-1 w-full">
-            <div class="impact-icon" style="font-size:2.2rem;color:#3949ab;filter:drop-shadow(0 2px 12px #3949ab44);">⏱️</div>
-            <div class="text-4xl font-extrabold text-indigo-700 drop-shadow-lg tracking-tight leading-tight">8 / 17</div>
-          </div>
-          <div class="flex flex-col items-center gap-0 mt-0 w-full">
-            <div class="text-base font-bold text-indigo-900 text-center leading-tight mb-1 uppercase tracking-wide" style="letter-spacing:-0.5px;">Donaciones / Trasplantes diarios</div>
-            <div class="text-xs font-medium text-indigo-700/90 text-center leading-tight italic px-1" style="text-align:center;">Cada día, 8 donaciones hacen posibles 17 trasplantes</div>
+        <div class="vida-flip-card-impact" tabindex="0" aria-label="Promedio diario" style="background:linear-gradient(135deg,#e3f2fd 60%,#bbdefb 100%);">
+          <div class="vida-flip-card-inner">
+            <div class="vida-flip-card-front flex flex-col items-center justify-center px-2 py-4">
+              <img src="donacionesdiarias.png" alt="Donaciones / Trasplantes diarios" class="vida-impact-icon mb-2" style="width:80px;height:80px;object-fit:contain;border-radius:1.2rem;box-shadow:0 4px 18px #90caf9cc;background:linear-gradient(90deg,#e3f2fd 60%,#bbdefb 100%);padding:0.5rem 0.7rem;display:block;margin:0 auto;margin-bottom:12px;" />
+              <span class="vida-impact-title text-base font-bold mb-1 text-blue-900 text-center tracking-tight" style="font-size:1.1rem;">Donaciones / Trasplantes diarios</span>
+            </div>
+            <div class="vida-flip-card-back flex flex-col items-center justify-center px-2 py-4" style="background:linear-gradient(135deg,#fff 60%,#e3f2fd 100%); border-radius:1.25rem; box-shadow:0 2px 12px #90caf9cc;">
+              <span class="vida-impact-number text-2xl font-extrabold mb-2 tracking-tight" style="color:#1565c0; font-family:'Roboto Mono',monospace; font-size:1.5rem;">8 / 17</span>
+              <span class="vida-impact-desc text-sm text-center font-semibold text-blue-800 mb-1">Cada día, 8 donaciones → 17 trasplantes</span>
+              <span class="vida-impact-extra text-xs text-blue-600">Ritmo sostenido de esperanza</span>
+            </div>
           </div>
         </div>
         <!-- Card 5 -->
-        <div class="impact-card uniform-impact-card flex flex-col items-center justify-center p-5 sm:p-6 rounded-3xl shadow-xl border-2 border-yellow-300/70 backdrop-blur-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_32px_8px_#fbc02daa] group relative gap-1" style="background:linear-gradient(135deg,rgba(255,255,255,0.32) 60%,rgba(251,192,45,0.13) 100%); border:2.5px solid #fbc02d;">
-          <div class="flex flex-col items-center gap-0 mb-1 w-full">
-            <div class="impact-icon" style="font-size:2.2rem;color:#fbc02d;filter:drop-shadow(0 2px 12px #fbc02d44);">🌍</div>
-            <div class="text-4xl font-extrabold text-yellow-600 drop-shadow-lg tracking-tight leading-tight">52,6 pmp</div>
-          </div>
-          <div class="flex flex-col items-center gap-0 mt-0 w-full">
-            <div class="text-base font-bold text-yellow-900 text-center leading-tight mb-1 uppercase tracking-wide" style="letter-spacing:-0.5px;">Donantes por millón de habitantes</div>
-            <div class="text-xs font-medium text-yellow-700/90 text-center leading-tight italic px-1" style="text-align:center;">Récord mundial durante 32 años consecutivos</div>
+        <div class="vida-flip-card-impact" tabindex="0" aria-label="Tasa nacional de donación" style="background:linear-gradient(135deg,#e3f2fd 60%,#bbdefb 100%);">
+          <div class="vida-flip-card-inner">
+            <div class="vida-flip-card-front flex flex-col items-center justify-center px-2 py-4">
+              <img src="dmp.png" alt="Donantes por millón de habitantes" class="vida-impact-icon mb-2" style="width:80px;height:80px;object-fit:contain;border-radius:1.2rem;box-shadow:0 4px 18px #fbc02d88;background:linear-gradient(90deg,#fff 60%,#e3f2fd 100%);padding:0.5rem 0.7rem;display:block;margin:0 auto;margin-bottom:12px;" />
+              <span class="vida-impact-title text-base font-bold mb-1 text-blue-900 text-center tracking-tight" style="font-size:1.1rem;line-height:1.2;max-width:120px;white-space:normal;">Donantes por millón<br>de habitantes</span>
+            </div>
+            <div class="vida-flip-card-back flex flex-col items-center justify-center px-2 py-4" style="background:linear-gradient(135deg,#fff 60%,#e3f2fd 100%); border-radius:1.25rem; box-shadow:0 2px 12px #fbc02d88;">
+              <span class="vida-impact-number text-2xl font-extrabold mb-2 tracking-tight" style="color:#fbc02d; font-family:'Roboto Mono',monospace; font-size:1.5rem;">52,6 pmp</span>
+              <span class="vida-impact-desc text-sm text-center font-semibold text-blue-800 mb-1">La más alta del mundo</span>
+              <span class="vida-impact-extra text-xs text-blue-600">32 años consecutivos</span>
+            </div>
           </div>
         </div>
       </div>
       <style>
-        #impacto-donacion .impact-card {
-          background: linear-gradient(135deg,rgba(255,255,255,0.32) 60%,rgba(233,30,99,0.13) 100%);
-          box-shadow: 0 6px 24px 0 #1976d233, 0 0 0 2px #e3f2fd33;
-          border-radius: 2rem;
-          border-width: 2.5px;
-          backdrop-filter: blur(18px) saturate(1.2);
+        .vida-impact-cards { margin-bottom: 2.5rem; }
+        .vida-flip-card-impact {
+          border-radius: 1.25rem;
+          box-shadow: 0 4px 16px 0 #1976d233, 0 0 0 2px #e3f2fd33;
+          width: 170px;
+          height: 230px;
+          perspective: 1200px;
+          margin: 0 0.5rem;
           position: relative;
-          overflow: hidden;
-          transition: border-color 0.2s, box-shadow 0.2s;
-          margin: auto;
+          cursor: pointer;
+          transition: box-shadow 0.3s, transform 0.3s;
+          outline: none;
+          border: 1.5px solid #e3f2fd;
         }
-        #impacto-donacion .uniform-impact-card {
-          min-width: 200px;
-          max-width: 220px;
-          min-height: 200px;
-          max-height: 220px;
-          display: flex;
+        .vida-flip-card-impact:focus, .vida-flip-card-impact:hover {
+          box-shadow: 0 8px 32px rgba(26, 35, 126, 0.18), 0 2px 8px rgba(255,255,255,0.2);
+          transform: scale(1.06);
         }
-        #impacto-donacion .impact-card:before {
-          content: '';
+        .vida-flip-card-inner {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          transition: transform 0.7s cubic-bezier(.4,2,.3,1);
+          transform-style: preserve-3d;
+        }
+        .vida-flip-card-front, .vida-flip-card-back {
           position: absolute;
-          left: 0; top: 0; right: 0; height: 8px;
-          border-radius: 2rem 2rem 0 0;
-          background: linear-gradient(90deg,#e3f2fd 0%,#bbdefb 60%,#64b5f6 100%);
-          opacity: 0.22;
+          width: 100%;
+          height: 100%;
+          backface-visibility: hidden;
+          border-radius: 1.25rem;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 1.2rem 0.7rem 0.7rem 0.7rem;
+          font-family: 'Roboto', sans-serif;
         }
-        #impacto-donacion .impact-icon {
-          filter: drop-shadow(0 2px 12px #90caf9cc);
-          transition: transform 0.18s;
+        .vida-flip-card-front {
+          z-index: 2;
+          background: linear-gradient(135deg,#fff 60%,#e3f2fd 100%);
+          border-bottom: 1px solid #e3f2fd;
         }
-        #impacto-donacion .impact-card:hover .impact-icon {
-          transform: scale(1.08) rotate(-3deg);
+        .vida-flip-card-back {
+          transform: rotateY(180deg);
+          z-index: 1;
+          background: linear-gradient(135deg,#f5faff 0%,#e3f2fd 100%);
+          border-bottom: 1px solid #e3f2fd;
+          box-shadow: 0 8px 32px 0 #1976d244, 0 0 0 6px #e3f2fd44;
+          padding: 1.7rem 1rem 1.2rem 1rem;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          font-family: 'Inter', 'Roboto', sans-serif;
         }
-        #impacto-donacion .impact-card:hover {
-          box-shadow: 0 12px 48px 0 #1976d288, 0 0 0 6px #e3f2fd77;
-          border-color: #1976d2;
+        .vida-flip-card-impact.flipped .vida-flip-card-inner,
+        .vida-flip-card-impact:focus .vida-flip-card-inner,
+        .vida-flip-card-impact:hover .vida-flip-card-inner {
+          transform: rotateY(180deg);
         }
-        #impacto-donacion .impact-card .text-base, #impacto-donacion .impact-card .text-lg {
-          font-weight: 800;
+        .vida-impact-icon {
+          filter: drop-shadow(0 2px 8px #90caf9cc);
+        }
+        .vida-impact-number {
+          font-family: 'Roboto Mono', monospace;
+          text-shadow: 0 2px 8px #90caf9cc, 0 1px 0 #fff;
+          font-size: 1.3rem !important;
+          color: #fbc02d;
+          background: linear-gradient(90deg,#fff 60%,#e3f2fd 100%);
+          border-radius: 0.7rem;
+          padding: 0.12rem 0.5rem;
+          margin-bottom: 0.22rem;
+          box-shadow: 0 1px 6px #fbc02d88;
+          white-space: nowrap;
+        }
+        .vida-impact-title {
+          color: #0d47a1;
           text-align: center;
-          letter-spacing: -0.5px;
+          font-size: 1rem;
+          font-weight: 700;
         }
-        #impacto-donacion .impact-card .text-xs, #impacto-donacion .impact-card .text-sm {
+        .vida-impact-label {
+          color: #1976d2;
+          font-size: 0.8rem;
+          font-weight: 500;
+          letter-spacing: 0.02em;
+        }
+        .vida-impact-desc {
+          color: #1976d2;
+          background: linear-gradient(90deg,#e3f2fd 60%,#fff 100%);
+          border-radius: 0.7rem;
+          box-shadow: 0 2px 8px #90caf9cc;
+          padding: 0.5rem 0.5rem;
+          margin: 0.15rem 0 0.08rem 0;
+          font-size: 0.98rem;
           font-weight: 600;
+          letter-spacing: 0.01em;
           text-align: center;
+          text-shadow: 0 1px 8px #e3f2fd88;
+        }
+        .vida-impact-extra {
+          color: #1565c0;
+          font-size: 0.85rem;
+          font-weight: 600;
+          margin-top: 0.12rem;
+          text-align: center;
+          display: block;
+          background: linear-gradient(90deg,#e3f2fd 60%,#bbdefb 100%);
+          border-radius: 0.5rem;
+          padding: 0.18rem 0.5rem;
+          box-shadow: 0 1px 6px #90caf9cc;
+          text-shadow: 0 1px 8px #e3f2fd88;
+        }
+        @media (max-width: 900px) {
+          .vida-impact-cards { flex-direction: column; align-items: center; }
+          .vida-flip-card-impact { width: 90vw; max-width: 320px; margin: 0.7rem 0; }
         }
       </style>
+      <script>
+        // Flip animado en click/tap y accesibilidad
+        document.querySelectorAll('.vida-flip-card-impact').forEach(function(card) {
+          card.addEventListener('click', function(e) {
+            if (window.matchMedia('(hover: none) and (pointer: coarse)').matches || e.detail === 0) {
+              card.classList.toggle('flipped');
+            }
+          });
+          card.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+              card.classList.toggle('flipped');
+            }
+          });
+        });
+      </script>
     </section>
 
     <!-- Footer SIEMPRE al final de la página -->

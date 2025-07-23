@@ -174,14 +174,14 @@
             100% { box-shadow: 0 0 0 0 rgba(79,195,247,0.7); }
         }
         .mic-recording {
-            background: #66BB6A !important;
+            background: #E53935 !important; /* Rojo grabación */
             animation: mic-pulse 1s infinite;
-            box-shadow: 0 0 0 0 rgba(102,187,106,0.7);
+            box-shadow: 0 0 0 0 rgba(229,57,53,0.7);
         }
         @keyframes mic-pulse {
-            0% { box-shadow: 0 0 0 0 rgba(102,187,106,0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(102,187,106,0); }
-            100% { box-shadow: 0 0 0 0 rgba(102,187,106,0.7); }
+            0% { box-shadow: 0 0 0 0 rgba(229,57,53,0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(229,57,53,0); }
+            100% { box-shadow: 0 0 0 0 rgba(229,57,53,0.7); }
         }
 
         .bot-avatar-breathing {
@@ -751,14 +751,40 @@
         // --- OpenAI TTS (Text-to-Speech) ---
         async function playOpenAITTS(text) {
             // ttsBtn, bocinaImg, bocinaSvg son opcionales (solo para animación)
+            // Mejorado: permite pausar/reanudar/detener audio con el mismo botón
+            if (!playOpenAITTS.audioObj) playOpenAITTS.audioObj = null;
+            if (!playOpenAITTS.audioState) playOpenAITTS.audioState = 'stopped'; // 'playing', 'paused', 'stopped'
+            let ttsBtn, bocinaImg, bocinaSvg;
+            if (arguments.length > 1) {
+                ttsBtn = arguments[1];
+                bocinaImg = arguments[2];
+                bocinaSvg = arguments[3];
+            }
+            // Si ya hay audio reproduciéndose
+            if (playOpenAITTS.audioObj && playOpenAITTS.audioState === 'playing') {
+                playOpenAITTS.audioObj.pause();
+                playOpenAITTS.audioState = 'paused';
+                if (ttsBtn) ttsBtn.classList.remove('tts-playing', 'opacity-60');
+                if (bocinaImg) bocinaImg.classList.remove('text-blue-600');
+                if (bocinaSvg) bocinaSvg.classList.remove('text-blue-600');
+                return;
+            }
+            // Si está pausado, reanudar
+            if (playOpenAITTS.audioObj && playOpenAITTS.audioState === 'paused') {
+                playOpenAITTS.audioObj.play();
+                playOpenAITTS.audioState = 'playing';
+                if (ttsBtn) ttsBtn.classList.add('tts-playing', 'opacity-60');
+                if (bocinaImg) bocinaImg.classList.add('text-blue-600');
+                if (bocinaSvg) bocinaSvg.classList.add('text-blue-600');
+                return;
+            }
+            // Si está detenido o no existe, crear nuevo audio
             try {
                 const response = await fetch('/api/tts', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         input: text,
-                        // modelo y voz controlados en backend
-                        // voice_prompt para acento y estilo
                         voice_prompt: 'Habla con acento español, tono cálido, velocidad natural, estilo empático y humano, adecuado para acompañar y explicar sobre donación de órganos en España.'
                     })
                 });
@@ -767,47 +793,43 @@
                 const url = URL.createObjectURL(blob);
                 const audio = new Audio();
                 audio.src = url;
-                // --- Animación SOLO mientras reproduce ---
-                let ttsBtn, bocinaImg, bocinaSvg;
-                if (arguments.length > 1) {
-                    ttsBtn = arguments[1];
-                    bocinaImg = arguments[2];
-                    bocinaSvg = arguments[3];
-                }
+                playOpenAITTS.audioObj = audio;
+                playOpenAITTS.audioState = 'playing';
                 const startAnim = () => {
-                    if (ttsBtn) {
-                        ttsBtn.classList.add('tts-playing', 'opacity-60');
-                        if (bocinaImg) bocinaImg.classList.add('text-blue-600');
-                        if (bocinaSvg) bocinaSvg.classList.add('text-blue-600');
-                    }
+                    if (ttsBtn) ttsBtn.classList.add('tts-playing', 'opacity-60');
+                    if (bocinaImg) bocinaImg.classList.add('text-blue-600');
+                    if (bocinaSvg) bocinaSvg.classList.add('text-blue-600');
                 };
                 const stopAnim = () => {
-                    if (ttsBtn) {
-                        ttsBtn.classList.remove('tts-playing', 'opacity-60');
-                        if (bocinaImg) bocinaImg.classList.remove('text-blue-600');
-                        if (bocinaSvg) bocinaSvg.classList.remove('text-blue-600');
-                    }
+                    if (ttsBtn) ttsBtn.classList.remove('tts-playing', 'opacity-60');
+                    if (bocinaImg) bocinaImg.classList.remove('text-blue-600');
+                    if (bocinaSvg) bocinaSvg.classList.remove('text-blue-600');
                 };
                 audio.onplay = startAnim;
+                audio.onpause = () => {
+                    playOpenAITTS.audioState = 'paused';
+                    stopAnim();
+                };
                 audio.onended = () => {
+                    playOpenAITTS.audioState = 'stopped';
                     stopAnim();
                     URL.revokeObjectURL(url);
+                    playOpenAITTS.audioObj = null;
                 };
                 audio.onerror = () => {
+                    playOpenAITTS.audioState = 'stopped';
                     stopAnim();
                     URL.revokeObjectURL(url);
+                    playOpenAITTS.audioObj = null;
                     alert('No se pudo reproducir el audio.');
                 };
                 await audio.play();
             } catch (err) {
-                if (arguments.length > 1) {
-                    const ttsBtn = arguments[1];
-                    const bocinaImg = arguments[2];
-                    const bocinaSvg = arguments[3];
-                    if (ttsBtn) ttsBtn.classList.remove('tts-playing', 'opacity-60');
-                    if (bocinaImg) bocinaImg.classList.remove('text-blue-600');
-                    if (bocinaSvg) bocinaSvg.classList.remove('text-blue-600');
-                }
+                playOpenAITTS.audioState = 'stopped';
+                playOpenAITTS.audioObj = null;
+                if (ttsBtn) ttsBtn.classList.remove('tts-playing', 'opacity-60');
+                if (bocinaImg) bocinaImg.classList.remove('text-blue-600');
+                if (bocinaSvg) bocinaSvg.classList.remove('text-blue-600');
                 alert('No se pudo reproducir el audio.');
             }
         }

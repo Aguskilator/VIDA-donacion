@@ -20,12 +20,12 @@
     <style>
         :root {
             --vida-bg: #E3F2FD;
-            --vida-text-dark: #0D47A1;
+            --vida-text-dark: #333333;
             --vida-btn-green: #66BB6A;
             --vida-btn-green-hover: #43A047;
             --vida-text-secondary: #757575;
             --vida-bg-footer: #F5F5F5;
-            --vida-chat-bot-bg: #F9F9F9;
+            --vida-chat-bot-bg: #F5F5F5;
             --vida-chat-user-bg: #E8F5E9;
             --vida-btn-feedback: #4FC3F7;
             --vida-suggest-btn-bg: #E0F2F7;
@@ -37,7 +37,7 @@
         }
 
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Inter', sans-serif;
             background-color: #f0f9ff;
             background-image: 
                 radial-gradient(at 47% 33%, hsl(200, 51%, 82%) 0px, transparent 50%),
@@ -646,7 +646,7 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
-                        prompt: messages,
+                        messages: messages,
                         model: 'gpt-4o',
                         temperature: 0.7,
                         max_tokens: 700

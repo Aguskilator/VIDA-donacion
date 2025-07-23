@@ -18,6 +18,17 @@
     
     <!-- Custom Styles -->
     <style>
+        /* Resaltar enlaces 'da clic aquí' en respuestas del bot */
+        .bot-bubble a {
+            color: #1976d2;
+            font-weight: 600;
+            text-decoration: underline;
+            transition: color 0.2s;
+        }
+        .bot-bubble a:hover {
+            color: #0d47a1;
+            text-decoration: underline wavy;
+        }
         :root {
             --vida-bg: #E3F2FD;
             --vida-text-dark: #333333;
@@ -529,7 +540,7 @@
         - Usa distintas estructuras: "Me alegra saber que...", "Qué bien que lo estés considerando...", "Te agradezco que lo menciones...", "Es muy valioso que te intereses..."
         - Sé breve, claro y empático. Usa un lenguaje sencillo, sin tecnicismos.
         - Brinda información y guía sobre obtención de tarjeta de donante, enlaces a la ONT, requisitos, proceso de donación, tipos de donación, compatibilidad, y aspectos legales en España.
-        - Nunca por ningún motivo uses asteriscos. Puedes usar listas numeradas o guiones si es necesario.
+        - Nunca por ningún motivo uses asteriscos en tus respuestas, ni para formato, ni para listas, ni para resaltar texto. Si necesitas hacer listas, usa guiones o números, pero jamás uses asteriscos.
         - Solo respondes sobre donación de órganos, tejidos y sangre en el marco español.
         - Brinda información y guía sobre el Registro de Instrucciones Previas (RIP) y cómo acceder a él, así como el acceso a cada comunidad autónoma.
         - Puedes responder sobre todos los temas relacionados con la donación, pero siempre desde el marco legal español.

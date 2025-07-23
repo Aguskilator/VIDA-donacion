@@ -21,7 +21,7 @@ export default async function handler(req, res) {
 
   // --- LÓGICA COMPATIBLE CON EL FRONTEND ---
   // Espera tanto el formato nuevo como el actual del frontend
-  const { historial, mensaje, model, prompt, temperature, max_tokens } = req.body;
+  const { historial, mensaje, model, prompt, temperature, max_tokens, messages } = req.body;
 
   // Prompt del sistema mejorado para respuestas más naturales y cierres variados
   const systemPrompt = `
@@ -38,25 +38,28 @@ Recuerda: tu objetivo es sonar humano, cercano y variado, especialmente al cerra
 `;
 
   // Construir el array de mensajes para OpenAI
-  let messages = [
+  let finalMessages = [
     { role: 'system', content: systemPrompt }
   ];
-  
-  // Compatibilidad con ambos formatos
-  if (Array.isArray(prompt)) {
-    // Formato actual del frontend: { prompt: [...] }
-    messages = prompt;
+
+  // Compatibilidad con todos los formatos
+  if (Array.isArray(messages)) {
+    // Nuevo formato: { messages: [...] }
+    finalMessages = messages;
+  } else if (Array.isArray(prompt)) {
+    // Formato alternativo: { prompt: [...] }
+    finalMessages = prompt;
   } else if (Array.isArray(historial)) {
     // Formato nuevo: { historial: [...], mensaje: 'texto' }
-    messages = messages.concat(historial);
+    finalMessages = finalMessages.concat(historial);
     if (mensaje) {
-      messages.push({ role: 'user', content: mensaje });
+      finalMessages.push({ role: 'user', content: mensaje });
     }
   }
 
   const openaiPayload = {
     model: model || 'gpt-4o',
-    messages,
+    messages: finalMessages,
     temperature: temperature || 0.7,
     max_tokens: max_tokens || 700
   };

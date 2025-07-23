@@ -23,8 +23,8 @@ export default async function handler(req, res) {
   const { input, model } = req.body;
   // Forzar siempre la voz 'fable' para máxima seguridad
   const voice = 'fable';
-  if (!input || !model) {
-    res.status(400).json({ error: 'Faltan parámetros requeridos (input, model).' });
+  if (typeof input !== 'string' || !input.trim() || model !== 'tts-1') {
+    res.status(400).json({ error: 'Faltan parámetros requeridos: input debe ser texto y model debe ser "tts-1".' });
     return;
   }
 

@@ -43,7 +43,8 @@ export default async function handler(req, res) {
   }
   if (userQuestion) {
     try {
-      const { data, error } = await supabase.from('vida-app').insert({ question: userQuestion });
+      const now = new Date().toISOString();
+      const { data, error } = await supabase.from('vida-app').insert({ question: userQuestion, created_at: now });
       console.log('Supabase insert response:', { data, error });
       if (error) {
         console.error('Error guardando pregunta en Supabase:', error.message);

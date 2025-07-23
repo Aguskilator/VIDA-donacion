@@ -43,10 +43,14 @@ export default async function handler(req, res) {
   }
   if (userQuestion) {
     try {
-      await supabase.from('vida-app').insert({ question: userQuestion });
+      const { data, error } = await supabase.from('vida-app').insert({ question: userQuestion });
+      console.log('Supabase insert response:', { data, error });
+      if (error) {
+        console.error('Error guardando pregunta en Supabase:', error.message);
+      }
     } catch (err) {
       // No interrumpir el flujo si falla el guardado
-      console.error('Error guardando pregunta en Supabase:', err.message);
+      console.error('Error guardando pregunta en Supabase (catch):', err.message);
     }
   }
 

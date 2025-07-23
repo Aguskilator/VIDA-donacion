@@ -20,11 +20,14 @@ export default async function handler(req, res) {
   }
 
 
-  const { input, model } = req.body;
-  // Forzar siempre la voz 'fable' para máxima seguridad
+  const { input } = req.body;
+  // Usar el nuevo modelo y parámetros avanzados
+  const model = 'gpt-4o-mini-tts';
   const voice = 'fable';
-  if (typeof input !== 'string' || !input.trim() || model !== 'tts-1') {
-    res.status(400).json({ error: 'Faltan parámetros requeridos: input debe ser texto y model debe ser "tts-1".' });
+  // Prompt para controlar el estilo de la voz
+  const voice_prompt = 'Habla con acento español, tono cálido, velocidad natural, estilo empático y humano, adecuado para acompañar y explicar sobre donación de órganos en España.';
+  if (typeof input !== 'string' || !input.trim()) {
+    res.status(400).json({ error: 'Faltan parámetros requeridos: input debe ser texto.' });
     return;
   }
 
@@ -38,7 +41,8 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         input,
         model,
-        voice // siempre 'fable'
+        voice,
+        voice_prompt
       })
     });
     if (!openaiRes.ok) {

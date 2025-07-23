@@ -544,7 +544,7 @@
         - Solo respondes sobre donación de órganos, tejidos y sangre en el marco español.
         - Brinda información y guía sobre el Registro de Instrucciones Previas (RIP) y cómo acceder a él, así como el acceso a cada comunidad autónoma.
         - Puedes responder sobre todos los temas relacionados con la donación, pero siempre desde el marco legal español.
-        - Si pide informacion sobre el registro de instrucciones previas (RIP) o de tarjeta de donante, primero ofrece una breve explicación de qué es y para qué sirve, y luego puedes preguntar si quiere registrarse o acceder a la información oficial.
+        - Si pide informacion sobre el registro de instrucciones previas (RIP) o de tarjeta de donante, primero ofrece una breve explicación de qué es y para qué sirve, y luego puedes preguntar si quiere registrarse o acceder a la información oficial, no des el link la primera vez que pregunte por esos temas, sigue la conversación y puedes ofrecerlo.
         - Puedes dar el link oficial de la Organización Nacional de Trasplantes (ONT) y de las comunidades autónomas, pero no debes dar enlaces a otros sitios web.
         - Debe de estar dirigido a un público general, sin conocimientos técnicos.
         - Puedes dar el link oficial del registro de instrucciones previas (RIP) y de las comunidades autónomas.
@@ -730,6 +730,11 @@
                 botTextAndBtn.className = 'flex flex-col items-start flex-1 min-w-0';
                 textBubbleDiv.className = 'px-4 py-3 shadow-lg chat-bubble-text relative bot-bubble bg-[var(--bot-bubble-bg)] text-[var(--text-dark)] rounded-2xl rounded-bl-lg w-full text-left';
                 textBubbleDiv.innerHTML = textContent;
+                // Hacer que los enlaces se abran en nueva pestaña
+                Array.from(textBubbleDiv.querySelectorAll('a')).forEach(a => {
+                    a.setAttribute('target', '_blank');
+                    a.setAttribute('rel', 'noopener noreferrer');
+                });
                 botTextAndBtn.appendChild(textBubbleDiv);
                 // Botón de audio alineado a la derecha debajo de la burbuja
                 const ttsBtnWrapper = document.createElement('div');
@@ -740,7 +745,7 @@
                 ttsBtn.className = 'mt-1 bg-slate-100 rounded-full p-2 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-300 shadow flex items-center';
                 ttsBtn.innerHTML = `<img src="bocina2.png" alt="Escuchar" class="h-6 w-6 object-contain" onerror=\"this.onerror=null;this.src='https://placehold.co/24x24/cccccc/ffffff?text=%F0%9F%94%8A';\" />`;
                 // Fallback SVG para bocina si no carga la imagen
-                ttsBtn.innerHTML = `<img src="bocina2.png" alt="Escuchar" class="h-6 w-6 object-contain" onerror=\"this.style.display='none';this.insertAdjacentHTML('afterend', '<svg class=\\'h-6 w-6 text-slate-600\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'2\\' viewBox=\\'0 0 24 24\\'><path stroke-linecap=\\'round\\' stroke-linejoin=\\'round\\' d=\\'M9 19V6l-2 2H5a2 2 0 00-2 2v4a2 2 0 002 2h2l2 2zm7-5a3 3 0 00-3-3m3 3a6 6 0 01-6 6m6-6V9a6 6 0 00-6-6\'/></svg>');\" />`;
+                ttsBtn.innerHTML = `<img src="bocina2.png" alt="Escuchar" class="h-6 w-6 object-contain" onerror=\"this.style.display='none';this.insertAdjacentHTML('afterend', '<svg class=\\'h-6 w-6 text-slate-600\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'2\\' viewBox=\\'0 0 24 24\\'><path stroke-linecap=\\'round\\' stroke-linejoin=\\'round\\' d=\\'M9 19V6l-2 2H5a2 2 0 00-2 2v4a2 2 0 002 2h2l2 2zm7-5a3 3 0 00-3-3m3 3a6 6 0 01-6 6m6-6V9a6 6 0 00-6-6\\'/></svg>');\" />`;
                 ttsBtn.addEventListener('click', async (e) => {
                     e.preventDefault();
                     ttsBtn.disabled = true;

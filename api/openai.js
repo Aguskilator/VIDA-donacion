@@ -7,6 +7,12 @@ export const config = {
   },
 };
 
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Método no permitido' });
@@ -22,6 +28,27 @@ export default async function handler(req, res) {
   // --- LÓGICA COMPATIBLE CON EL FRONTEND ---
   // Espera tanto el formato nuevo como el actual del frontend
   const { historial, mensaje, model, prompt, temperature, max_tokens, messages } = req.body;
+
+  // Guardar la pregunta del usuario en Supabase (solo si existe)
+  let userQuestion = null;
+  if (mensaje) {
+    userQuestion = mensaje;
+  } else if (Array.isArray(messages)) {
+    // Busca el último mensaje del usuario
+    const lastUserMsg = messages.filter(m => m.role === 'user').pop();
+    if (lastUserMsg) userQuestion = lastUserMsg.content;
+  } else if (Array.isArray(historial)) {
+    const lastUserMsg = historial.filter(m => m.role === 'user').pop();
+    if (lastUserMsg) userQuestion = lastUserMsg.content;
+  }
+  if (userQuestion) {
+    try {
+      await supabase.from('questions').insert({ question: userQuestion });
+    } catch (err) {
+      // No interrumpir el flujo si falla el guardado
+      console.error('Error guardando pregunta en Supabase:', err.message);
+    }
+  }
 
   // Prompt del sistema mejorado para respuestas más naturales y cierres variados
   const systemPrompt = `

@@ -41,10 +41,21 @@ export default async function handler(req, res) {
     const lastUserMsg = historial.filter(m => m.role === 'user').pop();
     if (lastUserMsg) userQuestion = lastUserMsg.content;
   }
+
+  // Función simple para eliminar posibles nombres y direcciones
+  function sanitizeQuestion(text) {
+    // Elimina patrones comunes de direcciones (calle, avenida, número, etc.).
+    let sanitized = text.replace(/\b(calle|av[.]?|avenida|número|num[.]?|#|cp|código postal|colonia|piso|departamento|dpto|apto|urbanización|barrio|manzana|lote|localidad|municipio|provincia|ciudad|estado|país)\b.*?(\s|$)/gi, '');
+    // Elimina secuencias que parecen nombres propios.
+    sanitized = sanitized.replace(/\b([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)\b/g, '[nombre]');
+    return sanitized;
+  }
+
   if (userQuestion) {
     try {
       const now = new Date().toISOString();
-      const { data, error } = await supabase.from('vida-app').insert({ question: userQuestion, created_at: now });
+      const cleanQuestion = sanitizeQuestion(userQuestion);
+      const { data, error } = await supabase.from('vida-app').insert({ question: cleanQuestion, created_at: now });
       console.log('Supabase insert response:', { data, error });
       if (error) {
         console.error('Error guardando pregunta en Supabase:', error.message);

@@ -18,36 +18,53 @@
     
     <!-- Custom Styles -->
     <style>
+        /* Resaltar enlaces 'da clic aquí' en respuestas del bot */
+        .bot-bubble a {
+            color: #1976d2;
+            font-weight: 600;
+            text-decoration: underline;
+            transition: color 0.2s;
+        }
+        .bot-bubble a:hover {
+            color: #0d47a1;
+            text-decoration: underline wavy;
+        }
         :root {
+            --vida-bg: #E3F2FD;
+            --vida-text-dark: #333333;
+            --vida-btn-green: #66BB6A;
+            --vida-btn-green-hover: #43A047;
+            --vida-text-secondary: #757575;
+            --vida-bg-footer: #F5F5F5;
+            --vida-chat-bot-bg: #F5F5F5;
+            --vida-chat-user-bg: #E8F5E9;
+            --vida-btn-feedback: #4FC3F7;
+            --vida-suggest-btn-bg: #E0F2F7;
+            --vida-suggest-btn-hover: #B3E5FC;
             --vida-primary: #2563EB;
             --vida-secondary: #3B82F6;
-            --text-dark: #1E293B;
-            --text-light: #64748B;
-            --bg-light: #F1F5F9;
-            --user-bubble-bg: #2563EB;
-            --bot-bubble-bg: #FFFFFF;
-            --border-color: #E2E8F0;
+            --vida-border: #E2E8F0;
+            --vida-scrollbar: #BDBDBD;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            overflow: hidden;
-            background-color: #e0e7ff;
-            animation: gradient-animation 20s ease infinite;
-            background-size: 200% 200%;
-            background-image: linear-gradient(45deg, #e0e7ff 0%, #c7d2fe 25%, #e0f2f1 50%, #f0f9ff 75%, #e0e7ff 100%);
+            background-color: #f0f9ff;
+            background-image: 
+                radial-gradient(at 47% 33%, hsl(200, 51%, 82%) 0px, transparent 50%),
+                radial-gradient(at 9% 62%, hsl(215, 51%, 76%) 0px, transparent 50%),
+                radial-gradient(at 82% 65%, hsl(210, 60%, 75%) 0px, transparent 50%),
+                radial-gradient(at 24% 88%, hsl(220, 60%, 85%) 0px, transparent 50%),
+                radial-gradient(at 75% 8%, hsl(205, 37%, 79%) 0px, transparent 50%),
+                radial-gradient(at 56% 33%, hsl(260.00, 80%, 85%) 0px, transparent 50%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            overflow-x: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
             margin: 0;
             padding: 0;
-        }
-        
-        @keyframes gradient-animation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
         }
 
         #bg-canvas {
@@ -57,15 +74,22 @@
             width: 100%;
             height: 100%;
             z-index: -1;
+            pointer-events: none;
         }
-        
+
         #chat-screen-container {
             animation: popIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             max-width: 1000px;
             width: 100%;
             margin: 0 auto;
+            box-shadow: 0 10px 35px rgba(13, 27, 42, 0.12), 0 5px 15px rgba(255,255,255,0.3), inset 0 1px 0 rgba(255,255,255,0.8);
+            border-radius: 2rem;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(24px) saturate(1.2);
+            -webkit-backdrop-filter: blur(24px) saturate(1.2);
+            border: 1.5px solid rgba(59,130,246,0.10);
         }
-        
+
         @media (min-width: 640px) {
             #chat-screen-container {
                 max-width: 900px;
@@ -74,17 +98,19 @@
             }
         }
 
-        /* Forzar altura fija para el contenedor principal */
         #chat-screen {
             height: 85vh;
             max-height: 85vh;
+            background: linear-gradient(135deg, #e0e7ff 0%, #f0fdfa 50%, #e3f2fd 100%);
+            border-radius: 2rem;
+            border: 1px solid var(--vida-border);
+            box-shadow: 0 4px 24px 0 rgba(31,38,135,0.10);
         }
 
-        /* Asegurar que el área de chat tenga scroll interno */
         #chat-container-wrapper {
             flex: 1;
             overflow-y: auto;
-            max-height: calc(85vh - 140px); /* Restar altura del header y footer */
+            max-height: calc(85vh - 140px);
         }
 
         .chat-bubble {
@@ -92,22 +118,110 @@
             transform: translateY(20px) scale(0.95);
             animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
-        
+
         .bot-bubble .chat-bubble-text {
             opacity: 0;
             animation: fadeInText 0.3s ease-out 0.2s forwards;
         }
 
         .chat-bubble-text {
-            text-align: justify;
+            text-align: justify !important;
             line-height: 1.6;
+            word-break: break-word;
+            hyphens: auto;
+            font-size: 1.08rem;
         }
-        
+
+        .bot-bubble {
+            background: var(--vida-chat-bot-bg) !important;
+            color: var(--vida-text-dark) !important;
+            border-radius: 1.5rem 1.5rem 1.5rem 0.5rem !important;
+            box-shadow: 0 2px 8px rgba(33,150,243,0.08);
+            border: 1px solid #e3f2fd;
+        }
+        .user-bubble {
+            background: var(--vida-chat-user-bg) !important;
+            color: var(--vida-text-dark) !important;
+            border-radius: 1.5rem 1.5rem 0.5rem 1.5rem !important;
+            box-shadow: 0 2px 8px rgba(102,187,106,0.08);
+            border: 1px solid #e8f5e9;
+        }
+
+        .bot-bubble::after {
+            content: '';
+            position: absolute;
+            left: -10px;
+            bottom: 0px;
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+            border-right-color: var(--vida-chat-bot-bg);
+            border-left: 0;
+            border-bottom: 0;
+            opacity: 0;
+            animation: fadeInText 0.2s ease-out 0.1s forwards;
+        }
+        .user-bubble::after {
+            content: '';
+            position: absolute;
+            right: -10px;
+            bottom: 0px;
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+            border-left-color: var(--vida-chat-user-bg);
+            border-right: 0;
+            border-bottom: 0;
+        }
+
+        .tts-playing {
+            background: var(--vida-btn-feedback) !important;
+            animation: tts-pulse 1s infinite;
+            box-shadow: 0 0 0 0 rgba(79,195,247,0.7);
+        }
+        @keyframes tts-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(79,195,247,0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(79,195,247,0); }
+            100% { box-shadow: 0 0 0 0 rgba(79,195,247,0.7); }
+        }
+        .mic-recording {
+            background: #df5250 !important; /* Rojo grabación */
+            animation: mic-pulse 1s infinite;
+            box-shadow: 0 0 0 0 rgba(238, 80, 77, 0.7);
+        }
+        @keyframes mic-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(237, 99, 96, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(229,57,53,0); }
+            100% { box-shadow: 0 0 0 0 rgba(229,57,53,0.7); }
+        }
+
+        .bot-avatar-breathing {
+            animation: breathing 3s ease-in-out infinite;
+        }
+        @keyframes breathing {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+        .logo-heartbeat {
+            animation: heart-beat 2.5s ease-in-out infinite;
+        }
+        @keyframes heart-beat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .active-feedback {
+            transform: scale(0.95);
+            transition: transform 0.1s ease-out;
+        }
+
         .chat-messages::-webkit-scrollbar { width: 8px; }
-        .chat-messages::-webkit-scrollbar-track { background: transparent; }
-        .chat-messages::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 10px; }
-        .chat-messages::-webkit-scrollbar-thumb:hover { background: #CBD5E1; }
-        
+        .chat-messages::-webkit-scrollbar-track { background: #FFFFFF; }
+        .chat-messages::-webkit-scrollbar-thumb { background: var(--vida-scrollbar); border-radius: 10px; }
+        .chat-messages::-webkit-scrollbar-thumb:hover { background: var(--vida-text-dark); }
+
         @keyframes popIn {
             from {
                 opacity: 0;
@@ -118,7 +232,6 @@
                 transform: scale(1);
             }
         }
-        
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -129,88 +242,54 @@
                 transform: translateY(0) scale(1);
             }
         }
-
         @keyframes fadeInText {
             from { opacity: 0; }
             to { opacity: 1; }
         }
-        
-        .bot-bubble::after {
-            content: '';
-            position: absolute;
-            left: -10px;
-            bottom: 0px;
-            width: 0;
-            height: 0;
-            border: 10px solid transparent;
-            border-right-color: var(--bot-bubble-bg);
-            border-left: 0;
-            border-bottom: 0;
-            opacity: 0;
-            animation: fadeInText 0.2s ease-out 0.1s forwards;
+
+        /* Botones principales */
+        #send-btn {
+            background: linear-gradient(135deg, var(--vida-btn-green), var(--vida-btn-green-hover));
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(102,187,106,0.12);
+            transition: all 0.2s;
+        }
+        #send-btn:hover {
+            background: linear-gradient(135deg, var(--vida-btn-green-hover), #388E3C);
+            transform: scale(1.08);
+            box-shadow: 0 4px 16px rgba(76,175,80,0.18);
+        }
+        #mic-btn {
+            background: linear-gradient(135deg, #5ca7e5, #7ab5f1);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(33,150,243,0.12);
+            transition: all 0.2s;
+        }
+        #mic-btn:hover {
+            background: linear-gradient(135deg, #3d94ec, #52a8ee);
+            transform: scale(1.08);
+            box-shadow: 0 4px 16px rgba(33,150,243,0.18);
+        }
+        #suggest-questions-btn {
+            background: linear-gradient(135deg, var(--vida-suggest-btn-bg), var(--vida-suggest-btn-hover));
+            color: var(--vida-text-dark);
+            box-shadow: 0 2px 8px rgba(33,150,243,0.10);
+            transition: all 0.2s;
+        }
+        #suggest-questions-btn:hover {
+            background: linear-gradient(135deg, var(--vida-suggest-btn-hover), var(--vida-suggest-btn-bg));
+            transform: scale(1.08);
+            box-shadow: 0 4px 16px rgba(33,150,243,0.15);
         }
 
-        .user-bubble::after {
-            content: '';
-            position: absolute;
-            right: -10px;
-            bottom: 0px;
-            width: 0;
-            height: 0;
-            border: 10px solid transparent;
-            border-left-color: var(--user-bubble-bg);
-            border-right: 0;
-            border-bottom: 0;
-        }
-
-        @keyframes breathing {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.03); }
-            100% { transform: scale(1); }
-        }
-
-        .bot-avatar-breathing {
-            animation: breathing 3s ease-in-out infinite;
-        }
-
-        @keyframes heart-beat {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        .logo-heartbeat {
-            animation: heart-beat 2.5s ease-in-out infinite;
-        }
-
-        .active-feedback {
-            transform: scale(0.95);
-            transition: transform 0.1s ease-out;
-        }
-        
-        /* Específico para móviles - manejo del teclado virtual */
-        :root {
-            --vh: 1vh;
-        }
-        
-        @supports (-webkit-touch-callout: none) {
-            body {
-                /* Usar viewport fijo para iOS */
-                height: 100vh;
-                height: calc(var(--vh, 1vh) * 100);
-            }
-        }
-        
-        /* Mejoras para el chat en móviles */
+        /* Responsive y mobile: mantener mejoras previas */
         @media (max-width: 640px) {
             html, body {
-                /* Prevenir el scroll del body cuando el chat está abierto */
                 overflow: hidden;
                 position: fixed;
                 width: 100%;
                 height: 100%;
             }
-            
             body {
                 display: block !important;
                 padding: 0 !important;
@@ -218,7 +297,6 @@
                 align-items: unset !important;
                 justify-content: unset !important;
             }
-            
             #chat-screen-container {
                 height: 100vh !important;
                 height: calc(var(--vh, 1vh) * 100) !important;
@@ -234,7 +312,6 @@
                 right: 0 !important;
                 bottom: 0 !important;
             }
-            
             #chat-screen {
                 height: 100vh !important;
                 height: calc(var(--vh, 1vh) * 100) !important;
@@ -243,18 +320,13 @@
                 border-radius: 0 !important;
                 border: none !important;
             }
-            
             #chat-input {
-                /* Prevenir zoom en inputs */
                 font-size: 16px !important;
                 -webkit-appearance: none;
                 appearance: none;
-                /* Prevenir el scroll automático al enfocar */
                 transform: translateZ(0);
                 -webkit-transform: translateZ(0);
             }
-            
-            /* Asegurar que el footer se mantenga visible */
             footer {
                 position: relative;
                 z-index: 10;
@@ -262,23 +334,16 @@
                 bottom: 0;
                 border-radius: 0 !important;
             }
-            
-            /* Mejorar el scroll del contenedor de mensajes */
             #chat-container-wrapper {
                 flex: 1;
                 overflow-y: auto;
                 -webkit-overflow-scrolling: touch;
-                /* Prevenir el rebote del scroll */
                 overscroll-behavior: contain;
             }
-            
-            /* Prevenir el zoom en toda la pantalla de chat */
             * {
                 -webkit-text-size-adjust: 100%;
                 text-size-adjust: 100%;
             }
-            
-            /* Header más compacto en móviles */
             header {
                 padding: 0.75rem !important;
                 border-radius: 0 !important;
@@ -297,10 +362,12 @@
                      <div class="w-12 h-12 bg-gradient-to-br from-[var(--vida-primary)] to-[var(--vida-secondary)] rounded-full flex items-center justify-center shadow-md">
                          <svg class="h-7 w-7 text-white logo-heartbeat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
                      </div>
-                     <img src="Vidalogo.png" alt="VIDA Logo" class="h-16 w-auto object-contain" onerror="this.onerror=null;this.src='https://placehold.co/126x56/E3F2FD/0D47A1?text=VIDA';" />
+                 <img src="Vidalogo.png" alt="VIDA Logo" class="h-20 w-auto object-contain sm:h-24" onerror="this.onerror=null;this.src='https://placehold.co/160x70/E3F2FD/0D47A1?text=VIDA';" />
                  </div>
                 <button id="close-chat-btn" class="text-gray-500 hover:bg-gray-200/50 p-2 rounded-full transition-colors" title="Cerrar Chat">
-                     <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                     <svg class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                     </svg>
                 </button>
             </header>
             <main class="flex-1 flex overflow-hidden relative">
@@ -326,10 +393,13 @@
                 <div id="suggested-questions-container" class="flex flex-wrap gap-2 mb-3 hidden"></div>
                 <form id="chat-form" class="flex items-center space-x-3">
                     <button type="button" id="suggest-questions-btn" class="bg-slate-100 text-slate-600 rounded-full p-2.5 h-12 w-12 sm:w-auto sm:px-4 hover:bg-slate-200 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--vida-secondary)] disabled:bg-gray-200 disabled:cursor-not-allowed flex items-center justify-center" title="Sugerir preguntas">
-                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.898 20.562L16.25 22.5l-.648-1.938a3.375 3.375 0 00-2.672-2.672L11.25 18l1.938-.648a3.375 3.375 0 002.672-2.672L16.75 13.5l.648 1.938a3.375 3.375 0 002.672 2.672L21.75 18l-1.938.648a3.375 3.375 0 00-2.672 2.672z" />
                         </svg>
                         <span id="suggest-button-text" class="ml-2 text-sm font-semibold hidden sm:inline">Sugerir</span>
+                    </button>
+                    <button type="button" id="mic-btn" class="bg-slate-100 text-slate-600 rounded-full p-2.5 h-12 w-12 flex items-center justify-center hover:bg-blue-100 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--vida-secondary)]" title="Dictar por voz">
+                        <img id="mic-icon" src="mic2.png" alt="Micrófono" class="h-8 w-8 object-contain" style="filter: grayscale(0.2) brightness(0.7); transition: filter 0.2s;" onerror="this.style.display='none';this.insertAdjacentHTML('afterend', '<svg class=\'h-8 w-8 text-slate-600\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' d=\'M12 18c3.314 0 6-2.686 6-6V7a6 6 0 10-12 0v5c0 3.314 2.686 6 6 6zm0 0v3m-4 0h8\'/></svg>');" />
                     </button>
                     <input type="text" id="chat-input" placeholder="Escribe tu pregunta aquí..." autocomplete="off" class="flex-1 w-full px-5 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[var(--vida-primary)] transition shadow-sm">
                     <button type="submit" id="send-btn" class="bg-gradient-to-br from-[var(--vida-primary)] to-[var(--vida-secondary)] text-white rounded-full p-3 h-12 w-12 hover:opacity-90 transition-all transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--vida-secondary)] disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed" title="Enviar mensaje">
@@ -341,6 +411,108 @@
     </div>
 
     <script>
+        // --- Speech Recognition (Dictado por voz) ---
+        let recognition;
+        let recognizing = false;
+        const micBtn = document.getElementById('mic-btn');
+        const micIcon = document.getElementById('mic-icon');
+
+        // Función para detectar si es Chrome en móvil
+        function isMobileChrome() {
+            const ua = navigator.userAgent;
+            return /Android/.test(ua) && /Chrome\//.test(ua) && !/Edg\//.test(ua);
+        }
+
+        // Función para mostrar alertas personalizadas
+        function showDictationError(msg) {
+            alert(msg + '\n\nSugerencia: Usa Google Chrome en Android, con permisos de micrófono y conexión HTTPS. En iPhone/iPad, la función no está disponible por limitaciones de Apple.');
+        }
+
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            try {
+                recognition = new SpeechRecognition();
+                recognition.lang = 'es-ES';
+                recognition.continuous = false;
+                recognition.interimResults = false;
+
+                let lastTranscript = '';
+
+                recognition.onstart = function() {
+                    recognizing = true;
+                    micBtn.classList.add('mic-recording');
+                    micIcon.classList.add('text-red-600');
+                    micIcon.style.filter = 'none';
+                    lastTranscript = '';
+                };
+                recognition.onend = function() {
+                    recognizing = false;
+                    micBtn.classList.remove('mic-recording');
+                    micIcon.classList.remove('text-red-600');
+                    micIcon.style.filter = 'grayscale(0.2) brightness(0.7)';
+                    // Si no llegó onresult pero hay transcript, usarlo
+                    if (lastTranscript) {
+                        chatInput.value = lastTranscript;
+                        setTimeout(() => { chatInput.focus(); }, 100);
+                    }
+                };
+                recognition.onerror = function(event) {
+                    recognizing = false;
+                    micBtn.classList.remove('mic-recording');
+                    micIcon.classList.remove('text-red-600');
+                    micIcon.style.filter = 'grayscale(0.2) brightness(0.7)';
+                    let msg = 'No se pudo reconocer el audio. Intenta de nuevo.';
+                    if (event.error === 'not-allowed') {
+                        msg = 'Permiso de micrófono denegado. Por favor, permite el acceso al micrófono en la configuración del navegador.';
+                    } else if (event.error === 'no-speech') {
+                        msg = 'No se detectó voz. Intenta hablar más cerca del micrófono.';
+                    } else if (event.error === 'aborted') {
+                        msg = 'El dictado fue interrumpido. Intenta de nuevo.';
+                    } else if (event.error === 'audio-capture') {
+                        msg = 'No se detectó micrófono. Verifica los permisos y la conexión de tu micrófono.';
+                    }
+                    showDictationError(msg);
+                };
+                recognition.onresult = function(event) {
+                    if (event.results && event.results[0] && event.results[0][0]) {
+                        lastTranscript = event.results[0][0].transcript;
+                        chatInput.value = lastTranscript;
+                        setTimeout(() => { chatInput.focus(); }, 100);
+                    }
+                };
+
+                micBtn.addEventListener('click', function() {
+                    if (window.isSecureContext !== true) {
+                        showDictationError('El dictado por voz solo funciona en sitios HTTPS.');
+                        return;
+                    }
+                    if (recognizing) {
+                        recognition.stop();
+                    } else {
+                        try {
+                            recognition.start();
+                        } catch (err) {
+                            showDictationError('No se pudo iniciar el dictado. Puede que otra app esté usando el micrófono o que el navegador tenga una restricción.');
+                        }
+                    }
+                });
+            } catch (e) {
+                micBtn.disabled = true;
+                micBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                micBtn.title = 'Dictado por voz no disponible en este navegador.';
+                micBtn.addEventListener('click', function() {
+                    showDictationError('El dictado por voz no está disponible en este navegador o dispositivo.');
+                });
+            }
+        } else {
+            // Desactivar el botón y mostrar advertencia clara
+            micBtn.disabled = true;
+            micBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            micBtn.title = 'Dictado por voz no compatible en este dispositivo/navegador.';
+            micBtn.addEventListener('click', function() {
+                showDictationError('El dictado por voz no es compatible con este navegador o dispositivo.');
+            });
+        }
         // --- DOM Elements ---
         const chatContainer = document.getElementById('chat-container');
         const chatContainerWrapper = document.getElementById('chat-container-wrapper');
@@ -355,177 +527,67 @@
 
         // --- State ---
         let chatHistory = [];
-        let currentDonorPathStep = null;
-        let viewedExplanations = {
-            muerte_encefalica: false,
-            paro_cardiaco: false
-        };
 
         // --- System Prompt for OpenAI ---
         const systemPrompt = `
-        Eres VIDA, un asistente virtual sobre donación de órganos, tejidos y sangre en México.
+        Eres VIDA, un asistente virtual sobre donación de órganos, tejidos, sangre, medula ósea y cordón umbilical en México. Tu función es brindar información clara, empática y accesible basada en la normativa vigente, sin sustituir asesoramiento médico ni legal.
 
         **Reglas básicas:**
-        - Responde de forma cálida, natural y conversacional. NUNCA como robot.
-        - EVITA respuestas repetitivas. Varía tu lenguaje y estructura completamente.
-        - PROHIBIDO usar palabras como "maravilloso", "increíble", "generoso" repetidamente.
-        - Usa sinónimos y diferentes estructuras: "Me da gusto saber que...", "Qué bueno que hayas decidido...", "Te agradezco que compartas...", "Es valioso que quieras..."
-        - Sé conciso, claro y empático. Usa lenguaje sencillo, sin tecnicismos.
-        - No uses asteriscos en ninguna respuesta. Puedes usar listas numeradas o guiones si es necesario.
-        - Si detectas duelo o dolor, prioriza el apoyo emocional.
-        - Solo responde sobre donación de órganos, tejidos y sangre.
-        - Si el usuario pregunta por otros temas, redirige amablemente con el uso de IA entendiendo el contexto de la conversación.
-        - Si está fuera de tema: "Lo siento, solo puedo ayudarte con preguntas sobre donación de órganos, tejidos o sangre."
+        - Responde siempre de forma cálida, humana y conversacional. NUNCA suenes como robot.
+        - EVITA repeticiones. Varía tu forma de hablar en cada mensaje.
+        - Si el usuario pregunta sobre temas ajenos a la donación (matemáticas, sexo, insultos, curiosidades generales, historia, tecnología, etc.), redirige amablemente hacia la donación de órganos y tejidos en México.
+        - NO repitas constantemente palabras como "maravilloso", "increíble" o "generoso".
+        - Usa distintas estructuras: "Me alegra saber que...", "Qué bien que lo estés considerando...", "Te agradezco que lo menciones...", "Es muy valioso que te intereses..."
+        - Sé breve, claro y empático. Usa un lenguaje sencillo, sin tecnicismos.
+        - Brinda información y guía sobre obtención de tarjeta de donante, enlaces a la ONT, requisitos, proceso de donación, tipos de donación, compatibilidad, y aspectos legales en México.
+        - Nunca por ningún motivo uses asteriscos en tus respuestas, ni para formato, ni para listas, ni para resaltar texto. Si necesitas hacer listas, usa guiones o números, pero jamás uses asteriscos.
+        - Solo respondes sobre donación de órganos, tejidos y sangre en el marco mexicano.
+        - Puedes responder sobre todos los temas relacionados con la donación, pero siempre desde el marco legal mexicano.
+        - Puedes dar el link oficial del Centro Nacional de Transplantes (CENATRA), pero no debes dar enlaces a otros sitios web.
+        - Debe de estar dirigido a un público general, sin conocimientos técnicos.
+        - Puedes dar el link oficial del registro de donantes de médula ósea y cordón umbilical.
+        - Puedes dar el link oficial del registro de donantes de sangre.
+        - Ofrece los link requeridos de manera que el usuario pueda acceder fácilmente a la información oficial dando un clic. SIEMPRE debes mostrar los enlaces en formato HTML usando <a href="URL">da clic aquí</a> y NUNCA en formato Markdown ni mostrando la URL completa. El texto debe ser "da clic aquí" y el enlace debe ser clicable. No uses otro formato para los links.
+        - Puedes dar el link oficial del registro de la tarjeta de donante de órganos y tejidos.
+        - No repitas siempre la palabra "México" en cada pregunta, pero asegúrate de que el contexto sea claro ya que todas las respuestas deben ser sobre la donación de órganos y tejidos en el contexto mexicano.
+        - No hagas cierres repetitivos o automatizados. Varía tus cierres y no des cierres en cada respuesta.
+        - Brinda información actualizada sobre la Organización Nacional de Trasplantes (ONT), su organización, organigrama, funciones y objetivos.
+        - No siempre cierres con "estoy aquí para ayudarte" o "si tienes más preguntas, no dudes en preguntar". Varía tus cierres y no des cierres en cada respuesta.
+        - No siempre pongas "Si tienes más preguntas, no dudes en preguntar" o similiares a ese al final de cada respuesta. Varía tus cierres y no des cierres en cada respuesta.
+        - Si te preguntan sobre otros temas ajenos a donacion de organos, tejidos y sangre en el contexto mexicano, redirige amablemente hacia la donación de órganos y tejidos en el país."
+
+        **Acompañamiento en pérdida y duelo:**
+        Si el usuario expresa pérdida, duelo, fallecimiento, tristeza, dolor emocional, luto, muerte de un ser querido, o emociones similares:
+        1. Prioriza  el acompañamiento tanatológico y psicológico: valida primero sus emociones, ofrece consuelo, escucha activa, comprensión y apoyo emocional. Haz sentir a la persona acompañada y comprendida antes de cualquier otra información.
+        2. Introduce el tema de la donación de órganos de manera natural y sutil, como una posibilidad que existe en México, pero nunca como una recomendación ni como un paso obligatorio. Puedes mencionar que la donación puede ser un acto de amor y trascendencia para algunas familias, pero siempre respetando el proceso de duelo y el ritmo de la persona. Si la persona no desea hablar del tema, no insistas.
+        3. Nunca minimices el dolor ni des consejos simplistas. Sé empático, humano y acompaña desde la comprensión. Puedes sugerir recursos de apoyo psicológico o tanatológico si es apropiado.
+        4. No des asesoramiento médico ni legal. Tu función es brindar apoyo emocional y acompañamiento en el proceso de duelo.
+
+        **VARIEDAD OBLIGATORIA:**
+        - Si el usuario repite una pregunta o pide la misma información varias veces, responde de forma diferente a la vez anterior. Cambia el enfoque, usa ejemplos, metáforas, analogías o diferentes estructuras, pero mantén la claridad y empatía.
+        - No repitas nunca la misma respuesta textual a la misma pregunta en una misma conversación.
 
         **PROHIBIDO ABSOLUTAMENTE:**
-        - NUNCA pidas datos personales (nombre, fecha de nacimiento, tipo de sangre, dirección, etc.)
-        - NO registres usuarios ni completes registros
-        - NO solicites información personal para "completar registro"
-        - Solo brindas información educativa y apoyo emocional
+        - NUNCA pidas ni almacenes datos personales (nombre, DNI, dirección, etc.).
+        - NO registres usuarios ni completes formularios de ningún tipo.
+        - NO recopiles ni solicites información personal.
+        - Tu función es únicamente educativa, informativa y de apoyo emocional.
 
         **IMPORTANTE - Detección de intención de donante:**
-        Si el usuario expresa claramente que quiere ser donante (frases como "quiero ser donante", "me interesa donar", "quiero ayudar", "deseo ser donante", "me gustaría donar"), responde de forma empática y natural según el contexto exacto de lo que dijeron. Puedes usar frases como:
-        - Si dice "quiero ser donante": "¡Me da mucho gusto saber que quieres ayudar a otros! Es una decisión muy valiosa."
-        - Si dice "me interesa donar": "Te agradezco que compartas esta intención. Es hermoso que quieras hacer la diferencia."
-        - Si dice "tengo dudas": "Es normal tener dudas sobre algo tan importante. Te voy a ayudar."
-        - Si dice "cómo puedo ser donante": "Te voy a explicar todo el proceso paso a paso."
+        Si el usuario expresa que quiere ser donante (frases como "quiero ser donante", "me interesa donar", "quiero ayudar", "deseo ser donante", "me gustaría donar"), responde con empatía y según el contexto exacto. Puedes usar frases como:
+        - Si dice "quiero ser donante": "Qué bien que quieras ayudar a otras personas. Es una decisión muy valiosa."
+        - Si dice "me interesa donar": "Gracias por compartirlo. Es bonito saber que te interesa marcar la diferencia."
+        - Si dice "tengo dudas": "Es totalmente normal tener dudas. Estoy aquí para ayudarte a resolverlas."
+        - Si dice "cómo puedo ser donante": "Claro, te explico cómo funciona la donación en México."
+        - Entiende lo que se pregunta y responde de forma empática, clara y adaptada a la pregunta concreta o situación del usuario.
+
+                
+        NO uses frases idénticas. Varía el estilo y adáptalo al mensaje concreto de la persona.
         
-        Responde según el contexto pero SIEMPRE incluye al final: { "activarModulo": "donorPath" }
-        
-        NO uses frases predeterminadas idénticas. Varía tu respuesta según lo que dijo exactamente el usuario.
-        
-        Responde siempre de manera natural, empática y sin sonar robótico.
+        Tu respuesta debe sonar cercana, humana y sin automatismos.
         `;
 
-        // =====================
-        // MODULO: Camino como Donante
-        // =====================
-        const donorPathModule = {
-            introduction: {
-                text: null, // No texto predeterminado, solo la respuesta de la IA
-                buttons: [
-                    { text: "Empezar el camino 🌱", action: "donor_path_step1" }
-                ]
-            },
-            step1: {
-                text: "Para poder decidir, es importante que sepas qué significa donar. En México, se puede donar órganos y tejidos después de fallecer, ya sea por Muerte encefálica (cuando el cerebro deja de funcionar por completo) o por Paro cardíaco (cuando el corazón deja de latir y ya no se puede revivir). En ambos casos, la donación puede salvar vidas o mejorar la salud de muchas personas.",
-                buttons: [
-                    { text: "¿Qué es la muerte encefálica? 🧠", action: "donor_path_explain_muerte_encefalica" },
-                    { text: "¿Qué es el paro cardíaco? ❤️", action: "donor_path_explain_paro_cardiaco" },
-                    { text: "Entendido, continuar 👉", action: "donor_path_step2" }
-                ]
-            },
-            explain_muerte_encefalica: {
-                text: "La muerte encefálica es cuando el cerebro, que controla todo el cuerpo, deja de funcionar de forma total e irreversible. Esto se confirma con pruebas médicas rigurosas que demuestran que ya no hay actividad cerebral ni capacidad de respirar por sí mismo. Es el momento en que una persona es legal y médicamente declarada fallecida.",
-                buttons: function() {
-                    const buttons = [];
-                    if (!viewedExplanations.paro_cardiaco) {
-                        buttons.push({ text: "¿Qué es el paro cardíaco? ❤️", action: "donor_path_explain_paro_cardiaco" });
-                    }
-                    buttons.push({ text: "Entendido, siguiente paso 👉", action: "donor_path_step2" });
-                    return buttons;
-                }
-            },
-            explain_paro_cardiaco: {
-                text: "El paro cardíaco es cuando el corazón deja de latir de forma definitiva y no puede ser revivido a pesar de las maniobras médicas. A diferencia de la muerte encefálica, aquí el corazón se detiene primero y luego el cerebro. En este caso, la donación debe realizarse muy rápidamente para que los órganos sigan siendo viables para trasplante.",
-                buttons: function() {
-                    const buttons = [];
-                    if (!viewedExplanations.muerte_encefalica) {
-                        buttons.push({ text: "¿Qué es la muerte encefálica? 🧠", action: "donor_path_explain_muerte_encefalica" });
-                    }
-                    buttons.push({ text: "Entendido, siguiente paso 👉", action: "donor_path_step2" });
-                    return buttons;
-                }
-            },
-            step2: {
-                text: "Donar es una decisión personal, libre y voluntaria. Te invito a pensar: ¿Me gustaría ayudar a alguien más si ya no estoy aquí? ¿Cómo me sentiría si alguien que amo necesitara un órgano? No hay respuestas correctas. Lo importante es que lo pienses con el corazón. 💙",
-                buttons: [
-                    { text: "Sí, quiero ayudar 💚", action: "donor_path_step3" },
-                    { text: "Tengo dudas aún 🤔", action: "indecision_start" }
-                ]
-            },
-            step3: {
-                text: "Aunque tú quieras donar, en México tu familia debe autorizarlo en el hospital. Por eso, lo más importante es que hables con ellos y les digas tu deseo de donar. Puedes decir algo como: 'Si algún día fallezco, quiero que donen mis órganos. Es mi decisión.'",
-                buttons: [
-                    { text: "¿Cómo hablo con mi familia? 👨‍👩‍👧‍👦", action: "donor_path_examples_family_talk" },
-                    { text: "Ya hablé con ellos 👍", action: "donor_path_step4" }
-                ]
-            },
-            examples_family_talk: {
-                text: "Aquí tienes algunas ideas para iniciar la conversación con tu familia: 'Estuve pensando en la donación de órganos y quiero compartirles mi decisión. Si algo me pasara, me gustaría que mis órganos ayudaran a alguien más.' 'Es un tema difícil, pero es importante para mí que sepan que quiero ser donante. Es un acto de generosidad que siento que es correcto.' 'Investigué sobre la donación de órganos y me gustaría dejar claro que es mi deseo. Me siento tranquilo con esta decisión.'",
-                buttons: [
-                    { text: "Gracias, continuar 👉", action: "donor_path_step4" }
-                ]
-            },
-            step4: {
-                text: "Además de hablar con tu familia, puedes dejar por escrito tu decisión de estas maneras: 1. Marcándolo en tu INE (si renovaste y pediste que aparezca). 2. En el portal del Centro Nacional de Trasplantes (CENATRA). 3. En una carta simple firmada. 4. O en tu testamento o voluntad anticipada (si aplica en tu estado).",
-                buttons: [
-                    { text: "Registrarme en CENATRA 📝", action: "cenatra_link" },
-                    { text: "Enséñame un ejemplo de carta", action: "donor_path_example_carta" },
-                    { text: "No, continuar 👉", action: "donor_path_step5" }
-                ]
-            },
-            example_carta: {
-                text: "Aquí tienes un ejemplo de una carta simple de voluntad anticipada para donación:\n\n'[Tu Nombre Completo]\n[Tu Dirección]\n[Tu Ciudad, Estado, Fecha]\n\nA quien corresponda:\n\nPor medio de la presente, yo, [Tu Nombre Completo], con [Tipo de identificación y número, ej. INE 1234567890], declaro que, en caso de fallecimiento, es mi libre y voluntaria voluntad que mis órganos y tejidos aptos sean donados para trasplante, con el fin de salvar o mejorar la calidad de vida de otras personas. Esta decisión es informada y definitiva. Solicito a mis familiares y al personal médico respetar y facilitar este deseo.\n\nAtentamente,\n[Tu Firma]\n[Tu Nombre Completo]\n\nNota: Es recomendable tener testigos y/o notario, aunque una carta simple con tu firma es un inicio importante.'",
-                buttons: [
-                    { text: "Entendido, continuar 👉", action: "donor_path_step5" }
-                ]
-            },
-            step5: {
-                text: "Donar es un acto que vale repetir. Recuérdales a tus seres queridos tu decisión cada tanto. Puedes también compartir tu voluntad en redes o por WhatsApp: 'He decidido que quiero donar mis órganos si algún día muero. Es una forma de seguir ayudando. VIDA me ayudó a informarme.'",
-                buttons: [
-                    { text: "Compartir por WhatsApp", action: "share_whatsapp", shareText: "He decidido que quiero donar mis órganos si algún día muero. Es una forma de seguir ayudando. VIDA me ayudó a informarme." },
-                    { text: "Finalizar camino 💚", action: "donor_path_cierre" }
-                ]
-            },
-            cierre: {
-                text: "¡Gracias por recorrer este camino conmigo! 🌱 Cada paso que das acerca a alguien más a vivir con esperanza. Tu decisión es un acto de amor y generosidad.",
-                buttons: [
-                    { text: "Ver más dudas frecuentes", action: "suggest_questions" }, 
-                    { text: "Hablar con VIDA nuevamente", action: "reset_chat" }
-                ]
-            }
-        };
 
-        // =====================
-        // MODULO: Registro CENATRA (independiente)
-        // =====================
-        const cenatraModule = {
-            showButton: function() {
-                addBotMessageWithTyping('¿Te gustaría registrarte como donante en el portal oficial de CENATRA? Si lo deseas, puedes hacerlo ahora mismo.');
-                displayModuleButtons([
-                    { text: "Ir al portal de CENATRA 📝", action: "cenatra_open_portal" },
-                    { text: "No, gracias", action: "cenatra_later" }
-                ], handleCenatraAction);
-            },
-            openPortal: function() {
-                window.open('https://dv.cenatra.salud.gob.mx/registrar.php', '_blank');
-                setTimeout(async () => {
-                    await addBotMessageWithTyping('Cuando termines tu registro en CENATRA, puedes indicarme si ya lo hiciste o si prefieres hacerlo en otro momento.');
-                    displayModuleButtons([
-                        { text: "Ya me registré 👍", action: "cenatra_done" },
-                        { text: "Lo haré en otro momento 📅", action: "cenatra_later" }
-                    ], handleCenatraAction);
-                }, 2500);
-            }
-        };
-
-        function handleCenatraAction(action) {
-            // Ocultar botones de CENATRA inmediatamente al responder
-            suggestedQuestionsContainer.classList.add('hidden');
-            moduleButtonClicks = 0;
-            cenatraConversationCount = 0;
-            activeModule = null;
-            if (action === "cenatra_open_portal") {
-                cenatraModule.openPortal();
-                return;
-            }
-            if (action === "cenatra_done") {
-                addBotMessageWithTyping('¡Felicidades por registrarte como donante en CENATRA! Si tienes más dudas, puedes preguntarme.');
-            } else if (action === "cenatra_later") {
-                addBotMessageWithTyping('No hay problema, puedes registrarte cuando lo desees. Si tienes más dudas, aquí estoy para ayudarte.');
-            }
-        }
 
         // =====================
         // MODULO: Preguntas Sugeridas
@@ -534,12 +596,27 @@
             generate: async function() {
                 try {
                     const suggestionPrompt = [
-                        { role: "system", content: "Eres VIDA. Genera exactamente 4 preguntas cortas (máximo 6 palabras cada una) sobre donación de órganos que una persona común haría. Deben ser preguntas concisas, en donde se entienda perfectamente lo que se esta preguntado.Responde SOLO con las 4 preguntas, una por línea, sin numeración ni puntos. Ejemplos: '¿Duele donar órganos?', '¿Qué órganos se donan?', '¿Cómo me registro?', '¿Es seguro donar?'" },
+                        { role: "system", content: "Eres VIDA. Genera exactamente 4 preguntas cortas (máximo 6 palabras cada una) sobre donación de órganos en México que una persona común haría. Deben ser preguntas concisas, no repetidas de las anteriores que sugeriste, en donde se entienda perfectamente lo que se esta preguntado.Responde SOLO con las 4 preguntas, una por línea, sin numeración ni puntos. Ejemplos: '¿Duele donar órganos?', '¿Qué órganos se donan?', '¿Cómo me registro?', '¿Es seguro donar?'" },
                         { role: "user", content: "Genera 4 preguntas cortas sobre donación de órganos" }
                     ];
-                    const result = await callOpenAI(suggestionPrompt);
-                    const response = result.choices?.[0]?.message?.content || "";
-                    const questions = response.split('\n')
+                    // Unificar payload igual que el chat
+                    const response = await fetch('/api/openai', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            messages: suggestionPrompt,
+                            model: 'gpt-4o',
+                            temperature: 0.7,
+                            max_tokens: 100
+                        })
+                    });
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error(`API request failed with status ${response.status}: ${errorText}`);
+                    }
+                    const result = await response.json();
+                    const text = result.choices?.[0]?.message?.content || "";
+                    const questions = text.split('\n')
                         .map(q => q.trim())
                         .filter(q => q.length > 0 && q.includes('?'))
                         .slice(0, 4);
@@ -604,8 +681,8 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
-                        prompt: messages,
-                        model: 'gpt-3.5-turbo',
+                        messages: messages,
+                        model: 'gpt-4o',
                         temperature: 0.7,
                         max_tokens: 700
                     })
@@ -623,33 +700,66 @@
 
         function addMessageToChat(role, text) {
             chatHistory.push({ role: role, content: text });
-            
             // Verificar si el usuario está cerca del final antes de agregar el mensaje
             const isNearBottom = chatContainerWrapper.scrollHeight - chatContainerWrapper.clientHeight <= chatContainerWrapper.scrollTop + 150;
-            
             const messageWrapper = document.createElement('div');
-            messageWrapper.className = `flex items-start gap-3 max-w-xl lg:max-w-2xl chat-bubble ${role === 'user' ? 'self-end flex-row-reverse' : 'self-start'}`;
-            
-            const textContent = text.replace(/\n/g, '<br>');
-
-            const textBubbleDiv = document.createElement('div');
-            textBubbleDiv.className = `px-4 py-3 shadow-lg chat-bubble-text relative`;
-            
             if (role === 'user') {
-                textBubbleDiv.className += ` user-bubble order-1 bg-[var(--user-bubble-bg)] text-white rounded-2xl rounded-br-lg`;
+                messageWrapper.className = 'flex items-start gap-3 max-w-xl lg:max-w-2xl chat-bubble self-end flex-row-reverse';
             } else {
+                messageWrapper.className = 'flex items-start gap-3 max-w-xl lg:max-w-2xl chat-bubble self-start';
+            }
+            const textContent = text.replace(/\n/g, '<br>');
+            const textBubbleDiv = document.createElement('div');
+            if (role === 'user') {
+                textBubbleDiv.className = 'px-4 py-3 shadow-lg chat-bubble-text relative user-bubble order-1 bg-[var(--user-bubble-bg)] text-white rounded-2xl rounded-br-lg';
+                textBubbleDiv.innerHTML = textContent;
+                messageWrapper.appendChild(textBubbleDiv);
+            } else {
+                // Bot avatar
                 const botAvatarDiv = document.createElement('div');
                 botAvatarDiv.className = "w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 bg-white shadow-md bot-avatar-breathing";
                 botAvatarDiv.innerHTML = '<img src="robotcara.png" alt="Robot VIDA" class="w-10 h-10 object-contain p-1" onerror="this.onerror=null;this.src=\'https://placehold.co/40x40/0D47A1/FFFFFF?text=V\';" />';
                 messageWrapper.appendChild(botAvatarDiv);
-                textBubbleDiv.className += ` bot-bubble bg-[var(--bot-bubble-bg)] text-[var(--text-dark)] rounded-2xl rounded-bl-lg`;
+                // Contenedor para burbuja y botón
+                const botTextAndBtn = document.createElement('div');
+                botTextAndBtn.className = 'flex flex-col items-start flex-1 min-w-0';
+                textBubbleDiv.className = 'px-4 py-3 shadow-lg chat-bubble-text relative bot-bubble bg-[var(--bot-bubble-bg)] text-[var(--text-dark)] rounded-2xl rounded-bl-lg w-full text-left';
+                textBubbleDiv.innerHTML = textContent;
+                // Hacer que los enlaces se abran en nueva pestaña
+                Array.from(textBubbleDiv.querySelectorAll('a')).forEach(a => {
+                    a.setAttribute('target', '_blank');
+                    a.setAttribute('rel', 'noopener noreferrer');
+                });
+                botTextAndBtn.appendChild(textBubbleDiv);
+                // Botón de audio alineado a la derecha debajo de la burbuja
+                const ttsBtnWrapper = document.createElement('div');
+                ttsBtnWrapper.className = 'w-full flex justify-end';
+                const ttsBtn = document.createElement('button');
+                ttsBtn.type = 'button';
+                ttsBtn.title = 'Escuchar respuesta';
+                ttsBtn.className = 'mt-1 bg-slate-100 rounded-full p-2 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-300 shadow flex items-center';
+                ttsBtn.innerHTML = `<img src="bocina2.png" alt="Escuchar" class="h-6 w-6 object-contain" onerror=\"this.onerror=null;this.src='https://placehold.co/24x24/cccccc/ffffff?text=%F0%9F%94%8A';\" />`;
+                // Fallback SVG para bocina si no carga la imagen
+                ttsBtn.innerHTML = `<img src="bocina2.png" alt="Escuchar" class="h-6 w-6 object-contain" onerror=\"this.style.display='none';this.insertAdjacentHTML('afterend', '<svg class=\\'h-6 w-6 text-slate-600\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'2\\' viewBox=\\'0 0 24 24\\'><path stroke-linecap=\\'round\\' stroke-linejoin=\\'round\\' d=\\'M9 19V6l-2 2H5a2 2 0 00-2 2v4a2 2 0 002 2h2l2 2zm7-5a3 3 0 00-3-3m3 3a6 6 0 01-6 6m6-6V9a6 6 0 00-6-6\\'/></svg>');\" />`;
+                ttsBtn.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    ttsBtn.disabled = true;
+                    // Cambiar color del icono bocina si es SVG fallback
+                    const bocinaImg = ttsBtn.querySelector('img');
+                    const bocinaSvg = ttsBtn.querySelector('svg');
+                    // Lógica de animación y color se mueve a playOpenAITTS
+                    try {
+                        await playOpenAITTS(text.replace(/<br>/g, ' '), ttsBtn, bocinaImg, bocinaSvg);
+                    } catch (err) {
+                        alert('No se pudo reproducir el audio.');
+                    }
+                    ttsBtn.disabled = false;
+                });
+                ttsBtnWrapper.appendChild(ttsBtn);
+                botTextAndBtn.appendChild(ttsBtnWrapper);
+                messageWrapper.appendChild(botTextAndBtn);
             }
-
-            textBubbleDiv.innerHTML = textContent;
-            messageWrapper.appendChild(textBubbleDiv);
-            
             chatContainer.appendChild(messageWrapper);
-            
             // Solo hacer scroll automático si es un mensaje del usuario O si el usuario estaba al final
             if (role === 'user' || isNearBottom) {
                 setTimeout(() => {
@@ -658,6 +768,84 @@
                         behavior: 'smooth'
                     });
                 }, 100);
+            }
+        }
+
+        // --- OpenAI TTS (Text-to-Speech) ---
+        async function playOpenAITTS(text) {
+            // ttsBtn, bocinaImg, bocinaSvg son opcionales (solo para animación)
+            // Modificado: al parar el audio, la próxima reproducción siempre inicia desde el principio
+            if (!playOpenAITTS.audioObj) playOpenAITTS.audioObj = null;
+            if (!playOpenAITTS.audioState) playOpenAITTS.audioState = 'stopped'; // 'playing', 'stopped'
+            let ttsBtn, bocinaImg, bocinaSvg;
+            if (arguments.length > 1) {
+                ttsBtn = arguments[1];
+                bocinaImg = arguments[2];
+                bocinaSvg = arguments[3];
+            }
+            // Si ya hay audio reproduciéndose
+            if (playOpenAITTS.audioObj && playOpenAITTS.audioState === 'playing') {
+                playOpenAITTS.audioObj.pause();
+                playOpenAITTS.audioObj.currentTime = 0;
+                playOpenAITTS.audioState = 'stopped';
+                if (ttsBtn) ttsBtn.classList.remove('tts-playing', 'opacity-60');
+                if (bocinaImg) bocinaImg.classList.remove('text-blue-600');
+                if (bocinaSvg) bocinaSvg.classList.remove('text-blue-600');
+                return;
+            }
+            // Si está detenido o no existe, crear nuevo audio
+            try {
+                const response = await fetch('/api/tts', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        input: text,
+                        voice_prompt: 'Habla con acento mexicano, tono cálido, velocidad natural, estilo empático y humano, adecuado para acompañar y explicar sobre donación de órganos en México.'
+                    })
+                });
+                if (!response.ok) throw new Error('TTS error');
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                const audio = new Audio();
+                audio.src = url;
+                playOpenAITTS.audioObj = audio;
+                playOpenAITTS.audioState = 'playing';
+                const startAnim = () => {
+                    if (ttsBtn) ttsBtn.classList.add('tts-playing', 'opacity-60');
+                    if (bocinaImg) bocinaImg.classList.add('text-blue-600');
+                    if (bocinaSvg) bocinaSvg.classList.add('text-blue-600');
+                };
+                const stopAnim = () => {
+                    if (ttsBtn) ttsBtn.classList.remove('tts-playing', 'opacity-60');
+                    if (bocinaImg) bocinaImg.classList.remove('text-blue-600');
+                    if (bocinaSvg) bocinaSvg.classList.remove('text-blue-600');
+                };
+                audio.onplay = startAnim;
+                audio.onpause = () => {
+                    playOpenAITTS.audioState = 'stopped';
+                    stopAnim();
+                };
+                audio.onended = () => {
+                    playOpenAITTS.audioState = 'stopped';
+                    stopAnim();
+                    URL.revokeObjectURL(url);
+                    playOpenAITTS.audioObj = null;
+                };
+                audio.onerror = () => {
+                    playOpenAITTS.audioState = 'stopped';
+                    stopAnim();
+                    URL.revokeObjectURL(url);
+                    playOpenAITTS.audioObj = null;
+                    alert('No se pudo reproducir el audio.');
+                };
+                await audio.play();
+            } catch (err) {
+                playOpenAITTS.audioState = 'stopped';
+                playOpenAITTS.audioObj = null;
+                if (ttsBtn) ttsBtn.classList.remove('tts-playing', 'opacity-60');
+                if (bocinaImg) bocinaImg.classList.remove('text-blue-600');
+                if (bocinaSvg) bocinaSvg.classList.remove('text-blue-600');
+                alert('No se pudo reproducir el audio.');
             }
         }
 
@@ -714,48 +902,10 @@
             addMessageToChat('assistant', text);
         }
         
-        // =====================
-        // CONTADOR DE INTERACCIONES DE BOTONES Y CONVERSACIONES DE MODULOS
-        // =====================
-        let moduleButtonClicks = 0;
-        let donorPathConversationCount = 0;
-        let cenatraConversationCount = 0;
-        let activeModule = null; // 'donorPath' | 'cenatra' | null
 
-        function closeActiveModule() {
-            const container = suggestedQuestionsContainer;
-            container.classList.add('hidden');
-            moduleButtonClicks = 0;
-            donorPathConversationCount = 0;
-            cenatraConversationCount = 0;
-            activeModule = null;
-        }
-
-        function displayModuleButtons(buttons, handler) {
-            const container = suggestedQuestionsContainer;
-            container.innerHTML = '';
-            container.classList.remove('hidden');
-            moduleButtonClicks = 0;
-            buttons.forEach((btn, idx) => {
-                const button = document.createElement('button');
-                button.className = 'bg-blue-50 text-blue-700 px-3 py-2 rounded-full text-sm hover:bg-blue-100 transition-colors opacity-0 transform translate-y-2';
-                button.textContent = btn.text;
-                button.addEventListener('click', () => {
-                    moduleButtonClicks++;
-                    handler(btn.action);
-                    if (moduleButtonClicks >= 2) {
-                        closeActiveModule();
-                    }
-                });
-                container.appendChild(button);
-                setTimeout(() => {
-                    button.classList.remove('opacity-0', 'translate-y-2');
-                }, idx * 150);
-            });
-        }
 
         // =====================
-        // ACTIVACION DE MODULOS SEGUN INTENCION
+        // FUNCION PRINCIPAL DEL CHAT (solo IA y preguntas sugeridas)
         // =====================
         async function getBotResponse(userMessage, isFromSuggestedQuestion = false) {
             showTypingIndicator(true); 
@@ -763,85 +913,29 @@
             chatForm.querySelector('button[type="submit"]').disabled = true; 
             suggestQuestionsBtn.disabled = true; 
 
-            // Detectar si hay un módulo activo y contar conversación
-            if (activeModule === 'donorPath') {
-                donorPathConversationCount++;
-                if (donorPathConversationCount >= 2) {
-                    closeActiveModule();
-                }
-            } else if (activeModule === 'cenatra') {
-                cenatraConversationCount++;
-                if (cenatraConversationCount >= 2) {
-                    closeActiveModule();
+            // Detectar si la pregunta ya fue hecha antes
+            let repeated = false;
+            const normalizedUserMsg = userMessage.trim().toLowerCase();
+            for (let i = 0; i < chatHistory.length; i++) {
+                if (chatHistory[i].role === 'user' && chatHistory[i].content.trim().toLowerCase() === normalizedUserMsg) {
+                    repeated = true;
+                    break;
                 }
             }
-
-            const messages = [
+            let messages = [
                 { role: "system", content: systemPrompt },
                 ...chatHistory
             ];
+            if (repeated) {
+                messages.push({
+                    role: "system",
+                    content: "El usuario ya preguntó esto antes en esta conversación. Responde de forma diferente a la vez anterior, usando otro enfoque, ejemplos, metáforas o analogías, pero manteniendo claridad y empatía. No repitas la misma respuesta textual."
+                });
+            }
             try {
                 const result = await callOpenAI(messages);
                 let botResponseText = result.choices?.[0]?.message?.content || "Lo siento, hubo un problema. Por favor, intenta de nuevo.";
-                // Detectar activación de módulos
-                const moduleMatch = botResponseText.match(/\{\s*"activarModulo"\s*:\s*"([^\"]+)"\s*\}/);
-                if (moduleMatch) {
-                    const moduleName = moduleMatch[1];
-                    botResponseText = botResponseText.replace(moduleMatch[0], '').trim();
-                    addMessageToChat('assistant', botResponseText);
-                    if (moduleName === 'donorPath') {
-                        activeModule = 'donorPath';
-                        donorPathConversationCount = 0;
-                        setTimeout(() => {
-                            displayDonorPathStep('introduction');
-                        }, 500);
-                    } else if (moduleName === 'cenatra') {
-                        activeModule = 'cenatra';
-                        cenatraConversationCount = 0;
-                        setTimeout(() => {
-                            cenatraModule.showButton();
-                        }, 500);
-                    } else if (moduleName === 'indecision') {
-                        setTimeout(() => {
-                            addMessageToChat('assistant', 'Es completamente normal tener dudas sobre la donación. Es una decisión importante. ¿Qué te preocupa más: el proceso médico, hablar con tu familia, o algo más específico?');
-                        }, 1500);
-                    }
-                } else {
-                    // Detectar intención manual para donante y cenatra
-                    const donorIntentions = [
-                        'quiero ser donante', 'me interesa donar', 'quiero ayudar', 'ser donante', 
-                        'donar organos', 'quiero donar', 'deseo ser donante', 'me gustaría donar',
-                        'pienso ser donante', 'creo que quiero ser donante', 'quisiera ser donante',
-                        'me interesa ser donante', 'quiero ser donador', 'deseo donar', 'me gustaría ser donante',
-                        'estoy interesado en donar', 'estoy pensando en ser donante', 'como ser donante',
-                        'como puedo ser donante', 'como me hago donante', 'quiero registrarme como donante'
-                    ];
-                    const cenatraIntentions = [
-                        'registrarme en cenatra', 'registro cenatra', 'quiero registrarme cenatra', 'portal cenatra', 'registro nacional de donantes', 'cenatra', 'quiero ser donante cenatra', 'quiero registrarme en el cenatra', 'quiero registrarme en el registro nacional de donantes', 'quiero el registro cenatra', 'quiero el portal cenatra',
-                        // Frases comunes de registro
-                        'donde me registro', 'cómo me registro', 'quiero registrarme', 'como registrarme', 'registrarme como donante', 'me quiero registrar', 'quiero hacer mi registro', 'quiero el registro', 'quiero registrarme como donante', 'como puedo registrarme', 'como hago mi registro', 'como puedo hacer mi registro', 'como puedo registrarme como donante', 'quiero saber como registrarme', 'quiero saber donde registrarme', 'quiero saber como hacer mi registro', 'quiero saber como registrarme como donante'
-                    ];
-                    const userMessageLower = userMessage.toLowerCase();
-                    const hasDonorIntention = donorIntentions.some(intention => userMessageLower.includes(intention));
-                    const hasCenatraIntention = cenatraIntentions.some(intention => userMessageLower.includes(intention));
-                    if (hasDonorIntention && !currentDonorPathStep) {
-                        activeModule = 'donorPath';
-                        donorPathConversationCount = 0;
-                        addMessageToChat('assistant', botResponseText);
-                        setTimeout(() => {
-                            displayDonorPathStep('introduction');
-                        }, 500);
-                    } else if (hasCenatraIntention) {
-                        activeModule = 'cenatra';
-                        cenatraConversationCount = 0;
-                        addMessageToChat('assistant', botResponseText);
-                        setTimeout(() => {
-                            cenatraModule.showButton();
-                        }, 500);
-                    } else {
-                        addMessageToChat('assistant', botResponseText);
-                    }
-                }
+                addMessageToChat('assistant', botResponseText);
             } catch (error) {
                 console.error("Error in getBotResponse:", error);
                 addMessageToChat('assistant', 'Lo siento, hubo un problema de conexión. Por favor, verifica tu conexión a internet e inténtalo de nuevo.');
@@ -859,59 +953,6 @@
         // =====================
         function toggleSuggestedQuestions() {
             suggestedQuestionsModule.show();
-        }
-        // =====================
-        // FUNCION GLOBAL: Mostrar Camino como Donador
-        // =====================
-        function displayDonorPathStep(step) {
-            currentDonorPathStep = step;
-            let stepData = donorPathModule[step];
-            let text = typeof stepData.text === 'function' ? stepData.text() : stepData.text;
-            let buttons = typeof stepData.buttons === 'function' ? stepData.buttons() : stepData.buttons;
-            if (text) addBotMessageWithTyping(text);
-            if (buttons && buttons.length > 0) {
-                displayModuleButtons(buttons, handleDonorPathAction);
-            }
-        }
-
-        function handleDonorPathAction(action) {
-            // Separar registro CENATRA del camino donador
-            if (action === "cenatra_link") {
-                activeModule = 'cenatra';
-                cenatraConversationCount = 0;
-                cenatraModule.openPortal();
-                return;
-            }
-            if (action === "donor_path_step1") return displayDonorPathStep('step1');
-            if (action === "donor_path_explain_muerte_encefalica") {
-                viewedExplanations.muerte_encefalica = true;
-                return displayDonorPathStep('explain_muerte_encefalica');
-            }
-            if (action === "donor_path_explain_paro_cardiaco") {
-                viewedExplanations.paro_cardiaco = true;
-                return displayDonorPathStep('explain_paro_cardiaco');
-            }
-            if (action === "donor_path_step2") return displayDonorPathStep('step2');
-            if (action === "indecision_start") return addBotMessageWithTyping('Es normal tener dudas. ¿Qué te gustaría saber?');
-            if (action === "donor_path_step3") return displayDonorPathStep('step3');
-            if (action === "donor_path_examples_family_talk") return displayDonorPathStep('examples_family_talk');
-            if (action === "donor_path_step4") return displayDonorPathStep('step4');
-            if (action === "donor_path_example_carta") return displayDonorPathStep('example_carta');
-            if (action === "donor_path_step5") return displayDonorPathStep('step5');
-            if (action === "share_whatsapp") {
-                window.open('https://wa.me/?text=' + encodeURIComponent('He decidido que quiero donar mis órganos si algún día muero. Es una forma de seguir ayudando. VIDA me ayudó a informarme.'), '_blank');
-                return;
-            }
-            if (action === "donor_path_cierre") {
-                closeActiveModule();
-                return displayDonorPathStep('cierre');
-            }
-            if (action === "suggest_questions") return suggestedQuestionsModule.show();
-            if (action === "reset_chat") {
-                chatHistory = [];
-                currentDonorPathStep = null;
-                addBotMessageWithTyping('¡Hola! Soy VIDA, tu asistente para información sobre donación de órganos, tejidos y sangre. ¿En qué puedo apoyarte hoy?');
-            }
         }
 
         // =====================
@@ -1043,7 +1084,7 @@
         // Initialize Chat and Background
         document.addEventListener('DOMContentLoaded', () => {
             // Usar el efecto de escritura para el mensaje inicial
-            addBotMessageWithTyping('¡Hola! Soy VIDA, tu asistente para información sobre donación de órganos, tejidos y sangre. Estoy aquí para ayudarte de manera clara y empática. ¿En qué puedo apoyarte hoy?');
+            addBotMessageWithTyping('Hola, soy VIDA. Estoy aquí para acompañarte y resolver tus dudas sobre la donación de órganos y tejidos en México. Pregúntame lo que necesites, con total confianza.');
             chatInput.focus();
             initBackground();
             animateBackground();
